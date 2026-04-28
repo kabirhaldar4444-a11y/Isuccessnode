@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../../utils/supabase';
 import DisclaimerOverlay from '../../components/DisclaimerOverlay';
@@ -47,8 +47,8 @@ const STATES = Object.keys(INDIA_STATES_CITIES);
 
 const CompleteProfile = ({ profile, user, onComplete }) => {
   const [phone, setPhone] = useState('');
-  const [phoneError, setPhoneError] = useState('');
   const [emailValue, setEmailValue] = useState(profile?.email || '');
+  const [pincode, setPincode] = useState('');
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [address, setAddress] = useState('');
@@ -59,6 +59,8 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+  const [isFetchingPincode, setIsFetchingPincode] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState('');
@@ -67,6 +69,76 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
   const navigate = useNavigate();
 
   const availableCities = selectedState ? INDIA_STATES_CITIES[selectedState] || [] : [];
+
+  useEffect(() => {
+    if (pincode.length === 6) {
+      handlePincodeLookup(pincode);
+    }
+  }, [pincode]);
+
+  const handlePincodeLookup = async (code) => {
+    setIsFetchingPincode(true);
+    try {
+      const response = await fetch(`https://api.postalpincode.in/pincode/${code}`);
+      const data = await response.json();
+      
+      if (data[0].Status === "Success") {
+        const postOffice = data[0].PostOffice[0];
+        const state = postOffice.State;
+        const district = postOffice.District;
+        
+        // Normalize state names to match our list if necessary
+        const normalizedState = STATES.find(s => s.toLowerCase() === state.toLowerCase()) || state;
+        
+        setSelectedState(normalizedState);
+        // We add the district to our cities list if it's not there, or just set it
+        setSelectedCity(district);
+      }
+    } catch (err) {
+      console.error("PIN code lookup failed", err);
+    } finally {
+      setIsFetchingPincode(false);
+    }
+  };
+
+  const detectLocation = () => {
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setIsDetectingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          // Using OpenStreetMap's Nominatim (Free, but please respect usage limits)
+          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`);
+          const data = await response.json();
+          
+          if (data.address) {
+            const { state, city, town, village, postcode } = data.address;
+            const detectedCity = city || town || village;
+            
+            if (postcode) setPincode(postcode.replace(/\s/g, '').slice(0, 6));
+            if (state) {
+              const normalizedState = STATES.find(s => s.toLowerCase() === state.toLowerCase()) || state;
+              setSelectedState(normalizedState);
+            }
+            if (detectedCity) setSelectedCity(detectedCity);
+          }
+        } catch (err) {
+          console.error("Location detection failed", err);
+        } finally {
+          setIsDetectingLocation(false);
+        }
+      },
+      (err) => {
+        setError("Location access denied or unavailable");
+        setIsDetectingLocation(false);
+      }
+    );
+  };
 
   const handleStateChange = (e) => {
     setSelectedState(e.target.value);
@@ -212,7 +284,7 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
 
       setUploadStatus('Finalizing profile...');
 
-      const fullAddress = `${address ? address + ', ' : ''}${selectedCity}, ${selectedState}`;
+      const fullAddress = `${address ? address + ', ' : ''}${selectedCity}, ${selectedState} - ${pincode}`;
 
       const { error } = await supabase.from('profiles').update({
         phone,
@@ -265,7 +337,7 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
             </svg>
           </div>
           <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2 uppercase">KYC Form</h1>
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Step 2: Elitetoolistic Global Verification</p>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Step 2: isuccessnode Global Verification</p>
         </div>
 
         {error && (
@@ -281,8 +353,20 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
             
             {/* Section 1: Personal Credentials */}
             <div className="space-y-10">
-              <div className="flex items-center gap-4 border-l-4 border-blue-600 pl-4">
+              <div className="flex items-center justify-between border-l-4 border-blue-600 pl-4">
                 <h2 className="text-[11px] font-black text-blue-600 uppercase tracking-[0.25em]">Personal Credentials</h2>
+                <button 
+                  type="button" 
+                  onClick={detectLocation}
+                  disabled={isDetectingLocation}
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-black text-slate-400 uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 shadow-sm disabled:opacity-50"
+                >
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className={isDetectingLocation ? 'animate-spin' : ''}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
+                  {isDetectingLocation ? 'Detecting...' : 'Detect Location'}
+                </button>
               </div>
 
               <div className="p-10 bg-slate-50/50 border border-slate-100 border-dashed rounded-[2.5rem] flex flex-col items-center gap-6 group transition-all duration-500 hover:bg-white hover:shadow-xl hover:shadow-slate-100">
@@ -342,7 +426,23 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="space-y-3">
+                  <label className={labelClass}>PIN Code *</label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="6-digit PIN"
+                      value={pincode}
+                      onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      className={inputClass}
+                      required
+                    />
+                    {isFetchingPincode && (
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
+                    )}
+                  </div>
+                </div>
                 <div className="space-y-3">
                   <label className={labelClass}>State / UT *</label>
                   <select value={selectedState} onChange={handleStateChange} className={`${inputClass} appearance-none cursor-pointer`} required>
@@ -353,8 +453,11 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
                 <div className="space-y-3">
                   <label className={labelClass}>City / District *</label>
                   <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)} className={`${inputClass} appearance-none cursor-pointer`} required disabled={!selectedState}>
-                    <option value="">{selectedState ? 'Select City' : 'Pending State Selection...'}</option>
+                    <option value="">{selectedState ? 'Select City' : 'Pending Selection...'}</option>
                     {availableCities.map(c => <option key={c} value={c}>{c}</option>)}
+                    {selectedCity && !availableCities.includes(selectedCity) && (
+                      <option value={selectedCity}>{selectedCity}</option>
+                    )}
                   </select>
                 </div>
               </div>
