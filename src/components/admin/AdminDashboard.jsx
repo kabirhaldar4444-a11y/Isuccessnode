@@ -40,8 +40,8 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
             <div className="w-16 h-16 rounded-[2rem] bg-slate-900 text-white flex items-center justify-center mb-6 shadow-2xl shadow-slate-200 mx-auto md:mx-0">
               <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">Central Command</h1>
-            <p className="text-slate-400 font-medium">Orchestrate examinations and administrative nodes</p>
+            <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">Admin Dashboard</h1>
+            <p className="text-slate-400 font-medium">Manage all exams and system users</p>
           </div>
           
           {/* Tab Switcher - Segmented Control */}
@@ -50,20 +50,20 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
               onClick={() => setActiveTab('exams')}
               className={`px-8 py-3.5 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 ${activeTab === 'exams' ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'}`}
             >
-              Assessments
+              Exams
             </button>
             <button
               onClick={() => setActiveTab('candidates')}
               className={`px-8 py-3.5 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 ${activeTab === 'candidates' ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'}`}
             >
-              Identities
+              Users
             </button>
             {isSuperAdmin && (
               <button
                 onClick={() => setActiveTab('staff')}
                 className={`px-8 py-3.5 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 ${activeTab === 'staff' ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'}`}
               >
-                Nodes
+                Admins
               </button>
             )}
           </div>
@@ -82,22 +82,22 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
                   <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 shadow-sm">
                     <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Initiate Assessment Session</h3>
+                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Create New Exam</h3>
                 </div>
 
                 <form onSubmit={handleSubmitExam} className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end relative z-10">
                   <div className="md:col-span-6 space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Session Title</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Exam Name</label>
                     <input
                       type="text"
-                      placeholder="Define the scope of assessment..."
+                      placeholder="Enter the exam name..."
                       value={newTitle}
                       onChange={(e) => setNewTitle(e.target.value)}
                       className="w-full px-6 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-slate-900/20 focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition-all duration-300 text-slate-900 font-bold placeholder:text-slate-300"
                     />
                   </div>
                   <div className="md:col-span-3 space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Temporal Limit (Min)</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Time Limit (Minutes)</label>
                     <input
                       type="number"
                       placeholder="60"
@@ -109,7 +109,7 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
                   </div>
                   <div className="md:col-span-3">
                     <button type="submit" className="w-full bg-slate-900 text-white font-bold py-5 rounded-2xl hover:bg-slate-800 shadow-2xl shadow-slate-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3 uppercase text-[10px] tracking-[0.2em]">
-                      Establish
+                      Create Exam
                       <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                     </button>
                   </div>
@@ -119,10 +119,10 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
               {/* Grid Module */}
               <div className="space-y-8">
                 <div className="flex items-center justify-between px-2">
-                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Active Matrix</h3>
+                  <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Active Exams</h3>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Units</span>
-                    <span className="bg-white text-slate-900 border border-slate-100 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">{exams.length} Sessions</span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Exams</span>
+                    <span className="bg-white text-slate-900 border border-slate-100 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">{exams.length} Exams</span>
                   </div>
                 </div>
 
@@ -132,8 +132,8 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
                       <div className="w-20 h-20 rounded-full bg-white border border-slate-100 flex items-center justify-center text-slate-200 mb-6 shadow-sm">
                         <svg width="40" height="40" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25" /></svg>
                       </div>
-                      <p className="text-slate-900 font-bold text-xl mb-2">No Active Matrix</p>
-                      <p className="text-slate-400 font-medium text-sm max-w-xs">Establish your first assessment session to begin orchestrating identity evaluations.</p>
+                      <p className="text-slate-900 font-bold text-xl mb-2">No Active Exams</p>
+                      <p className="text-slate-400 font-medium text-sm max-w-xs">Create your first exam to start managing student assessments.</p>
                     </div>
                   ) : (
                     exams.map((exam, i) => (
@@ -149,7 +149,7 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
                               {exam.duration} Min
                             </div>
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
-                            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Active State</span>
+                            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Status: Active</span>
                           </div>
                         </div>
 
@@ -158,7 +158,7 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
                             onClick={() => setSelectedExam(exam)}
                             className="w-full bg-slate-900 text-white font-bold text-[10px] uppercase tracking-[0.2em] py-4 rounded-2xl shadow-xl shadow-slate-200 hover:bg-slate-800 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2"
                           >
-                            <span>Configure Units</span>
+                            <span>Manage Questions</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5M4.5 20.25l7.5-7.5-7.5-7.5" /></svg>
                           </button>
                           <button
@@ -166,7 +166,7 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
                             className="w-full bg-white text-rose-500 border border-rose-50 font-bold text-[10px] uppercase tracking-[0.2em] py-4 rounded-2xl hover:bg-rose-50 hover:border-rose-100 transition-all duration-300 flex items-center justify-center gap-2"
                           >
                             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
-                            Purge
+                            Delete
                           </button>
                         </div>
                       </div>
@@ -186,8 +186,8 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
                   <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center mb-6 shadow-xl shadow-slate-200">
                     <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-3.833-6.247 4.147 4.147 0 00-2.479.825 4.137 4.137 0 00-3.385-.351 4.16 4.16 0 01-.154-1.208c0-2.278 1.847-4.125 4.125-4.125S22.5 9.397 22.5 11.675a4.125 4.125 0 01-8.25 0V11.25m-1.5 7.5l-3 3m0 0l-3-3m3 3V15m1.5-12a1.5 1.5 0 00-3 0v1.125a1.5 1.5 0 01-3 0V3a1.5 1.5 0 10-3 0v1.125a1.5 1.5 0 01-3 0V3a1.5 1.5 0 10-3 0v1.125a1.5 1.5 0 01-3 0V3a1.5 1.5 0 10-3 0v1.125a1.5 1.5 0 01-3 0V3z" /></svg>
                   </div>
-                  <h3 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Administrative Node Authority</h3>
-                  <p className="text-slate-400 font-medium max-w-2xl text-sm leading-relaxed">Establish secondary administrative nodes for team orchestration. Staff nodes possess core authority over assessments and identities but remain subordinate to the master node.</p>
+                  <h3 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Admin Management</h3>
+                  <p className="text-slate-400 font-medium max-w-2xl text-sm leading-relaxed">Create additional admin accounts to help manage the portal. Admins can manage exams and users.</p>
                 </div>
                 <CreateUser user={user} profile={profile} initialRole="admin" />
               </div>

@@ -75,8 +75,8 @@ const CandidateDashboard = ({ exams, onStartExam, profile, user }) => {
                 <div className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]"></div>
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Account Status</span>
-                <span className="text-emerald-600 font-bold text-xs uppercase tracking-[0.15em]">Verified</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Profile Status</span>
+                <span className="text-emerald-600 font-bold text-xs uppercase tracking-[0.15em]">Approved</span>
               </div>
             </div>
           </div>
@@ -152,7 +152,7 @@ const CandidateDashboard = ({ exams, onStartExam, profile, user }) => {
                         : 'bg-slate-900 text-white shadow-slate-200 hover:bg-slate-800 hover:shadow-slate-300 active:scale-95'
                     }`}
                   >
-                    {profile?.is_exam_locked ? 'Access Restricted' : (
+                    {profile?.is_exam_locked ? 'Locked' : (
                       <>
                         Start Exam
                         <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
@@ -202,7 +202,7 @@ const CandidateDashboard = ({ exams, onStartExam, profile, user }) => {
                       <p className="text-[9px] font-black uppercase tracking-widest text-slate-300 mb-2">Status</p>
                       <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest ${sub.is_released ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100'}`}>
                         <div className={`w-1.5 h-1.5 rounded-full ${sub.is_released ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} />
-                        {sub.is_released ? 'Verified' : 'Pending'}
+                        {sub.is_released ? 'Completed' : 'Pending'}
                       </div>
                     </div>
                     

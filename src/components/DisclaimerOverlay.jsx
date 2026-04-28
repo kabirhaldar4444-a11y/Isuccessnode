@@ -51,7 +51,7 @@ const DisclaimerOverlay = ({ user, profile }) => {
             </div>
             <div>
               <h2 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1.5 uppercase">Terms & Conditions</h2>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Official Enrollment Protocol</p>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Please read carefully</p>
             </div>
           </div>
           <div className="hidden sm:block">
@@ -366,7 +366,7 @@ const DisclaimerOverlay = ({ user, profile }) => {
                 <div className="w-5 h-5 border-2 border-slate-300 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  Establish Agreement
+                  I Agree & Continue
                   <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="animate-pulse">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>

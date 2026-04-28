@@ -62,12 +62,12 @@ const Login = ({ onLoginSuccess }) => {
 
   return (
     <AuthLayout 
-      title="Access Portal" 
-      subtitle="Authorized Personnel Only"
+      title="Exam Portal" 
+      subtitle="Please enter your details"
     >
       <form onSubmit={handleLogin} className="space-y-12 animate-slide-up">
         <div className="space-y-4 group">
-          <label className="text-[9px] font-black text-slate-900 uppercase tracking-[0.3em] block ml-1">Authorized Email</label>
+          <label className="text-[9px] font-black text-slate-900 uppercase tracking-[0.3em] block ml-1">Email Address</label>
           <div className="relative">
             <input 
               type="email" 
@@ -82,7 +82,7 @@ const Login = ({ onLoginSuccess }) => {
         </div>
 
         <div className="space-y-4 group">
-          <label className="text-[9px] font-black text-slate-900 uppercase tracking-[0.3em] block ml-1">Secure Password</label>
+          <label className="text-[9px] font-black text-slate-900 uppercase tracking-[0.3em] block ml-1">Password</label>
           <div className="relative">
             <input 
               type={showPassword ? "text" : "password"} 
@@ -117,7 +117,7 @@ const Login = ({ onLoginSuccess }) => {
           ) : (
             <>
               <span className="relative z-10 flex items-center justify-center gap-3">
-                Access Portal
+                Login
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-1"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
