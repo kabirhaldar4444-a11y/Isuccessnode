@@ -42,32 +42,64 @@ DATE/TIME: ${new Date().toLocaleString('en-IN')}
 
 The candidate has officially accepted the following terms:
 
-01. SERVICE DELIVERY
-────────────────────
-• Enrollment & confirmation process acknowledged.
-• Fee payment & GST invoice protocol understood.
-• Pre-exam (24-48h) and Results (24-48h) flow accepted.
-• Reward eligibility (80%+ score) noted.
-• Training duration (90-120 days) and format accepted.
+SERVICE DELIVERY:
+• Enrollment Process: Customers visit the iSuccessNode website 
+  and fill out the Enrollment Form. After form submission, Our 
+  team connects with the customer.
+• Process Flow: A detailed email is shared explaining the 
+  complete process flow and fee structure. Payments may also 
+  be accepted directly through an authorized professional 
+  expert trainer account, where applicable.
+• Explanation: During the call, the team explains the course 
+  structure, learning journey, and assessment-to-certification 
+  flow. Customer then confirms participation.
+• Fee Payment: Upon completion, a GST-compliant invoice is 
+  issued within 6 hours. Study materials are shared within 24h.
+• Pre-Exam: Conducted within 24–48 hours of fee payment to 
+  assess initial understanding. Results shared within 24–48h.
+• Certificate: A Pre-Board Professional Certificate is issued 
+  with "Under Training" mentioned.
+• Reward: Customers scoring above 80% become eligible for a 
+  gift from four available options.
+• Training: Access to recorded video lectures within 15 days. 
+  Duration is 90–120 days.
+• Final Exam: Conducted between 90-120 days.
+• Final Certificate: Issued upon successful completion, 
+  clearly stating status as "Certified."
+• Support: Team remains in contact for guidance throughout.
 
-02. TERMS & CONDITIONS
-──────────────────────
-• Course Duration: 90-120 days.
-• Training: Recorded lectures only, no live sessions.
-• Exam Policy: Single attempts only for all assessments.
-• Reward: Complimentary gift for 80%+ scorers.
+TERMS & CONDITIONS:
+• Delivery: Complete course delivered within 90-120 days.
+• Access: Invoice, materials, and videos within 10 working days.
+• Exams: Pre-Board (24-48h) and Final (90-120 days) attempts.
+• Certification: Final PC Softcopy indicates "Successfully 
+  Certified." Abbreviation format used (e.g., "RCT" for 
+  Resilience Coach Training).
+• Training Format: No live sessions. Materials shared once via 
+  email and are non-transferable.
+• Exam Policy: Multiple attempts are NOT permitted for any exam.
+• Rewards: 80%+ scorers eligible for gifts worth 50k-100k. 
+  Consent required for promotional use of photograph.
 
-03. REFUND POLICY
-─────────────────
-• NO REFUND after attempting any exam.
-• 90% refund applicable BEFORE any exam attempt.
-• 10% mandatory deduction on all refunds.
+REFUND POLICY:
+• No Refund: Not applicable after attempting any exam 
+  (Pre-Board or Final).
+• 90% Refund: Applicable ONLY before attempting any exam 
+  and if requested within 24 hours of payment.
+• Deductions: A 10% deduction applies to all approved refunds 
+  to cover administrative and content access costs.
+• Procedure: Written request via support@isucessnode.com 
+  including full credentials and receipt.
+• Non-Refundable Cases: Partial completion, delayed progress, 
+  accessed content, or general dissatisfaction.
 
-04. PRIVACY POLICY
-──────────────────
-• Data collection for enrollment and certification only.
-• No data sharing with third parties.
-• Secure encrypted storage of all identification data.
+LEGAL NOTICE:
+• Independent Org: I-SUCCESSNODE (OPC) PVT. LTD. is an 
+  independent entity not affiliated with other bodies.
+• Employment: Programs are for skill development only; 
+  NO guarantee of job placement or financial gain.
+• Third-Party: No liability for losses from third-party 
+  recommendations or representations.
 
 FINAL CONFIRMATION:
 ───────────────────
