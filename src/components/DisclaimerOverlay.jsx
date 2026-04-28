@@ -54,9 +54,7 @@ const DisclaimerOverlay = ({ user, profile }) => {
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Please read carefully</p>
             </div>
           </div>
-          <div className="hidden sm:block">
-            <div className="px-4 py-2 rounded-xl bg-slate-50 text-slate-400 text-[9px] font-black uppercase tracking-widest border border-slate-100">v2.4.0 Final</div>
-          </div>
+          {/* Removed v2.4.0 Final badge */}
         </div>
 
         {/* Content Area */}
@@ -143,11 +141,11 @@ const DisclaimerOverlay = ({ user, profile }) => {
                 <div className="space-y-6">
                   <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Pre-Examination Reward Policy</h4>
                   <div className="p-8 bg-slate-900 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-6">
+                    <div className="absolute top-6 right-6">
                       <div className="px-4 py-2 bg-emerald-500 text-white text-[9px] font-black rounded-xl uppercase tracking-widest shadow-xl shadow-emerald-500/20">Reward Eligible</div>
                     </div>
                     <div className="space-y-6">
-                      <p className="text-[13px] font-bold text-white tracking-tight leading-relaxed">Candidates who secure 80% or above in the designated pre-examination will be eligible to receive a complimentary gift worth upto 50k-100k.</p>
+                      <p className="text-[13px] font-bold text-white tracking-tight leading-relaxed pr-32">Candidates who secure 80% or above in the designated pre-examination will be eligible to receive a complimentary gift worth upto 50k-100k.</p>
                       <ul className="text-[11px] text-slate-400 space-y-3 font-medium leading-relaxed">
                         <li>• Eligible candidates will be provided with 5+ options for gift items. Final selection subject to availability and company discretion.</li>
                         <li>• By qualifying, candidates consent to the use and display of their photograph on the company’s official website and promotional platforms.</li>
