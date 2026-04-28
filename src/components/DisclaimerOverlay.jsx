@@ -63,10 +63,119 @@ const DisclaimerOverlay = ({ user, profile }) => {
         <div className="px-8 sm:px-12 py-10 overflow-y-auto flex-1 custom-scrollbar selection:bg-slate-100 bg-white">
           <div className="space-y-20">
             
-            {/* 01. Refund Policy Section */}
+            {/* 01. Service Delivery Section */}
             <section className="space-y-8">
               <div className="flex items-center gap-4">
                 <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 font-black text-[10px]">01</div>
+                <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.25em]">Service Delivery</h3>
+              </div>
+              
+              <div className="relative pl-10 space-y-16 border-l border-slate-100">
+                {[
+                  { t: "Enrollment Process", d: "Customers visit the iSuccessNode website and fill out the Enrollment Form. After form submission, Our team connects with the customer. A detailed email is shared explaining the complete process flow and fee structure. Payments may also be accepted directly through an authorized professional expert trainer account, where applicable." },
+                  { t: "Process Explanation & Confirmation", d: "During the call, the team explains the course structure, learning journey, and assessment-to-certification flow. The customer then confirms their participation in the program." },
+                  { t: "Fee Payment", d: "Upon successful completion of the fee payment, a GST-compliant invoice is issued within 6 hours. Pre-examination study materials are shared with the learner within 24 hours." },
+                  { t: "Pre-Exam", d: "A Pre-Exam is conducted within 24–48 hours of fee payment. This exam assesses the customer’s initial understanding of the selected domain. Before the exam, the Guidance Team connects to explain the exam process." },
+                  { t: "Pre-Exam Result & Pre-Board Professional Certificate", d: "Results are shared within 24–48 hours via email. A Pre-Board Professional Certificate is issued with “Under Training” mentioned." },
+                  { t: "Reward Eligibility", d: "Customers scoring above 80% become eligible for a gift. One gift can be selected from four available options, which will be delivered accordingly." },
+                  { t: "Self-Paced Training", d: "Access to recorded video lectures is shared within 15 days on payment. Training duration is 90–120 days." },
+                  { t: "Final Exam", d: "A Final Exam is conducted between 90-120 days." },
+                  { t: "Final Certificate", d: "Upon successful completion of all requirements, the Final Certificate is issued. The certificate will clearly state the status as “Certified.”" },
+                  { t: "Continuous Support", d: "Throughout the entire journey, the iSuccessNode team remains in contact for guidance and support." }
+                ].map((step, i) => (
+                  <div key={i} className="relative group">
+                    <div className="absolute -left-[45px] top-1.5 w-3.5 h-3.5 rounded-full bg-white border-[3px] border-slate-900 shadow-lg group-hover:scale-125 transition-all duration-300 ring-4 ring-white" />
+                    <h5 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-2.5">{step.t}</h5>
+                    <p className="text-xs text-slate-500 font-medium leading-relaxed">{step.d}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 02. Terms & Conditions Section */}
+            <section className="space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 font-black text-[10px]">02</div>
+                <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.25em]">Terms & Conditions</h3>
+              </div>
+              
+              <div className="space-y-12 pl-4 border-l border-slate-100">
+                <div className="space-y-6">
+                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Course Duration and Delivery</h4>
+                  <div className="space-y-4 text-[13px] text-slate-500 font-medium leading-relaxed">
+                    <p>The complete course will be delivered within 90 to 120 days from the date of enrollment.</p>
+                    <p>After enrollment, learners will receive an Invoice, Study Materials and video lectures within 10 working days of making the payment.</p>
+                    <p>A Pre-Board Exam will be scheduled 24 to 48 hours after payment, accessible via the official I-SUCESSNODE exam portal. An Initial PC Softcopy (indicating “Under Training” and course details), will be provided after going through the pre-board exam within 48 to 72 hours.</p>
+                    <p>The final online exam must be attended between 90 to 120 days after enrollment.</p>
+                    <p>Upon successful exam completion, the Final PC Softcopy will be emailed to the candidate, indicating “Successfully Certified”.</p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Training Format</h4>
+                  <ul className="space-y-3 text-[13px] text-slate-500 font-medium leading-relaxed">
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> No live training sessions will be provided.</li>
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> Study material and training videos will be shared once only via email after the enrollment.</li>
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> Training videos and study materials are non-transferable and intended solely for enrolled candidates.</li>
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> Upon successful completion of the program, the certificate will be released with an abbreviation format. For an example if the course you have enrolled in "Resilience Coach Training", then "RCT" will appear on your certificate, similarly if the course name is Decision Making Mastery Training, on the certificate it will show "DMMT"</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-6">
+                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Exam Policy</h4>
+                  <ul className="space-y-3 text-[13px] text-slate-500 font-medium leading-relaxed">
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> Multiple exam attempts are not permitted, for pre- board as well as final exam.</li>
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> The Final PC Softcopy will be issued within 15 days after the final exam attempt.</li>
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> No hard copy certificates will be delivered; all documents will be sent in digital format only.</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-6">
+                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Refund Policy (Summary)</h4>
+                  <ul className="space-y-3 text-[13px] text-slate-500 font-medium leading-relaxed">
+                    <li className="flex gap-3"><span className="text-slate-900 font-black">•</span> No refund will be applicable after attempting any exam (Pre-Board or Final).</li>
+                    <li className="flex gap-3"><span className="text-slate-900 font-black">•</span> A 90% refund is applicable before attempting any exam.</li>
+                    <li className="flex gap-3"><span className="text-slate-900 font-black">•</span> There is no 100% refund policy.</li>
+                    <li className="flex gap-3"><span className="text-slate-900 font-black">•</span> A 10% deduction will apply to all refunds to cover the cost of digital study materials and content access.</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-6">
+                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Pre-Examination Reward Policy</h4>
+                  <div className="p-8 bg-slate-900 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-6">
+                      <div className="px-4 py-2 bg-emerald-500 text-white text-[9px] font-black rounded-xl uppercase tracking-widest shadow-xl shadow-emerald-500/20">Reward Eligible</div>
+                    </div>
+                    <div className="space-y-6">
+                      <p className="text-[13px] font-bold text-white tracking-tight leading-relaxed">Candidates who secure 80% or above in the designated pre-examination will be eligible to receive a complimentary gift worth upto 50k-100k.</p>
+                      <ul className="text-[11px] text-slate-400 space-y-3 font-medium leading-relaxed">
+                        <li>• Eligible candidates will be provided with 5+ options for gift items. Final selection subject to availability and company discretion.</li>
+                        <li>• By qualifying, candidates consent to the use and display of their photograph on the company’s official website and promotional platforms.</li>
+                        <li>• Gift items dispatched within 45 to 60 days from the date of result declaration.</li>
+                        <li>• All gifts accompanied by the manufacturer’s warranty, where applicable.</li>
+                        <li>• Courier tracking details shared via registered email once dispatched.</li>
+                        <li>• Delivery verification (OTP) required by the courier partner will be shared with the recipient.</li>
+                        <li>• The company reserves the right to modify, substitute, or discontinue the reward offer at any time without prior notice.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">General Terms</h4>
+                  <ul className="space-y-3 text-[13px] text-slate-500 font-medium leading-relaxed">
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> All timelines mentioned are approximate and subject to variation depending on course type and customer engagement.</li>
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> Study materials and videos are shared once and cannot be reissued.</li>
+                    <li className="flex gap-3"><span className="text-slate-900">•</span> By enrolling, candidates agree to comply with the above terms and conditions.</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            {/* 03. Refund Policy Section */}
+            <section className="space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 font-black text-[10px]">03</div>
                 <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.25em]">Refund Policy</h3>
               </div>
               
@@ -152,91 +261,11 @@ const DisclaimerOverlay = ({ user, profile }) => {
               </div>
             </section>
 
-            {/* 02. Terms & Conditions Section */}
-            <section className="space-y-8">
+            {/* 04. Privacy Policy Section */}
+            <section className="space-y-8 pb-10">
               <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 font-black text-[10px]">02</div>
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.25em]">Terms & Conditions</h3>
-              </div>
-              
-              <div className="space-y-12 pl-4 border-l border-slate-100">
-                <div className="space-y-6">
-                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Course Duration and Delivery</h4>
-                  <div className="space-y-4 text-[13px] text-slate-500 font-medium leading-relaxed">
-                    <p>The complete course will be delivered within 90 to 120 days from the date of enrollment.</p>
-                    <p>After enrollment, learners will receive an Invoice, Study Materials and video lectures within 10 working days of making the payment.</p>
-                    <p>A Pre-Board Exam will be scheduled 24 to 48 hours after payment, accessible via the official I-SUCESSNODE exam portal. An Initial PC Softcopy (indicating “Under Training” and course details), will be provided after going through the pre-board exam within 48 to 72 hours.</p>
-                    <p>The final online exam must be attended between 90 to 120 days after enrollment.</p>
-                    <p>Upon successful exam completion, the Final PC Softcopy will be emailed to the candidate, indicating “Successfully Certified”.</p>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Training Format</h4>
-                  <ul className="space-y-3 text-[13px] text-slate-500 font-medium leading-relaxed">
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> No live training sessions will be provided.</li>
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> Study material and training videos will be shared once only via email after the enrollment.</li>
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> Training videos and study materials are non-transferable and intended solely for enrolled candidates.</li>
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> Upon successful completion of the program, the certificate will be released with an abbreviation format. For an example if the course you have enrolled in "Resilience Coach Training", then "RCT" will appear on your certificate, similarly if the course name is Decision Making Mastery Training, on the certificate it will show "DMMT"</li>
-                  </ul>
-                </div>
-
-                <div className="space-y-6">
-                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Exam Policy</h4>
-                  <ul className="space-y-3 text-[13px] text-slate-500 font-medium leading-relaxed">
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> Multiple exam attempts are not permitted, for pre- board as well as final exam.</li>
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> The Final PC Softcopy will be issued within 15 days after the final exam attempt.</li>
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> No hard copy certificates will be delivered; all documents will be sent in digital format only.</li>
-                  </ul>
-                </div>
-
-                <div className="space-y-6">
-                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Refund Policy (Summary)</h4>
-                  <ul className="space-y-3 text-[13px] text-slate-500 font-medium leading-relaxed">
-                    <li className="flex gap-3"><span className="text-slate-900 font-black">•</span> No refund will be applicable after attempting any exam (Pre-Board or Final).</li>
-                    <li className="flex gap-3"><span className="text-slate-900 font-black">•</span> A 90% refund is applicable before attempting any exam.</li>
-                    <li className="flex gap-3"><span className="text-slate-900 font-black">•</span> There is no 100% refund policy.</li>
-                    <li className="flex gap-3"><span className="text-slate-900 font-black">•</span> A 10% deduction will apply to all refunds to cover the cost of digital study materials and content access.</li>
-                  </ul>
-                </div>
-
-                <div className="space-y-6">
-                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Pre-Examination Reward Policy</h4>
-                  <div className="p-8 bg-slate-900 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-6">
-                      <div className="px-4 py-2 bg-emerald-500 text-white text-[9px] font-black rounded-xl uppercase tracking-widest shadow-xl shadow-emerald-500/20">Reward Eligible</div>
-                    </div>
-                    <div className="space-y-6">
-                      <p className="text-[13px] font-bold text-white tracking-tight leading-relaxed">Candidates who secure 80% or above in the designated pre-examination will be eligible to receive a complimentary gift worth upto 50k-100k.</p>
-                      <ul className="text-[11px] text-slate-400 space-y-3 font-medium leading-relaxed">
-                        <li>• Eligible candidates will be provided with 5+ options for gift items. Final selection subject to availability and company discretion.</li>
-                        <li>• By qualifying, candidates consent to the use and display of their photograph on the company’s official website and promotional platforms.</li>
-                        <li>• Gift items dispatched within 45 to 60 days from the date of result declaration.</li>
-                        <li>• All gifts accompanied by the manufacturer’s warranty, where applicable.</li>
-                        <li>• Courier tracking details shared via registered email once dispatched.</li>
-                        <li>• Delivery verification (OTP) required by the courier partner will be shared with the recipient.</li>
-                        <li>• The company reserves the right to modify, substitute, or discontinue the reward offer at any time without prior notice.</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">General Terms</h4>
-                  <ul className="space-y-3 text-[13px] text-slate-500 font-medium leading-relaxed">
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> All timelines mentioned are approximate and subject to variation depending on course type and customer engagement.</li>
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> Study materials and videos are shared once and cannot be reissued.</li>
-                    <li className="flex gap-3"><span className="text-slate-900">•</span> By enrolling, candidates agree to comply with the above terms and conditions.</li>
-                  </ul>
-                </div>
-              </div>
-            </section>
-
-            {/* 03. Terms & Conditions (Privacy Policy) Section */}
-            <section className="space-y-8">
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 font-black text-[10px]">03</div>
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.25em]">Terms & Conditions</h3>
+                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 font-black text-[10px]">04</div>
+                <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.25em]">Privacy Policy</h3>
               </div>
               
               <div className="space-y-12 pl-4 border-l border-slate-100">
@@ -305,37 +334,6 @@ const DisclaimerOverlay = ({ user, profile }) => {
                 </div>
               </div>
             </section>
-
-            {/* 04. Service Delivery Section */}
-            <section className="space-y-8 pb-10">
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 font-black text-[10px]">04</div>
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.25em]">Service Delivery</h3>
-              </div>
-              
-              <div className="relative pl-10 space-y-16">
-                <div className="absolute left-0 top-2 bottom-2 w-px bg-slate-100" />
-                
-                {[
-                  { t: "Enrollment Process", d: "Customers visit the iSuccessNode website and fill out the Enrollment Form. After form submission, Our team connects with the customer. A detailed email is shared explaining the complete process flow and fee structure. Payments may also be accepted directly through an authorized professional expert trainer account, where applicable." },
-                  { t: "Process Explanation & Confirmation", d: "During the call, the team explains the course structure, learning journey, and assessment-to-certification flow. The customer then confirms their participation in the program." },
-                  { t: "Fee Payment", d: "Upon successful completion of the fee payment, a GST-compliant invoice is issued within 6 hours. Pre-examination study materials are shared with the learner within 24 hours." },
-                  { t: "Pre-Exam", d: "A Pre-Exam is conducted within 24–48 hours of fee payment. This exam assesses the customer’s initial understanding of the selected domain. Before the exam, the Guidance Team connects to explain the exam process." },
-                  { t: "Pre-Exam Result & Pre-Board Professional Certificate", d: "Results are shared within 24–48 hours via email. A Pre-Board Professional Certificate is issued with “Under Training” mentioned." },
-                  { t: "Reward Eligibility", d: "Customers scoring above 80% become eligible for a gift. One gift can be selected from four available options, which will be delivered accordingly." },
-                  { t: "Self-Paced Training", d: "Access to recorded video lectures is shared within 15 days on payment. Training duration is 90–120 days." },
-                  { t: "Final Exam", d: "A Final Exam is conducted between 90-120 days." },
-                  { t: "Final Certificate", d: "Upon successful completion of all requirements, the Final Certificate is issued. The certificate will clearly state the status as “Certified.”" },
-                  { t: "Continuous Support", d: "Throughout the entire journey, the iSuccessNode team remains in contact for guidance and support." }
-                ].map((step, i) => (
-                  <div key={i} className="relative group">
-                    <div className="absolute -left-[45px] top-1.5 w-3.5 h-3.5 rounded-full bg-white border-[3px] border-slate-900 shadow-lg group-hover:scale-125 transition-all duration-300 ring-4 ring-white" />
-                    <h5 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-2.5">{step.t}</h5>
-                    <p className="text-xs text-slate-500 font-medium leading-relaxed">{step.d}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
           </div>
         </div>
 
@@ -353,7 +351,7 @@ const DisclaimerOverlay = ({ user, profile }) => {
                 <svg className={`absolute left-1 top-1 w-4 h-4 text-white pointer-events-none transition-transform duration-300 ${disclaimerCheckbox ? 'scale-100' : 'scale-0'}`} fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
               </div>
               <span className="text-[10px] font-black text-slate-400 group-hover:text-slate-900 transition-colors leading-relaxed uppercase tracking-tight">
-                I have read and unequivocally agree to the <span className="text-slate-900 underline underline-offset-4 decoration-2">isuccessnode Terms & Conditions</span> and all associated identity protocols.
+                I have read and unequivocally agree to the <span className="text-slate-900 underline underline-offset-4 decoration-2">isuccessnode TERMS & CONDITIONS</span> and all associated identity protocols.
               </span>
             </label>
 
