@@ -95,9 +95,9 @@ const SignaturePad = ({ onSave, onClear }) => {
 
   return (
     <div className="flex flex-col gap-3 w-full animate-fade-in">
-      <div className="flex items-center justify-between mb-1">
-        <label className="text-sm font-bold text-[color:var(--text-dark)] flex items-center gap-2">
-          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+      <div className="flex items-center justify-between mb-3 px-1">
+        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 flex items-center gap-2">
+          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
           </svg>
           Digital Signature *
@@ -105,9 +105,9 @@ const SignaturePad = ({ onSave, onClear }) => {
         <button 
           type="button" 
           onClick={clearCanvas}
-          className="text-xs font-bold text-rose-500 hover:text-rose-600 flex items-center gap-1 p-1"
+          className="text-[9px] font-black text-rose-600 uppercase tracking-widest hover:text-rose-700 transition-colors flex items-center gap-1.5"
         >
-          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
           Clear
@@ -128,12 +128,12 @@ const SignaturePad = ({ onSave, onClear }) => {
         />
         {!hasContent && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-            <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Sign Here (Mouse/Touch/Pen)</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">Sign Here (Mouse/Touch/Pen)</span>
           </div>
         )}
       </div>
       
-      <p className="text-[10px] text-[color:var(--text-light)] italic">
+      <p className="text-[9px] font-medium text-slate-400 italic ml-2">
         * Please sign carefully. This signature will be used for all certificates and official documents.
       </p>
     </div>

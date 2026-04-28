@@ -509,18 +509,8 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
                 <h2 className="text-[11px] font-black text-emerald-600 uppercase tracking-[0.25em]">Identity Attestation</h2>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-between px-2">
-                  <label className={labelClass}>Digital Signature *</label>
-                  <button type="button" onClick={() => setSignatureBlob(null)} className="text-[9px] font-black text-rose-600 uppercase tracking-widest hover:text-rose-700 transition-colors flex items-center gap-2">
-                    <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                    Clear
-                  </button>
-                </div>
-                <div className="bg-white rounded-3xl border border-slate-200 border-dashed overflow-hidden group hover:border-emerald-300 transition-colors shadow-sm">
-                  <SignaturePad onSave={(blob) => setSignatureBlob(blob)} onClear={() => setSignatureBlob(null)} placeholder="Sign here (Mouse/Touch/Pen)" />
-                </div>
-                <p className="text-[9px] font-medium text-slate-400 italic ml-2">* Please sign carefully. This signature will be used for all certificates and official documents.</p>
+              <div className="bg-white rounded-3xl border border-slate-200 border-dashed overflow-hidden group hover:border-emerald-300 transition-colors shadow-sm">
+                <SignaturePad onSave={(blob) => setSignatureBlob(blob)} onClear={() => setSignatureBlob(null)} placeholder="Sign here (Mouse/Touch/Pen)" />
               </div>
             </div>
 
