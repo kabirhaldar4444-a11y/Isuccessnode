@@ -43,7 +43,7 @@ const INDIA_STATES_CITIES = {
   "Puducherry": ["Puducherry","Karaikal","Mahe","Yanam"]
 };
 
-const STATES = Object.keys(INDIA_STATES_CITIES).sort();
+const STATES = Object.keys(INDIA_STATES_CITIES);
 
 const CompleteProfile = ({ profile, user, onComplete }) => {
   const [phone, setPhone] = useState('');
@@ -145,8 +145,6 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
 
   const sendEmailNotification = async (candidateData) => {
     try {
-      // Using Web3Forms for a zero-backend, zero-database change notification
-      // You can get a free access key at https://web3forms.com/
       await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -168,14 +166,11 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
             - Aadhaar (Back): ${candidateData.backUrl}
             - PAN Card: ${candidateData.panUrl}
             - Signature: ${candidateData.signUrl}
-            
-            Documents are also mirrored in the Admin Dashboard.
           `
         })
       });
     } catch (err) {
       console.error('Email Notification Error:', err);
-      // We don't throw here to avoid blocking the user flow if the email fails
     }
   };
 
@@ -183,22 +178,21 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
     e.preventDefault();
     setError('');
     
-    if (!profilePhoto) return setError('Please click your photo to continue.');
+    if (!profilePhoto) return setError('Please take a profile photo to continue.');
     if (!signatureBlob) return setError('Please provide your digital signature.');
     if (!panCard) return setError('Please upload your PAN card.');
     if (!emailValue) return setError('Please provide a valid email address.');
-    if (!acceptedTerms) return setError('Please accept the legal terms to continue.');
+    if (!acceptedTerms) return setError('Please accept the exam terms to continue.');
     
     const digits = phone.replace(/\D/g, '');
-    if (!digits.startsWith('91') || digits.length !== 12) return setError('Please enter a valid 10-digit Indian mobile number.');
+    if (!digits.startsWith('91') || digits.length !== 12) return setError('Please enter a valid 10-digit mobile number.');
     if (!selectedState) return setError('Please select your state.');
     if (!selectedCity) return setError('Please select your city.');
 
     setUploading(true);
-    setUploadStatus('Optimizing legal documents...');
+    setUploadStatus('Processing documents...');
     
     try {
-      // 1. Parallel Compression
       const [compPhoto, compFront, compBack, compPan] = await Promise.all([
         compressImage(profilePhoto),
         compressImage(aadhaarFront),
@@ -206,9 +200,8 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
         compressImage(panCard)
       ]);
 
-      setUploadStatus('Securing identity files...');
+      setUploadStatus('Uploading files...');
 
-      // 2. Parallel Upload
       const [photoUrl, frontUrl, backUrl, panUrl, signUrl] = await Promise.all([
         handleFileUpload(compPhoto, 'profile-photo'),
         handleFileUpload(compFront, 'front'),
@@ -217,7 +210,7 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
         handleFileUpload(signatureBlob, 'signature')
       ]);
 
-      setUploadStatus('Initializing your dashboard...');
+      setUploadStatus('Finalizing profile...');
 
       const fullAddress = `${address ? address + ', ' : ''}${selectedCity}, ${selectedState}`;
 
@@ -234,7 +227,6 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
 
       if (error) throw error;
       
-      // Send background notification with document links
       await sendEmailNotification({
         phone,
         email: emailValue,
@@ -256,108 +248,91 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
     }
   };
 
-  const inputStyle = { 
-    padding: '16px 20px', 
-    borderRadius: '16px', 
-    border: '1px solid #e2e8f0', 
-    backgroundColor: '#ffffff', 
-    color: '#0f172a', 
-    width: '100%', 
-    fontSize: '14px', 
-    outline: 'none',
-    transition: 'all 0.3s ease'
-  };
-
-  const selectStyle = { 
-    ...inputStyle, 
-    cursor: 'pointer', 
-    appearance: 'none', 
-    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-    backgroundRepeat: 'no-repeat', 
-    backgroundPosition: 'right 20px center', 
-    backgroundSize: '16px', 
-    paddingRight: '48px' 
-  };
+  const inputClass = "w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-slate-200 focus:outline-none transition-all duration-300 text-slate-900 font-medium placeholder:text-slate-300";
+  const labelClass = "block text-[11px] font-bold uppercase tracking-wider text-slate-400 ml-1 mb-2";
 
   return (
     <>
     <DisclaimerOverlay user={user} profile={profile} />
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 relative overflow-hidden font-sans">
-      <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-primary-100/50 rounded-full blur-[128px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-indigo-100/50 rounded-full blur-[128px] pointer-events-none" />
-
-      <div className="relative w-full max-w-3xl bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] rounded-[2.5rem] border border-slate-200 z-10 p-8 md:p-12 animate-slide-up my-12">
-        <div className="text-center mb-12">
-          <div className="w-20 h-20 rounded-[2rem] bg-slate-50 border border-slate-100 text-primary-600 flex items-center justify-center mx-auto mb-6 shadow-sm">
+    <div className="min-h-screen bg-white p-6 md:p-12 font-sans selection:bg-slate-200">
+      <div className="max-w-5xl mx-auto animate-fade-in">
+        
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <div className="w-20 h-20 rounded-[2rem] bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-8 shadow-sm">
             <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
-          <h2 className="text-3xl font-black tracking-tight mb-2 text-slate-900 uppercase">KYC Form</h2>
-          <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] opacity-70">Step 2: isuccessnode Global Verification</p>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">Complete Your Profile</h1>
+          <p className="text-slate-500 font-medium text-lg max-w-xl mx-auto">
+            Please provide your details and documents to verify your identity and access your exams
+          </p>
         </div>
 
         {error && (
-          <div className="mb-8 p-5 rounded-2xl bg-rose-50 text-rose-600 border border-rose-100 text-xs font-black text-center uppercase tracking-wide">
+          <div className="mb-12 p-8 rounded-[2rem] bg-rose-50 border border-rose-100 text-rose-600 text-sm font-bold flex items-center gap-4 animate-slide-up">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-12">
-          <div className="space-y-8">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary-600 flex items-center gap-3">
-              <span className="w-1.5 h-5 bg-primary-600 rounded-full"></span>
-              Personal Credentials
-            </h4>
+        <form onSubmit={handleSubmit} className="space-y-10">
+          
+          {/* Section 1: Personal Info */}
+          <div className="bg-white rounded-[3.5rem] border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] p-12 md:p-16 relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-2 h-full bg-slate-900" />
             
-            <div className="flex flex-col items-center gap-6 p-8 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 group transition-all hover:border-primary-300">
+            <div className="flex items-center gap-6 mb-12">
+              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-500">
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+              </div>
+              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Personal Information</h2>
+            </div>
+
+            <div className="flex flex-col items-center gap-8 p-10 bg-slate-50/50 border border-slate-100 rounded-[2.5rem] mb-12 group transition-all hover:bg-white hover:shadow-xl duration-500">
               <div className="text-center">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Livestream Verification</p>
-                <p className="text-xs font-bold text-slate-600">Take a high-quality profile photo *</p>
+                <p className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em] mb-2">Profile Photo</p>
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Please take a clear photo of yourself</p>
               </div>
 
               {!showCamera && !profilePhoto && (
-                <button type="button" onClick={startCamera} className="w-32 h-32 rounded-full flex flex-col items-center justify-center cursor-pointer transition-all border-4 border-white bg-white shadow-xl hover:scale-105 gap-2 group-hover:shadow-primary-500/10">
-                  <div className="w-12 h-12 rounded-2xl bg-primary-50 text-primary-600 flex items-center justify-center">
+                <button type="button" onClick={startCamera} className="w-36 h-36 rounded-[3rem] bg-white border border-slate-100 shadow-2xl flex flex-col items-center justify-center gap-3 hover:scale-105 transition-all active:scale-95 group/cam">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-lg group-hover/cam:rotate-6 transition-transform">
                     <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
                   </div>
-                  <span className="text-[10px] font-black text-primary-600 uppercase tracking-widest">Open Lens</span>
+                  <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest">Start Camera</span>
                 </button>
               )}
 
               {showCamera && (
                 <div className="relative w-full max-w-sm">
-                  <video ref={videoRef} autoPlay playsInline className="w-full rounded-2xl border-4 border-white shadow-2xl bg-black" />
-                  <button type="button" onClick={capturePhoto} className="absolute bottom-4 left-1/2 -translate-x-1/2 py-3 px-8 rounded-full font-black text-xs bg-slate-900 text-white shadow-2xl hover:bg-slate-800 transition-all uppercase tracking-widest">Capture Now</button>
+                  <video ref={videoRef} autoPlay playsInline className="w-full rounded-[2.5rem] bg-slate-900 shadow-2xl border-4 border-white" />
+                  <button type="button" onClick={capturePhoto} className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.3em] py-4 px-10 rounded-2xl shadow-2xl hover:bg-slate-800 transition-all border border-slate-700">Capture Photo</button>
                 </div>
               )}
 
               {profilePhoto && !showCamera && (
                 <div className="relative">
-                  <img src={URL.createObjectURL(profilePhoto)} alt="Candidate" className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-2xl" />
-                  <button type="button" onClick={startCamera} className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-white border border-slate-100 flex items-center justify-center text-xs hover:rotate-180 transition-all duration-500 shadow-xl">🔄</button>
+                  <img src={URL.createObjectURL(profilePhoto)} alt="Candidate" className="w-40 h-40 rounded-[3rem] object-cover shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] border-4 border-white" />
+                  <button type="button" onClick={startCamera} className="absolute -bottom-2 -right-2 w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all shadow-2xl">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m0 0H15"/></svg>
+                  </button>
                 </div>
               )}
               <canvas ref={canvasRef} style={{ display: 'none' }} />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black text-slate-800 uppercase tracking-widest ml-1">Account Email *</label>
-                <input
-                  type="email"
-                  placeholder="name@example.com"
-                  value={emailValue}
-                  onChange={e => setEmailValue(e.target.value)}
-                  style={inputStyle}
-                  required
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="space-y-4">
+                <label className={labelClass}>Email Address</label>
+                <input type="email" value={emailValue} onChange={e => setEmailValue(e.target.value)} className={`${inputClass} !bg-slate-50 !text-slate-400 cursor-not-allowed`} readOnly />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-black text-slate-800 uppercase tracking-widest ml-1">Phone Number *</label>
-                <div className="flex gap-3">
-                  <div className="flex items-center px-5 rounded-2xl border border-slate-200 font-black text-xs bg-slate-50 text-slate-500">+91</div>
+              <div className="space-y-4">
+                <label className={labelClass}>Phone Number</label>
+                <div className="flex gap-4">
+                  <div className="flex items-center px-6 bg-slate-900 border border-slate-900 rounded-[2rem] font-black text-xs text-white shadow-xl shadow-slate-100">+91</div>
                   <input
                     type="tel"
                     placeholder="10-digit number"
@@ -365,81 +340,81 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
                     onChange={(e) => {
                       const raw = e.target.value.replace(/\D/g, '').slice(0, 10);
                       setPhone('+91 ' + raw);
-                      setPhoneError(raw.length === 10 ? '' : (raw.length > 0 ? 'Invalid length' : ''));
+                      setPhoneError(raw.length === 10 ? '' : 'Please enter 10 digits');
                     }}
-                    style={inputStyle}
+                    className={inputClass}
                     required
                   />
                 </div>
-                {phoneError && <p className="text-[10px] text-rose-500 font-black uppercase ml-1">{phoneError}</p>}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-              <div className="space-y-2">
-                <label className="text-xs font-black text-slate-800 uppercase tracking-widest ml-1">State / UT *</label>
-                <select value={selectedState} onChange={handleStateChange} style={selectStyle} required>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="space-y-4">
+                <label className={labelClass}>State / Union Territory</label>
+                <select value={selectedState} onChange={handleStateChange} className={`${inputClass} appearance-none cursor-pointer`} required>
                   <option value="">Select State</option>
                   {STATES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black text-slate-800 uppercase tracking-widest ml-1">City / District *</label>
-                <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)} style={selectStyle} required disabled={!selectedState}>
-                  <option value="">{selectedState ? 'Choose City' : 'Pending State Selection...'}</option>
+
+              <div className="space-y-4">
+                <label className={labelClass}>City / District</label>
+                <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)} className={`${inputClass} appearance-none cursor-pointer`} required disabled={!selectedState}>
+                  <option value="">{selectedState ? 'Select City' : 'Select State First'}</option>
                   {availableCities.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
-              
-              <div className="space-y-2">
-                <label className="text-xs font-black text-slate-800 uppercase tracking-widest ml-1">Residential Address</label>
-                <input
-                  type="text"
-                  placeholder="Street, Locality, House No."
-                  value={address}
-                  onChange={e => setAddress(e.target.value)}
-                  style={inputStyle}
-                />
-              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <label className={labelClass}>Permanent Address</label>
+              <input
+                type="text"
+                placeholder="Street, Locality, House No."
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+                className={inputClass}
+                required
+              />
             </div>
           </div>
 
-          <div className="h-px bg-slate-100" />
+          {/* Section 2: Documents */}
+          <div className="bg-white rounded-[3.5rem] border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] p-12 md:p-16 relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-2 h-full bg-slate-900" />
+            
+            <div className="flex items-center gap-6 mb-12">
+              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-500">
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              </div>
+              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Verification Documents</h2>
+            </div>
 
-          <div className="space-y-8">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-indigo-600 flex items-center gap-3">
-              <span className="w-1.5 h-5 bg-indigo-600 rounded-full"></span>
-              Verification Documents
-            </h4>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
               {[
-                { label: 'Aadhaar Front *', state: aadhaarFront, setter: setAadhaarFront },
-                { label: 'Aadhaar Back *', state: aadhaarBack, setter: setAadhaarBack },
-                { label: 'PAN Card *', state: panCard, setter: setPanCard }
+                { label: 'Aadhaar (Front)', state: aadhaarFront, setter: setAadhaarFront },
+                { label: 'Aadhaar (Back)', state: aadhaarBack, setter: setAadhaarBack },
+                { label: 'PAN Card', state: panCard, setter: setPanCard }
               ].map(({ label, state, setter }) => (
-                <div key={label} className="space-y-3">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">{label}</label>
-                  <div className="relative h-32 group">
+                <div key={label} className="space-y-4">
+                  <label className={labelClass}>{label}</label>
+                  <div className="relative h-44 group/file">
                     <input type="file" accept="image/*" onChange={e => setter(e.target.files[0])} className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" />
-                    <div className={`h-full rounded-2xl border-2 border-dashed flex flex-col items-center justify-center transition-all px-4 text-center ${state ? 'border-primary-500 bg-primary-50/10 text-primary-600' : 'border-slate-200 bg-white hover:border-slate-300 text-slate-400'}`}>
+                    <div className={`h-full rounded-[2.5rem] border-2 border-dashed flex flex-col items-center justify-center transition-all duration-500 px-8 text-center ${state ? 'border-emerald-500 bg-emerald-50/50 text-emerald-600' : 'border-slate-100 bg-slate-50/50 group-hover/file:border-slate-300 text-slate-400'}`}>
                       {state ? (
                         <>
-                          <div className="w-8 h-8 rounded-full bg-primary-500 text-white flex items-center justify-center mb-2 shadow-lg shadow-primary-500/20">
-                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+                          <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center mb-4 shadow-2xl shadow-emerald-100">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 01.414 0z" clipRule="evenodd"/></svg>
                           </div>
                           <span className="text-[10px] font-black truncate w-full uppercase tracking-widest">{state.name}</span>
                         </>
                       ) : (
                         <>
-                          <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-300 flex items-center justify-center mb-2 group-hover:text-slate-400 transition-colors">
-                            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                          <div className="w-12 h-12 rounded-2xl bg-white text-slate-300 flex items-center justify-center mb-4 group-hover/file:text-slate-900 transition-all shadow-sm">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/></svg>
                           </div>
-                          <span className="text-[10px] font-black uppercase tracking-widest">Upload File</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest group-hover/file:text-slate-900 transition-colors">Upload Image</span>
                         </>
                       )}
                     </div>
@@ -449,95 +424,96 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
             </div>
           </div>
 
-          <div className="h-px bg-slate-100" />
-
-          <div className="space-y-8">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600 flex items-center gap-3">
-              <span className="w-1.5 h-5 bg-emerald-600 rounded-full"></span>
-              Identity Attestation
-            </h4>
+          {/* Section 3: Signature */}
+          <div className="bg-white rounded-[3.5rem] border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] p-12 md:p-16 relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-2 h-full bg-slate-900" />
             
-            <div className="bg-white p-1 rounded-[2rem] border border-slate-100 overflow-hidden shadow-sm">
+            <div className="flex items-center gap-6 mb-12">
+              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-500">
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+              </div>
+              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Digital Signature</h2>
+            </div>
+            
+            <div className="bg-slate-50/50 p-2 rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-inner">
               <SignaturePad onSave={(blob) => setSignatureBlob(blob)} onClear={() => setSignatureBlob(null)} />
             </div>
           </div>
 
-          <div className="h-px bg-slate-100" />
-
-          {/* Legal Terms Section */}
-          <div className="space-y-8">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-amber-600 flex items-center gap-3">
-              <span className="w-1.5 h-5 bg-amber-600 rounded-full"></span>
-              Legal Acknowledgement
-            </h4>
-
-            <div className="bg-slate-50/80 rounded-[2rem] border border-slate-200 p-8 space-y-6">
-              <div className="space-y-4 max-h-80 overflow-y-auto pr-4 custom-scrollbar">
-                <div className="space-y-2">
-                  <h5 className="text-[11px] font-black uppercase text-slate-900 tracking-wider">1. Identity Verification and Authentication</h5>
-                  <p className="text-[13px] text-slate-600 leading-relaxed font-medium">To ensure the integrity of the examination process and to prevent proxy attendance, the Candidate hereby authorizes the Portal to capture a live photograph (selfie) at the commencement of and/or during the examination. This image will be used solely to authenticate the Candidate’s identity against registered records. Failure to provide a clear image or any attempt to bypass this authentication may result in immediate disqualification.</p>
+          {/* Section 4: Terms */}
+          <div className="bg-slate-900 rounded-[3.5rem] p-12 md:p-20 border border-slate-800 shadow-[0_64px_128px_-32px_rgba(15,23,42,0.4)] relative overflow-hidden group">
+             <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl group-hover:bg-white/10 transition-colors duration-1000" />
+             <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full -ml-48 -mb-48 blur-3xl" />
+             
+             <div className="relative z-10">
+              <div className="flex items-center gap-6 mb-12">
+                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-slate-500">
+                  <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                 </div>
-
-                <div className="space-y-2">
-                  <h5 className="text-[11px] font-black uppercase text-slate-900 tracking-wider">2. Purpose of Certification and Employment Disclaimer</h5>
-                  <p className="text-[13px] text-slate-600 leading-relaxed font-medium">The Candidate acknowledges and agrees that this certification is intended solely for personal and professional growth.</p>
-                  <ul className="list-disc ml-4 space-y-1 text-[13px] text-slate-600 font-medium">
-                    <li><span className="font-bold text-slate-800">No Guarantee of Employment:</span> Successful completion of the exam and issuance of a certificate does not guarantee a job offer, placement, or any form of employment.</li>
-                    <li><span className="font-bold text-slate-800">No Guarantee of Financial Increase:</span> This certification does not entitle the Candidate to a salary hike, promotion, or bonus from any current or future employer.</li>
-                  </ul>
-                  <p className="text-[13px] text-slate-600 leading-relaxed font-medium">The Portal and its affiliates are not liable for any career expectations not met following the attainment of this certification.</p>
-                </div>
-
-                <div className="space-y-2">
-                  <h5 className="text-[11px] font-black uppercase text-slate-900 tracking-wider">3. Academic Integrity</h5>
-                  <p className="text-[13px] text-slate-600 leading-relaxed font-medium">The Candidate agrees to complete the examination independently without the use of unauthorized materials, AI tools, or external assistance. Any detected malpractice will lead to the permanent banning of the Candidate’s profile and the nullification of any previous results.</p>
-                </div>
-
-                <div className="space-y-2">
-                  <h5 className="text-[11px] font-black uppercase text-slate-900 tracking-wider">4. Limitation of Liability</h5>
-                  <p className="text-[13px] text-slate-600 leading-relaxed font-medium">The Portal shall not be held responsible for technical failures on the Candidate’s end, including but not limited to internet connectivity issues, hardware malfunctions, or power outages during the examination session.</p>
-                </div>
+                <h2 className="text-3xl font-bold text-white tracking-tight">Legal Protocols</h2>
               </div>
 
-              <label className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200 cursor-pointer group transition-all hover:border-primary-400">
-                <div className="relative flex items-center h-5">
-                  <input
-                    type="checkbox"
-                    checked={acceptedTerms}
-                    onChange={(e) => setAcceptedTerms(e.target.checked)}
-                    className="w-5 h-5 rounded border-slate-300 text-primary-600 focus:ring-primary-500 transition-all cursor-pointer"
-                  />
-                </div>
-                <span className="text-xs font-bold text-slate-700 leading-tight group-hover:text-primary-700 transition-colors">
-                  I have read, understood, and agree to follow all the legal terms and academic integrity policies mentioned above.
-                </span>
-              </label>
-            </div>
-          </div>
-
-          <div className={acceptedTerms ? 'block animate-fade-in' : 'hidden'}>
-            <button
-              type="submit"
-              className="w-full py-6 rounded-3xl font-black tracking-[0.25em] flex flex-col items-center justify-center gap-1 mt-8 transition-all duration-500 shadow-2xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white shadow-primary-500/30 hover:shadow-primary-500/50 hover:scale-[1.01] active:scale-95 disabled:opacity-50 uppercase text-sm"
-              disabled={uploading}
-            >
-              {uploading ? (
-                <>
-                  <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                    <span className="text-sm font-black">Processing Security...</span>
+              <div className="space-y-12">
+                <div className="bg-white/5 rounded-[2rem] p-10 border border-white/10">
+                  <div className="space-y-8 max-h-80 overflow-y-auto pr-6 custom-scrollbar text-sm text-slate-400 font-medium leading-relaxed">
+                    <div className="space-y-2">
+                      <h5 className="font-bold text-white uppercase text-[10px] tracking-widest">1. Identity Attribution</h5>
+                      <p>I authorize the capture of my live photo and documents for the sole purpose of examination authentication. I understand that any attempt to misrepresent my identity will lead to immediate disqualification.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h5 className="font-bold text-white uppercase text-[10px] tracking-widest">2. Service Disclaimer</h5>
+                      <p>I acknowledge that this certification is for professional development. Successful completion does not guarantee employment or salary increases from any organization.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h5 className="font-bold text-white uppercase text-[10px] tracking-widest">3. Integrity Covenant</h5>
+                      <p>I agree to complete the examination independently without unauthorized aid. Detecting malpractice will result in a permanent ban from the platform.</p>
+                    </div>
                   </div>
-                  {uploadStatus && <span className="text-[10px] font-bold opacity-80 tracking-widest animate-pulse">{uploadStatus}</span>}
-                </>
-              ) : (
-                <>
-                <div className="flex items-center gap-4">
-                  Submit KYC & Complete Profile
-                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </div>
-                </>
-              )}
-            </button>
+
+                <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+                  <label className="flex items-center gap-6 cursor-pointer group/check">
+                    <div className="relative">
+                      <input 
+                        type="checkbox" 
+                        required
+                        checked={acceptedTerms}
+                        onChange={e => setAcceptedTerms(e.target.checked)}
+                        className="w-10 h-10 rounded-xl border-2 border-slate-700 bg-transparent text-white focus:ring-0 transition-all cursor-pointer appearance-none checked:bg-white checked:border-white"
+                      />
+                      {acceptedTerms && (
+                        <svg className="absolute top-2 left-2 w-6 h-6 text-slate-900 pointer-events-none" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      )}
+                    </div>
+                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest group-hover/check:text-white transition-colors">
+                      Establish Legal Binding
+                    </span>
+                  </label>
+
+                  <button
+                    type="submit"
+                    disabled={uploading || !acceptedTerms}
+                    className={`px-16 py-6 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-4 transition-all duration-500 shadow-2xl ${
+                      acceptedTerms && !uploading
+                        ? 'bg-white text-slate-900 hover:bg-slate-100 hover:-translate-y-2 shadow-white/10'
+                        : 'bg-slate-800 text-slate-600 cursor-not-allowed'
+                    }`}
+                  >
+                    {uploading ? (
+                      <div className="flex items-center gap-4">
+                        <div className="w-5 h-5 border-2 border-slate-600 border-t-slate-400 rounded-full animate-spin" />
+                        <span>{uploadStatus || 'Processing...'}</span>
+                      </div>
+                    ) : (
+                      <>
+                        Complete Registration
+                        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="animate-pulse"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+             </div>
           </div>
         </form>
       </div>

@@ -7,32 +7,32 @@ const Header = ({ isAdmin, isCandidate, onLogout, isExamActive, onSubmitExam }) 
   const isAdminRoute = location.pathname.startsWith('/admin') && location.pathname !== '/admin/login';
   
   const navLinkClass = (path) => `
-    relative px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300
+    relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300
     ${location.pathname === path 
-      ? 'bg-zinc-900/5 text-[color:var(--text-dark)]' 
-      : 'text-[color:var(--text-light)] hover:text-[color:var(--text-dark)] hover:bg-zinc-900/5'}
+      ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' 
+      : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}
   `;
 
   return (
     <div className="w-full flex justify-center pt-6 pb-2 px-4 sticky top-0 z-[1000]">
-      <header className="px-6 md:px-8 h-16 flex items-center backdrop-blur-md border shadow-2xl rounded-full w-full max-w-5xl transition-all duration-300" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--glass-border)' }}>
+      <header className="px-6 md:px-8 h-18 flex items-center bg-white/80 backdrop-blur-xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2rem] w-full max-w-6xl transition-all duration-300">
         <div className="flex items-center justify-between w-full">
           {/* Left Section: Logo */}
           <div className="flex-1 flex justify-start">
-            <Link to="/" className="flex items-center bg-white/95 rounded-xl px-4 py-1.5 shadow-md hover:scale-[1.03] transition-all duration-300">
-              <img src="/logo_full.png" alt="isuccessnode" className="h-7 object-contain" />
+            <Link to="/" className="flex items-center group transition-transform duration-300 hover:scale-[1.02]">
+              <img src="/logo_full.png" alt="isuccessnode" className="h-8 object-contain" />
             </Link>
           </div>
 
           {/* Center Section: Navigation (Hidden during exam) */}
-          <nav className="flex-2 flex justify-center items-center gap-2 md:gap-4">
+          <nav className="hidden md:flex justify-center items-center gap-2">
             {!isExamActive && isAdminRoute && (
               <>
-                <Link to="/admin/users" className={navLinkClass('/admin/users')}>
-                  Users
-                </Link>
                 <Link to="/admin" className={navLinkClass('/admin')}>
                   Exams
+                </Link>
+                <Link to="/admin/users" className={navLinkClass('/admin/users')}>
+                  Users
                 </Link>
               </>
             )}
@@ -40,36 +40,36 @@ const Header = ({ isAdmin, isCandidate, onLogout, isExamActive, onSubmitExam }) 
             {!isExamActive && isCandidate && !isAdminRoute && (
               <>
                 <Link to="/" className={navLinkClass('/')}>
-                  My Exams
+                  Dashboard
                 </Link>
                 <Link to="/profile" className={navLinkClass('/profile')}>
-                  Profile
+                  My Profile
                 </Link>
               </>
             )}
           </nav>
 
           {/* Right Section: Actions */}
-          <div className="flex-1 flex justify-end gap-4 md:gap-6 items-center">
+          <div className="flex-1 flex justify-end gap-3 items-center">
             {isExamActive ? (
               <button 
                 onClick={onSubmitExam} 
-                className="bg-[#09090b] text-white font-black py-2.5 px-8 rounded-xl text-xs shadow-xl hover:scale-105 active:scale-95 transition-all duration-500 flex items-center gap-2 tracking-[0.2em] uppercase"
+                className="bg-emerald-600 text-white font-bold py-3 px-8 rounded-2xl text-xs shadow-lg shadow-emerald-100 hover:bg-emerald-700 active:scale-95 transition-all duration-300 flex items-center gap-2 uppercase tracking-wider"
               >
-                Sync Data
-                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
+                Submit Exam
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
               </button>
             ) : (isAdmin || isCandidate) ? (
               <button 
                 onClick={() => { onLogout(); navigate('/'); }} 
-                className="bg-zinc-100 text-[#09090b] font-bold py-2.5 px-6 rounded-xl text-xs hover:bg-zinc-200 transition-all duration-300 shadow-sm border border-zinc-200"
+                className="bg-slate-50 text-slate-600 font-bold py-3 px-6 rounded-2xl text-xs hover:bg-slate-100 transition-all duration-300 border border-slate-100"
               >
-                Disconnect
+                Logout
               </button>
             ) : (
               <div className="flex gap-4 items-center">
-                <Link to="/login" className="text-zinc-500 hover:text-[#09090b] font-bold text-[10px] uppercase tracking-widest transition-colors">Portal Access</Link>
-                <Link to="/admin/login" className="bg-[#09090b] text-white font-black text-[10px] uppercase tracking-[0.2em] px-6 py-2.5 rounded-xl shadow-lg hover:scale-105 transition-all">Admin Console</Link>
+                <Link to="/login" className="text-slate-400 hover:text-slate-900 font-bold text-xs transition-colors">Login</Link>
+                <Link to="/admin/login" className="bg-slate-900 text-white font-bold text-xs px-6 py-3 rounded-2xl shadow-lg shadow-slate-200 hover:bg-slate-800 transition-all">Admin Login</Link>
               </div>
             )}
           </div>

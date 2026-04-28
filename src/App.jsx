@@ -110,7 +110,7 @@ function App() {
       }
 
       if (data) {
-        toast('New examination session created successfully', 'success');
+        toast('Exam created successfully', 'success');
         fetchExams();
       }
     } catch (err) {
@@ -125,7 +125,7 @@ function App() {
       if (error) {
         toast(`Error deleting exam: ${error.message}`, 'error');
       } else {
-        toast('Exam session deleted permanently', 'success');
+        toast('Exam deleted successfully', 'success');
         fetchExams();
       }
     } catch (err) {
@@ -152,13 +152,16 @@ function App() {
   const isLoginRoute = location.pathname === '/login' || location.pathname === '/complete-profile';
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white font-sans">
-      <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+    <div className="min-h-screen flex items-center justify-center bg-white font-sans">
+      <div className="flex flex-col items-center gap-8">
+        <div className="w-16 h-16 border-4 border-slate-900 border-t-transparent rounded-full animate-spin shadow-2xl shadow-slate-100"></div>
+        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading...</p>
+      </div>
     </div>
   );
 
   return (
-    <div className="premium-container relative min-h-screen">
+    <div className="relative min-h-screen bg-slate-50/30">
       {!isLoginRoute && (
         <Header 
           isAdmin={profile?.role === 'admin'} 
@@ -173,10 +176,15 @@ function App() {
           <Route path="/login" element={
             user ? (
               !loading && !profile ? (
-                <div className="flex flex-col items-center justify-center min-h-[80vh] gap-6 text-center px-4 animate-fade-in">
-                  <h2 className="text-4xl font-black text-red-500 tracking-tight">Profile Not Found</h2>
-                  <p className="text-slate-400 max-w-md">Your account exists but we couldn't find your profile details.</p>
-                  <button onClick={handleLogout} className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full font-bold transition-all">Back to Login</button>
+                <div className="flex flex-col items-center justify-center min-h-screen gap-10 text-center px-6 animate-fade-in bg-white">
+                  <div className="w-24 h-24 rounded-[2.5rem] bg-rose-50 text-rose-500 flex items-center justify-center shadow-2xl shadow-rose-50">
+                    <svg width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
+                  </div>
+                  <div className="space-y-4">
+                    <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Profile Not Found</h2>
+                    <p className="text-slate-400 font-bold uppercase tracking-widest text-xs max-w-sm mx-auto">We couldn't find your profile. Please contact support.</p>
+                  </div>
+                  <button onClick={handleLogout} className="bg-slate-900 text-white px-12 py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all hover:bg-slate-800 shadow-2xl shadow-slate-200">Logout</button>
                 </div>
               ) : (
                 profile?.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/" />
@@ -194,10 +202,15 @@ function App() {
                 <CandidateDashboard exams={exams} onStartExam={setActiveExam} profile={profile} user={user} />
               )
             ) : profile?.role === 'admin' ? <Navigate to="/admin" /> : (
-              <div className="flex flex-col items-center justify-center min-h-[80vh] gap-6 text-center px-4 animate-fade-in">
-                <h2 className="text-4xl font-black text-red-500 tracking-tight">Identity Mismatch</h2>
-                <p className="text-slate-400 max-w-md">We found your account but your profile details are missing or corrupted.</p>
-                <button onClick={handleLogout} className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full font-bold transition-all">Sign Out & Retry</button>
+              <div className="flex flex-col items-center justify-center min-h-screen gap-10 text-center px-6 animate-fade-in bg-white">
+                <div className="w-24 h-24 rounded-[2.5rem] bg-amber-50 text-amber-500 flex items-center justify-center shadow-2xl shadow-amber-50">
+                  <svg width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
+                </div>
+                <div className="space-y-4">
+                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Account Error</h2>
+                  <p className="text-slate-400 font-bold uppercase tracking-widest text-xs max-w-sm mx-auto">There was an error with your account. Please try logging in again.</p>
+                </div>
+                <button onClick={handleLogout} className="bg-slate-900 text-white px-12 py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all hover:bg-slate-800 shadow-2xl shadow-slate-200">Logout</button>
               </div>
             )
           } />

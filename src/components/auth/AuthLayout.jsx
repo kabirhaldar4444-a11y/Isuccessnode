@@ -1,49 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
 
 const AuthLayout = ({ children, title, subtitle }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isAdmin = location.pathname === '/admin/login';
-
   return (
-    <div className="min-h-screen w-full flex items-center justify-center overflow-hidden relative font-sans transition-colors duration-500" style={{ background: 'var(--bg-gradient)' }}>
-      {/* Background Animated Blobs */}
-      <div className="absolute top-0 -left-4 w-72 h-72 bg-primary-500 rounded-full mix-blend-multiply filter blur-3xl opacity-[var(--blob-opacity)] animate-blob"></div>
-      <div className="absolute top-0 -right-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-[var(--blob-opacity)] animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-8 left-20 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-[var(--blob-opacity)] animate-blob animation-delay-4000"></div>
-      <div className="absolute -bottom-8 right-20 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-[var(--blob-opacity)] animate-blob animation-delay-2000"></div>
+    <div className="min-h-screen w-full flex items-center justify-center p-6 bg-slate-50 relative overflow-hidden font-sans selection:bg-slate-200">
+      
+      {/* Ethereal Drift Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[10%] left-[-10%] w-[40vw] h-[40vw] bg-indigo-100/30 rounded-full blur-[120px] animate-drift-right" style={{ '--drift-duration': '45s' }}></div>
+        <div className="absolute bottom-[20%] right-[-10%] w-[35vw] h-[35vw] bg-emerald-100/20 rounded-full blur-[100px] animate-drift-left" style={{ '--drift-duration': '55s' }}></div>
+        <div className="absolute top-[40%] right-[10%] w-[25vw] h-[25vw] bg-amber-100/20 rounded-full blur-[90px] animate-drift-left" style={{ '--drift-duration': '40s' }}></div>
+        <div className="absolute bottom-[10%] left-[15%] w-[30vw] h-[30vw] bg-rose-100/20 rounded-full blur-[110px] animate-drift-right" style={{ '--drift-duration': '50s' }}></div>
+      </div>
 
-      <div className="relative z-10 w-full max-w-[480px] px-6 animate-fade-in mx-auto">
-        <div className="glass-card rounded-[2.5rem] p-10 md:p-14 shadow-[0_22px_70px_4px_rgba(0,0,0,0.2)] border-2 relative overflow-hidden transition-all duration-500" 
-             style={{ 
-               backgroundColor: 'var(--card-bg)', 
-               borderColor: 'var(--glass-border)',
-               backdropFilter: 'blur(30px)',
-               WebkitBackdropFilter: 'blur(30px)'
-             }}>
-          
-          <div className="flex flex-col items-center mb-12">
-            <div className="relative group mb-8">
-              {/* Premium Logo 'Island' - Expertly Proportioned */}
-              <div className="absolute -inset-2 bg-gradient-to-r from-primary-500/40 to-secondary-500/40 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-700"></div>
-              <div className="relative w-40 h-auto bg-white rounded-[1.5rem] p-4 shadow-2xl transition-all duration-500 hover:scale-[1.05] hover:-translate-y-1">
-                <img src="/logo_full.png" alt="Logo" className="w-full h-full object-contain" />
-              </div>
-            </div>
-
-            <h1 className="text-3xl font-extrabold mb-2 tracking-tight transition-colors duration-300 text-center" style={{ color: 'var(--text-dark)' }}>{title}</h1>
-            <p className="text-sm font-semibold leading-relaxed transition-colors duration-300 opacity-60 text-center" style={{ color: 'var(--text-light)' }}>{subtitle}</p>
+      <div className="relative w-full max-w-[400px] animate-fade-in">
+        <div className="flex flex-col items-center mb-10">
+          <div className="w-32 mb-10 transform transition-transform hover:scale-105 duration-700">
+            <img src="/logo_full.png" alt="Logo" className="w-full h-auto object-contain" />
           </div>
 
-          {children}
+          <h1 className="text-3xl font-black text-slate-900 tracking-tighter mb-2 text-center uppercase">{title}</h1>
+          <p className="text-[10px] font-bold text-slate-400 text-center uppercase tracking-[0.2em]">{subtitle}</p>
+        </div>
 
-          {/* Footer branding */}
-          <div className="mt-10 pt-8 border-t flex flex-col items-center gap-1" style={{ borderColor: 'var(--glass-border)' }}>
-            <p className="text-[10px] font-black tracking-[0.3em] uppercase opacity-40" style={{ color: 'var(--text-light)' }}>
-              Elite Engineering Solutions
-            </p>
-          </div>
+        {children}
+
+        {/* Footer branding */}
+        <div className="mt-16 pt-8 border-t border-slate-100/50 flex flex-col items-center">
+          <p className="text-[9px] font-black tracking-[0.4em] uppercase text-slate-200">
+            Powered by I-Successnode
+          </p>
         </div>
       </div>
     </div>

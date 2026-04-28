@@ -206,62 +206,62 @@ const ManageQuestions = ({ exam, onBack }) => {
   };
 
   return (
-    <div className="manage-questions animate-fade-in relative z-10 w-full min-h-[500px]">
+    <div className="manage-questions animate-fade-in relative z-10 w-full min-h-[500px] font-sans selection:bg-slate-100">
       {/* Header Container */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 pb-8 border-b" style={{ borderColor: 'var(--glass-border)' }}>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 pb-8 border-b border-slate-50">
         <div>
           <button 
             onClick={onBack} 
-            className="flex items-center gap-2 mb-4 text-primary-500 hover:text-primary-400 transition-colors font-bold text-sm tracking-wide"
+            className="flex items-center gap-2 mb-4 text-slate-400 hover:text-slate-900 transition-colors font-bold text-xs uppercase tracking-widest"
           >
-            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
             Back to Exams
           </button>
-          <h2 className="text-3xl md:text-4xl font-black tracking-tight flex flex-col md:flex-row md:items-baseline gap-2" style={{ color: 'var(--text-dark)' }}>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900">
             {exam.title} 
-            <span className="font-medium opacity-50 text-xl tracking-normal" style={{ color: 'var(--text-light)' }}>- Questions</span>
+            <span className="font-medium text-slate-400 text-xl ml-2">Assessment Core</span>
           </h2>
         </div>
         
-        <label className="btn-premium flex items-center justify-center gap-2 cursor-pointer w-full md:w-auto mt-4 md:mt-0 !px-8 !py-4 h-14">
-          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-          {isUploading ? 'Uploading...' : 'Upload Excel'}
+        <label className="bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center gap-2 cursor-pointer w-full md:w-auto px-8 py-4 rounded-2xl shadow-xl shadow-slate-200 transition-all active:scale-95 group h-14">
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="transition-transform group-hover:-translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+          <span className="font-bold text-sm tracking-wide">{isUploading ? 'Syncing...' : 'Bulk Import (Excel)'}</span>
           <input type="file" accept=".xlsx, .xls" onChange={handleExcelUpload} style={{ display: 'none' }} disabled={isUploading} />
         </label>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative max-w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start relative max-w-full">
         {/* Add Question Form - Sticky on Desktop */}
-        <div className="lg:col-span-5 glass-card-saas p-8 lg:sticky lg:top-8 w-full order-2 lg:order-1 animate-slide-up">
-          <h3 className="text-xl font-black tracking-tight mb-6 flex items-center gap-3" style={{ color: 'var(--text-dark)' }}>
-            <span className="w-8 h-8 rounded-lg bg-primary-500/10 text-primary-500 flex items-center justify-center">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-            </span>
-            Add Single Question
+        <div className="lg:col-span-5 bg-white p-8 lg:sticky lg:top-8 w-full order-2 lg:order-1 animate-slide-up rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/40">
+          <h3 className="text-xl font-bold tracking-tight mb-8 flex items-center gap-4 text-slate-900">
+            <div className="w-10 h-10 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-900 shadow-sm">
+              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            </div>
+            Create Assessment Unit
           </h3>
           
-          <form onSubmit={handleAddQuestion} className="flex flex-col gap-5">
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-[color:var(--text-light)] ml-2">Question Text</label>
+          <form onSubmit={handleAddQuestion} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Question Content</label>
               <textarea 
-                placeholder="Enter question text here..." 
+                placeholder="Formulate the assessment question..." 
                 value={newQuestion.question_text}
                 onChange={(e) => setNewQuestion({...newQuestion, question_text: e.target.value})}
                 required
-                className="input-premium w-full resize-y min-h-[120px] py-4"
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all duration-300 min-h-[120px] text-sm font-medium leading-relaxed"
               />
             </div>
 
             <div className="space-y-3">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-[color:var(--text-light)] ml-2">Options</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Option Architecture</label>
               {newQuestion.options.map((opt, idx) => (
                 <div key={idx} className="relative group">
-                  <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center font-black pointer-events-none transition-colors group-focus-within:text-primary-500" style={{ color: 'var(--text-light)' }}>
+                  <div className="absolute inset-y-0 left-0 w-12 flex items-center justify-center font-bold text-slate-300 pointer-events-none transition-colors group-focus-within:text-slate-900 border-r border-slate-100/50">
                     {String.fromCharCode(65 + idx)}
                   </div>
                   <input 
                     type="text" 
-                    placeholder={`Option ${String.fromCharCode(65 + idx)}`}
+                    placeholder={`Define alternative ${String.fromCharCode(65 + idx)}`}
                     value={opt}
                     onChange={(e) => {
                       const newOpts = [...newQuestion.options];
@@ -269,128 +269,127 @@ const ManageQuestions = ({ exam, onBack }) => {
                       setNewQuestion({...newQuestion, options: newOpts});
                     }}
                     required
-                    className="input-premium w-full py-3"
-                    style={{ paddingLeft: '3.5rem' }}
+                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-16 pr-5 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all duration-300 text-sm font-medium"
                   />
                 </div>
               ))}
             </div>
 
-            <div className="space-y-1 pt-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-[color:var(--text-light)] ml-2">Correct Option</label>
+            <div className="space-y-2 pt-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Verification Key (Correct Option)</label>
               <div className="relative">
                 <select 
                   value={newQuestion.correct_option}
                   onChange={(e) => setNewQuestion({...newQuestion, correct_option: e.target.value})}
-                  className="input-premium w-full appearance-none py-3 cursor-pointer"
+                  className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all duration-300 text-sm font-bold appearance-none cursor-pointer"
                 >
                   {newQuestion.options.map((_, idx) => (
-                    <option key={idx} value={idx}>Option {String.fromCharCode(65 + idx)}</option>
+                    <option key={idx} value={idx}>Selection Alternative {String.fromCharCode(65 + idx)}</option>
                   ))}
                 </select>
-                <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-[color:var(--text-light)]">
-                  <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                <div className="absolute inset-y-0 right-5 flex items-center pointer-events-none text-slate-400">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-[color:var(--text-light)] ml-2">Explanation (Optional)</label>
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Rationale / Explanation</label>
               <textarea 
-                placeholder="Optional explanation for the correct answer..." 
+                placeholder="Provide a logical breakdown for the correct answer..." 
                 value={newQuestion.explanation}
                 onChange={(e) => setNewQuestion({...newQuestion, explanation: e.target.value})}
-                className="input-premium w-full resize-y min-h-[80px] py-3 text-sm"
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all duration-300 min-h-[100px] text-sm font-medium leading-relaxed"
               />
             </div>
             
-            <button type="submit" className="btn-premium w-full !py-4 font-black tracking-wide flex items-center justify-center gap-2">
-              Add Question
-              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+            <button type="submit" className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-5 rounded-2xl shadow-xl shadow-slate-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3 tracking-wide uppercase text-xs">
+              Commit Question
+              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
             </button>
           </form>
           
           {/* Documentation Block */}
-          <div className="mt-8 p-5 rounded-2xl border bg-primary-500/5" style={{ borderColor: 'var(--glass-border)' }}>
-            <h4 className="font-black text-primary-500 text-sm tracking-wide flex items-center gap-2 mb-3">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              Excel Format (.xlsx)
+          <div className="mt-10 p-6 rounded-2xl bg-slate-50 border border-slate-100">
+            <h4 className="font-bold text-slate-900 text-xs tracking-wide flex items-center gap-2 mb-4">
+              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h.008v.008H12V7.5zM12 21a9 9 0 110-18 9 9 0 010 18zm0-9h.008v5.25H12V12z" /></svg>
+              Standard Interface Specs
             </h4>
-            <div className="space-y-2 text-xs font-medium" style={{ color: 'var(--text-light)' }}>
-              <p>Supported Column Headers (Any of these sets):</p>
-              <div className="flex flex-col gap-3 mt-2">
-                <div className="flex flex-wrap gap-2 text-[10px]">
-                  {['question', 'opt1', 'opt2', 'opt3', 'opt4', 'correct_option', 'description'].map(h => (
-                    <span key={h} className="px-2 py-1 rounded bg-blue-500/10 text-blue-500 font-bold font-mono">{h}</span>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-2 text-[10px]">
-                  {['Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Answer', 'Explanation'].map(h => (
-                    <span key={h} className="px-2 py-1 rounded bg-slate-500/10 text-slate-500 font-bold font-mono">{h}</span>
-                  ))}
-                </div>
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-1.5">
+                {['question', 'opt1', 'opt2', 'opt3', 'opt4', 'correct_option'].map(h => (
+                  <span key={h} className="px-2 py-1 rounded-md bg-white border border-slate-200 text-slate-600 font-bold text-[9px] font-mono shadow-sm">{h}</span>
+                ))}
               </div>
-              <p className="mt-2 text-[11px] opacity-70">* Answer can be A/B/C/D, 0-3, or exact option text.</p>
+              <p className="text-[10px] text-slate-400 font-medium leading-relaxed">Ensure Excel headers match exactly for perfect synchronization. Answer keys accept A-D, 0-3, or literal text matches.</p>
             </div>
           </div>
         </div>
 
         {/* Question Schema List */}
         <div className="lg:col-span-7 flex flex-col gap-6 order-1 lg:order-2 w-full">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xl font-black tracking-tight" style={{ color: 'var(--text-dark)' }}>Existing Questions</h3>
-            <span className="text-sm font-black bg-primary-500/10 text-primary-500 px-3 py-1 rounded-full border border-primary-500/20">{questions.length} Added</span>
+          <div className="flex items-center justify-between mb-4 bg-slate-50/50 p-4 rounded-2xl border border-slate-100/50">
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Active Assessment Pool</h3>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Population</span>
+              <span className="text-xs font-bold bg-white text-slate-900 px-3 py-1 rounded-lg border border-slate-200 shadow-sm">{questions.length} Units</span>
+            </div>
           </div>
           
-          <div className="flex flex-col gap-5 min-w-0 w-full animate-slide-up" style={{ animationDelay: '100ms' }}>
+          <div className="space-y-6 w-full animate-slide-up">
             {loading ? (
-              <div className="py-12 flex justify-center w-full">
-                <div className="w-10 h-10 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="py-20 flex flex-col items-center justify-center text-center">
+                <div className="w-12 h-12 border-4 border-slate-100 border-t-slate-900 rounded-full animate-spin mb-6"></div>
+                <p className="text-sm font-bold text-slate-900">Synchronizing with question bank...</p>
               </div>
             ) : questions.length === 0 ? (
-              <div className="py-16 flex flex-col items-center justify-center border-2 border-dashed rounded-3xl w-full" style={{ borderColor: 'var(--glass-border)' }}>
-                <svg className="text-slate-400 mb-4 opacity-30" width="64" height="64" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                <p className="text-[color:var(--text-light)] font-bold text-lg">No questions added for this exam yet.</p>
+              <div className="py-24 flex flex-col items-center justify-center bg-slate-50/30 border-2 border-dashed border-slate-200 rounded-[2.5rem] w-full text-center px-10">
+                <div className="w-20 h-20 rounded-full bg-white border border-slate-100 flex items-center justify-center text-slate-200 mb-6 shadow-sm">
+                  <svg width="40" height="40" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25" /></svg>
+                </div>
+                <p className="text-slate-900 font-bold text-xl mb-2">No Content Identified</p>
+                <p className="text-slate-400 font-medium text-sm max-w-xs">Start building your assessment by adding individual questions or uploading a bulk dataset.</p>
               </div>
             ) : (
               questions.map((q, qIdx) => (
-                <div key={q.id} className="glass-card-saas p-6 group hover:-translate-y-1 transition-all duration-300 w-full overflow-hidden">
-                  <div className="flex justify-between items-start gap-4 mb-4">
-                    <p className="font-bold text-lg leading-snug w-full" style={{ color: 'var(--text-dark)', wordWrap: 'break-word', overflowWrap: 'break-word', hyphens: 'auto', maxWidth: '100%' }}>
-                      <span className="text-primary-500 font-black mr-2">Q{qIdx + 1}.</span> 
-                      <span className="break-words max-w-full">{q.question_text}</span>
-                    </p>
+                <div key={q.id} className="bg-white p-8 rounded-3xl border border-slate-100 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 group relative">
+                  <div className="flex justify-between items-start gap-6 mb-8">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Entry #{qIdx + 1}</span>
+                        <div className="h-px w-8 bg-slate-100" />
+                      </div>
+                      <p className="text-xl font-bold text-slate-900 leading-snug break-words">{q.question_text}</p>
+                    </div>
                     <button 
                       onClick={() => handleDeleteQuestion(q.id)}
-                      className="shrink-0 p-2 text-rose-400 hover:bg-rose-500/10 rounded-xl transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                      title="Delete Question"
+                      className="w-10 h-10 rounded-xl bg-white border border-slate-50 text-slate-300 hover:text-red-500 hover:bg-red-50 hover:border-red-100 transition-all flex items-center justify-center shrink-0 opacity-0 group-hover:opacity-100 shadow-sm"
+                      title="Purge Entry"
                     >
-                      <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                     </button>
                   </div>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 w-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                     {q.options.map((opt, optIdx) => {
                       const isCorrect = q.correct_option === optIdx;
                       return (
                         <div 
                           key={optIdx} 
-                          className={`px-4 py-3 rounded-xl border flex gap-3 transition-colors min-w-0 ${
+                          className={`px-5 py-4 rounded-2xl border flex items-center justify-between gap-4 transition-all ${
                             isCorrect 
-                              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold' 
-                              : 'border-transparent font-medium'
+                              ? 'bg-emerald-50 border-emerald-200 text-emerald-900 shadow-sm ring-2 ring-emerald-500/10' 
+                              : 'bg-slate-50 border-slate-50 text-slate-500 font-medium'
                           }`}
-                          style={!isCorrect ? { backgroundColor: 'var(--input-bg)', color: 'var(--text-light)' } : {}}
                         >
-                          <span className={`${isCorrect ? 'text-emerald-500' : 'opacity-50 font-bold'} shrink-0`}>
-                            {String.fromCharCode(65 + optIdx)}.
-                          </span> 
-                          <span className="break-words min-w-0" style={{ wordWrap: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }}>{opt}</span>
-                          
+                          <div className="flex items-center gap-3 overflow-hidden">
+                            <span className={`text-[10px] font-bold ${isCorrect ? 'text-emerald-500' : 'text-slate-300'} shrink-0`}>
+                              {String.fromCharCode(65 + optIdx)}
+                            </span> 
+                            <span className="text-sm font-bold truncate">{opt}</span>
+                          </div>
                           {isCorrect && (
-                            <span className="ml-auto shrink-0 flex items-center">
-                              <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
-                            </span>
+                            <svg className="text-emerald-500 shrink-0" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
                           )}
                         </div>
                       );
@@ -398,13 +397,13 @@ const ManageQuestions = ({ exam, onBack }) => {
                   </div>
                   
                   {q.explanation && (
-                    <div className="p-4 rounded-xl border border-blue-500/20 bg-blue-500/5 mt-4 flex gap-3 w-full break-words">
-                      <div className="shrink-0 mt-0.5 text-blue-500">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div className="p-6 rounded-2xl bg-indigo-50/50 border border-indigo-100 flex gap-4 w-full">
+                      <div className="shrink-0 mt-1 text-indigo-400">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
                       </div>
-                      <div style={{ wordWrap: 'break-word', overflowWrap: 'break-word', minWidth: 0, maxWidth: '100%' }}>
-                        <span className="font-bold text-blue-600 dark:text-blue-400 text-sm uppercase tracking-wider block mb-1">Explanation</span>
-                        <p className="text-sm font-medium leading-relaxed opacity-90 break-words" style={{ color: 'var(--text-dark)' }}>{q.explanation}</p>
+                      <div className="flex-1 min-w-0">
+                        <span className="font-bold text-indigo-900 text-[10px] uppercase tracking-widest block mb-2">Scientific Rationale</span>
+                        <p className="text-sm font-medium text-indigo-900 leading-relaxed italic break-words opacity-80">{q.explanation}</p>
                       </div>
                     </div>
                   )}
