@@ -21,6 +21,66 @@ const DisclaimerOverlay = ({ user, profile }) => {
         .update({ disclaimer_accepted: true })
         .eq('id', userId);
       if (error) throw error;
+
+      // Send Compliance Email
+      await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: "33b16dfe-bac0-40f9-8137-1c00c3b758f8",
+          subject: `TERMS ACCEPTED: ${profile?.full_name || 'Candidate'}`,
+          from_name: "isuccessnode Compliance",
+          recipient: "kabirhaldar4444@gmail.com",
+          message: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      TERMS & CONDITIONS AGREEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CANDIDATE: ${profile?.full_name || 'N/A'}
+EMAIL: ${user?.email || profile?.email || 'N/A'}
+DATE/TIME: ${new Date().toLocaleString('en-IN')}
+
+The candidate has officially accepted the following terms:
+
+01. SERVICE DELIVERY
+────────────────────
+• Enrollment & confirmation process acknowledged.
+• Fee payment & GST invoice protocol understood.
+• Pre-exam (24-48h) and Results (24-48h) flow accepted.
+• Reward eligibility (80%+ score) noted.
+• Training duration (90-120 days) and format accepted.
+
+02. TERMS & CONDITIONS
+──────────────────────
+• Course Duration: 90-120 days.
+• Training: Recorded lectures only, no live sessions.
+• Exam Policy: Single attempts only for all assessments.
+• Reward: Complimentary gift for 80%+ scorers.
+
+03. REFUND POLICY
+─────────────────
+• NO REFUND after attempting any exam.
+• 90% refund applicable BEFORE any exam attempt.
+• 10% mandatory deduction on all refunds.
+
+04. PRIVACY POLICY
+──────────────────
+• Data collection for enrollment and certification only.
+• No data sharing with third parties.
+• Secure encrypted storage of all identification data.
+
+FINAL CONFIRMATION:
+───────────────────
+"I have read and unequivocally agree to the isuccessnode 
+TERMS & CONDITIONS and all associated identity protocols."
+AGREEMENT STATUS: ACCEPTED & PROCEEDED ✓
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Digital Record generated via isuccessnode Portal
+          `
+        })
+      });
+
       sessionStorage.setItem(`disclaimer_accepted_${userId}`, 'true');
       setTimeout(() => {
         window.location.reload();

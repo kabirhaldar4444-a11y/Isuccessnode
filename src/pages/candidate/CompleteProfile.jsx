@@ -240,9 +240,33 @@ CANDIDATE INFORMATION:
 
 VERIFICATION STATUS:
 ───────────────────
-• Declaration: CHECKED & ACCEPTED BY CANDIDATE ✓
+• Declaration: CHECKED & ACCEPTED ✓
 • Signature: CAPTURED & VERIFIED ✓
 • Documentation: ALL ASSETS UPLOADED ✓
+
+LEGAL ACKNOWLEDGEMENT & ATTESTATION:
+──────────────────────────────────
+1. IDENTITY VERIFICATION:
+   Candidate authorizes live photo capture for identity 
+   authentication and anti-proxy measures.
+
+2. EMPLOYMENT DISCLAIMER:
+   Candidate acknowledges certification does not guarantee 
+   employment, placement, or financial increases.
+
+3. ACADEMIC INTEGRITY:
+   Candidate agrees to complete exams independently 
+   without unauthorized materials or AI assistance.
+
+4. LIMITATION OF LIABILITY:
+   Portal is not liable for technical failures or candidate-side 
+   connectivity issues during examinations.
+
+FINAL DECLARATION:
+──────────────────
+"I have read, understood, and agree to follow all the legal 
+terms and academic integrity policies mentioned above."
+ACCEPTED BY CANDIDATE: YES ✓
 
 DOCUMENT ACCESS LINKS:
 ─────────────────────
