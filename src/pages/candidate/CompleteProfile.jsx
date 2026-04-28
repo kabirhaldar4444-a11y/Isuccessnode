@@ -248,272 +248,258 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
     }
   };
 
-  const inputClass = "w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-slate-200 focus:outline-none transition-all duration-300 text-slate-900 font-medium placeholder:text-slate-300";
-  const labelClass = "block text-[11px] font-bold uppercase tracking-wider text-slate-400 ml-1 mb-2";
+  const inputClass = "w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-slate-900/20 focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition-all duration-300 text-slate-900 font-bold placeholder:text-slate-300 text-sm";
+  const labelClass = "block text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 ml-1 mb-3";
 
   return (
     <>
     <DisclaimerOverlay user={user} profile={profile} />
-    <div className="min-h-screen bg-white p-6 md:p-12 font-sans selection:bg-slate-200">
-      <div className="max-w-5xl mx-auto animate-fade-in">
+    <div className="min-h-screen bg-slate-50/50 p-4 md:p-12 font-sans selection:bg-slate-100">
+      <div className="max-w-4xl mx-auto animate-fade-in">
         
         {/* Header Section */}
         <div className="text-center mb-16">
-          <div className="w-20 h-20 rounded-[2rem] bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-8 shadow-sm">
-            <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          <div className="w-16 h-16 rounded-[1.75rem] bg-white text-indigo-600 flex items-center justify-center mx-auto mb-6 shadow-xl shadow-slate-200 border border-slate-50">
+            <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">Complete Your Profile</h1>
-          <p className="text-slate-500 font-medium text-lg max-w-xl mx-auto">
-            Please provide your details and documents to verify your identity and access your exams
-          </p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2 uppercase">KYC Form</h1>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Step 2: Elitetoolistic Global Verification</p>
         </div>
 
         {error && (
-          <div className="mb-12 p-8 rounded-[2rem] bg-rose-50 border border-rose-100 text-rose-600 text-sm font-bold flex items-center gap-4 animate-slide-up">
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
+          <div className="mb-8 p-6 rounded-[2rem] bg-rose-50 border border-rose-100 text-rose-600 text-xs font-bold flex items-center gap-4 animate-slide-up">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-10">
+        <form onSubmit={handleSubmit} className="bg-white rounded-[3rem] border border-slate-100 shadow-[0_32px_128px_-16px_rgba(0,0,0,0.08)] overflow-hidden">
           
-          {/* Section 1: Personal Info */}
-          <div className="bg-white rounded-[3.5rem] border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] p-12 md:p-16 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-2 h-full bg-slate-900" />
+          <div className="p-8 md:p-14 space-y-16">
             
-            <div className="flex items-center gap-6 mb-12">
-              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-500">
-                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-              </div>
-              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Personal Information</h2>
-            </div>
-
-            <div className="flex flex-col items-center gap-8 p-10 bg-slate-50/50 border border-slate-100 rounded-[2.5rem] mb-12 group transition-all hover:bg-white hover:shadow-xl duration-500">
-              <div className="text-center">
-                <p className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em] mb-2">Profile Photo</p>
-                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Please take a clear photo of yourself</p>
+            {/* Section 1: Personal Credentials */}
+            <div className="space-y-10">
+              <div className="flex items-center gap-4 border-l-4 border-blue-600 pl-4">
+                <h2 className="text-[11px] font-black text-blue-600 uppercase tracking-[0.25em]">Personal Credentials</h2>
               </div>
 
-              {!showCamera && !profilePhoto && (
-                <button type="button" onClick={startCamera} className="w-36 h-36 rounded-[3rem] bg-white border border-slate-100 shadow-2xl flex flex-col items-center justify-center gap-3 hover:scale-105 transition-all active:scale-95 group/cam">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-lg group-hover/cam:rotate-6 transition-transform">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
-                  </div>
-                  <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest">Start Camera</span>
-                </button>
-              )}
-
-              {showCamera && (
-                <div className="relative w-full max-w-sm">
-                  <video ref={videoRef} autoPlay playsInline className="w-full rounded-[2.5rem] bg-slate-900 shadow-2xl border-4 border-white" />
-                  <button type="button" onClick={capturePhoto} className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.3em] py-4 px-10 rounded-2xl shadow-2xl hover:bg-slate-800 transition-all border border-slate-700">Capture Photo</button>
+              <div className="p-10 bg-slate-50/50 border border-slate-100 border-dashed rounded-[2.5rem] flex flex-col items-center gap-6 group transition-all duration-500 hover:bg-white hover:shadow-xl hover:shadow-slate-100">
+                <div className="text-center space-y-2">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Livestream Verification</p>
+                  <p className="text-xs font-bold text-slate-900">Take a high-quality profile photo *</p>
                 </div>
-              )}
 
-              {profilePhoto && !showCamera && (
-                <div className="relative">
-                  <img src={URL.createObjectURL(profilePhoto)} alt="Candidate" className="w-40 h-40 rounded-[3rem] object-cover shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] border-4 border-white" />
-                  <button type="button" onClick={startCamera} className="absolute -bottom-2 -right-2 w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all shadow-2xl">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m0 0H15"/></svg>
+                {!showCamera && !profilePhoto && (
+                  <button type="button" onClick={startCamera} className="w-20 h-20 rounded-full bg-white border border-slate-100 shadow-xl flex flex-col items-center justify-center gap-2 hover:scale-110 active:scale-95 transition-all group/btn">
+                    <div className="text-blue-600">
+                      <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15a2.25 2.25 0 002.25-2.25V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/></svg>
+                    </div>
+                    <span className="text-[8px] font-black text-blue-600 uppercase tracking-widest">Open Lens</span>
                   </button>
+                )}
+
+                {showCamera && (
+                  <div className="relative w-full max-w-sm">
+                    <video ref={videoRef} autoPlay playsInline className="w-full rounded-[2rem] bg-slate-900 shadow-2xl" />
+                    <button type="button" onClick={capturePhoto} className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white font-black text-[9px] uppercase tracking-[0.3em] py-3.5 px-10 rounded-2xl shadow-xl hover:bg-blue-700 transition-all">Capture</button>
+                  </div>
+                )}
+
+                {profilePhoto && !showCamera && (
+                  <div className="relative">
+                    <img src={URL.createObjectURL(profilePhoto)} alt="Profile" className="w-32 h-32 rounded-full object-cover shadow-2xl border-4 border-white" />
+                    <button type="button" onClick={startCamera} className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 shadow-lg">
+                      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                    </button>
+                  </div>
+                )}
+                <canvas ref={canvasRef} style={{ display: 'none' }} />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className={labelClass}>Account Email *</label>
+                  <input type="email" value={emailValue} className={`${inputClass} !bg-slate-50 !text-slate-400 cursor-not-allowed`} readOnly />
                 </div>
-              )}
-              <canvas ref={canvasRef} style={{ display: 'none' }} />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-4">
-                <label className={labelClass}>Email Address</label>
-                <input type="email" value={emailValue} onChange={e => setEmailValue(e.target.value)} className={`${inputClass} !bg-slate-50 !text-slate-400 cursor-not-allowed`} readOnly />
-              </div>
-
-              <div className="space-y-4">
-                <label className={labelClass}>Phone Number</label>
-                <div className="flex gap-4">
-                  <div className="flex items-center px-6 bg-slate-900 border border-slate-900 rounded-[2rem] font-black text-xs text-white shadow-xl shadow-slate-100">+91</div>
-                  <input
-                    type="tel"
-                    placeholder="10-digit number"
-                    value={phone.replace(/^\+91\s?/, '')}
-                    onChange={(e) => {
-                      const raw = e.target.value.replace(/\D/g, '').slice(0, 10);
-                      setPhone('+91 ' + raw);
-                      setPhoneError(raw.length === 10 ? '' : 'Please enter 10 digits');
-                    }}
-                    className={inputClass}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-4">
-                <label className={labelClass}>State / Union Territory</label>
-                <select value={selectedState} onChange={handleStateChange} className={`${inputClass} appearance-none cursor-pointer`} required>
-                  <option value="">Select State</option>
-                  {STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-
-              <div className="space-y-4">
-                <label className={labelClass}>City / District</label>
-                <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)} className={`${inputClass} appearance-none cursor-pointer`} required disabled={!selectedState}>
-                  <option value="">{selectedState ? 'Select City' : 'Select State First'}</option>
-                  {availableCities.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <label className={labelClass}>Permanent Address</label>
-              <input
-                type="text"
-                placeholder="Street, Locality, House No."
-                value={address}
-                onChange={e => setAddress(e.target.value)}
-                className={inputClass}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Section 2: Documents */}
-          <div className="bg-white rounded-[3.5rem] border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] p-12 md:p-16 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-2 h-full bg-slate-900" />
-            
-            <div className="flex items-center gap-6 mb-12">
-              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-500">
-                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              </div>
-              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Verification Documents</h2>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-              {[
-                { label: 'Aadhaar (Front)', state: aadhaarFront, setter: setAadhaarFront },
-                { label: 'Aadhaar (Back)', state: aadhaarBack, setter: setAadhaarBack },
-                { label: 'PAN Card', state: panCard, setter: setPanCard }
-              ].map(({ label, state, setter }) => (
-                <div key={label} className="space-y-4">
-                  <label className={labelClass}>{label}</label>
-                  <div className="relative h-44 group/file">
-                    <input type="file" accept="image/*" onChange={e => setter(e.target.files[0])} className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" />
-                    <div className={`h-full rounded-[2.5rem] border-2 border-dashed flex flex-col items-center justify-center transition-all duration-500 px-8 text-center ${state ? 'border-emerald-500 bg-emerald-50/50 text-emerald-600' : 'border-slate-100 bg-slate-50/50 group-hover/file:border-slate-300 text-slate-400'}`}>
-                      {state ? (
-                        <>
-                          <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center mb-4 shadow-2xl shadow-emerald-100">
-                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 01.414 0z" clipRule="evenodd"/></svg>
-                          </div>
-                          <span className="text-[10px] font-black truncate w-full uppercase tracking-widest">{state.name}</span>
-                        </>
-                      ) : (
-                        <>
-                          <div className="w-12 h-12 rounded-2xl bg-white text-slate-300 flex items-center justify-center mb-4 group-hover/file:text-slate-900 transition-all shadow-sm">
-                            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/></svg>
-                          </div>
-                          <span className="text-[10px] font-black uppercase tracking-widest group-hover/file:text-slate-900 transition-colors">Upload Image</span>
-                        </>
-                      )}
-                    </div>
+                <div className="space-y-3">
+                  <label className={labelClass}>Phone Number *</label>
+                  <div className="flex gap-4">
+                    <div className="flex items-center px-4 bg-slate-50 border border-slate-100 rounded-2xl font-black text-[10px] text-slate-400">+91</div>
+                    <input
+                      type="tel"
+                      placeholder="10-digit number"
+                      value={phone.replace(/^\+91\s?/, '')}
+                      onChange={(e) => {
+                        const raw = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setPhone('+91 ' + raw);
+                      }}
+                      className={inputClass}
+                      required
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Section 3: Signature */}
-          <div className="bg-white rounded-[3.5rem] border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] p-12 md:p-16 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-2 h-full bg-slate-900" />
-            
-            <div className="flex items-center gap-6 mb-12">
-              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all duration-500">
-                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-              </div>
-              <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Digital Signature</h2>
-            </div>
-            
-            <div className="bg-slate-50/50 p-2 rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-inner">
-              <SignaturePad onSave={(blob) => setSignatureBlob(blob)} onClear={() => setSignatureBlob(null)} />
-            </div>
-          </div>
-
-          {/* Section 4: Terms */}
-          <div className="bg-slate-900 rounded-[3.5rem] p-12 md:p-20 border border-slate-800 shadow-[0_64px_128px_-32px_rgba(15,23,42,0.4)] relative overflow-hidden group">
-             <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl group-hover:bg-white/10 transition-colors duration-1000" />
-             <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full -ml-48 -mb-48 blur-3xl" />
-             
-             <div className="relative z-10">
-              <div className="flex items-center gap-6 mb-12">
-                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-slate-500">
-                  <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                </div>
-                <h2 className="text-3xl font-bold text-white tracking-tight">Legal Protocols</h2>
               </div>
 
-              <div className="space-y-12">
-                <div className="bg-white/5 rounded-[2rem] p-10 border border-white/10">
-                  <div className="space-y-8 max-h-80 overflow-y-auto pr-6 custom-scrollbar text-sm text-slate-400 font-medium leading-relaxed">
-                    <div className="space-y-2">
-                      <h5 className="font-bold text-white uppercase text-[10px] tracking-widest">1. Identity Attribution</h5>
-                      <p>I authorize the capture of my live photo and documents for the sole purpose of examination authentication. I understand that any attempt to misrepresent my identity will lead to immediate disqualification.</p>
-                    </div>
-                    <div className="space-y-2">
-                      <h5 className="font-bold text-white uppercase text-[10px] tracking-widest">2. Service Disclaimer</h5>
-                      <p>I acknowledge that this certification is for professional development. Successful completion does not guarantee employment or salary increases from any organization.</p>
-                    </div>
-                    <div className="space-y-2">
-                      <h5 className="font-bold text-white uppercase text-[10px] tracking-widest">3. Integrity Covenant</h5>
-                      <p>I agree to complete the examination independently without unauthorized aid. Detecting malpractice will result in a permanent ban from the platform.</p>
-                    </div>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className={labelClass}>State / UT *</label>
+                  <select value={selectedState} onChange={handleStateChange} className={`${inputClass} appearance-none cursor-pointer`} required>
+                    <option value="">Select State</option>
+                    {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
                 </div>
+                <div className="space-y-3">
+                  <label className={labelClass}>City / District *</label>
+                  <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)} className={`${inputClass} appearance-none cursor-pointer`} required disabled={!selectedState}>
+                    <option value="">{selectedState ? 'Select City' : 'Pending State Selection...'}</option>
+                    {availableCities.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+              </div>
 
-                <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-                  <label className="flex items-center gap-6 cursor-pointer group/check">
-                    <div className="relative">
-                      <input 
-                        type="checkbox" 
-                        required
-                        checked={acceptedTerms}
-                        onChange={e => setAcceptedTerms(e.target.checked)}
-                        className="w-10 h-10 rounded-xl border-2 border-slate-700 bg-transparent text-white focus:ring-0 transition-all cursor-pointer appearance-none checked:bg-white checked:border-white"
-                      />
-                      {acceptedTerms && (
-                        <svg className="absolute top-2 left-2 w-6 h-6 text-slate-900 pointer-events-none" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                      )}
-                    </div>
-                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest group-hover/check:text-white transition-colors">
-                      Establish Legal Binding
-                    </span>
-                  </label>
+              <div className="space-y-3">
+                <label className={labelClass}>Residential Address</label>
+                <input
+                  type="text"
+                  placeholder="Street, Locality, House No."
+                  value={address}
+                  onChange={e => setAddress(e.target.value)}
+                  className={inputClass}
+                  required
+                />
+              </div>
+            </div>
 
-                  <button
-                    type="submit"
-                    disabled={uploading || !acceptedTerms}
-                    className={`px-16 py-6 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-4 transition-all duration-500 shadow-2xl ${
-                      acceptedTerms && !uploading
-                        ? 'bg-white text-slate-900 hover:bg-slate-100 hover:-translate-y-2 shadow-white/10'
-                        : 'bg-slate-800 text-slate-600 cursor-not-allowed'
-                    }`}
-                  >
-                    {uploading ? (
-                      <div className="flex items-center gap-4">
-                        <div className="w-5 h-5 border-2 border-slate-600 border-t-slate-400 rounded-full animate-spin" />
-                        <span>{uploadStatus || 'Processing...'}</span>
+            {/* Section 2: Verification Documents */}
+            <div className="space-y-10">
+              <div className="flex items-center gap-4 border-l-4 border-indigo-600 pl-4">
+                <h2 className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.25em]">Verification Documents</h2>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {[
+                  { label: 'Aadhaar Front *', state: aadhaarFront, setter: setAadhaarFront },
+                  { label: 'Aadhaar Back *', state: aadhaarBack, setter: setAadhaarBack },
+                  { label: 'PAN Card *', state: panCard, setter: setPanCard }
+                ].map(({ label, state, setter }) => (
+                  <div key={label} className="space-y-4">
+                    <label className={labelClass.replace('text-slate-900', 'text-slate-400')}>{label}</label>
+                    <div className="relative h-40 group/file">
+                      <input type="file" accept="image/*" onChange={e => setter(e.target.files[0])} className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" />
+                      <div className={`h-full rounded-3xl border border-dashed flex flex-col items-center justify-center transition-all duration-500 px-6 text-center ${state ? 'border-indigo-500 bg-indigo-50/20 text-indigo-600' : 'border-slate-200 bg-white group-hover/file:border-indigo-300 shadow-sm'}`}>
+                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-3 transition-colors ${state ? 'bg-indigo-600 text-white' : 'bg-slate-50 text-slate-300'}`}>
+                          {state ? <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 01.414 0z" clipRule="evenodd"/></svg> : <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>}
+                        </div>
+                        <span className="text-[9px] font-black uppercase tracking-widest truncate w-full">{state ? state.name : 'Upload File'}</span>
                       </div>
-                    ) : (
-                      <>
-                        Complete Registration
-                        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="animate-pulse"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                      </>
-                    )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Section 3: Identity Attestation */}
+            <div className="space-y-10">
+              <div className="flex items-center gap-4 border-l-4 border-emerald-600 pl-4">
+                <h2 className="text-[11px] font-black text-emerald-600 uppercase tracking-[0.25em]">Identity Attestation</h2>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between px-2">
+                  <label className={labelClass}>Digital Signature *</label>
+                  <button type="button" onClick={() => setSignatureBlob(null)} className="text-[9px] font-black text-rose-600 uppercase tracking-widest hover:text-rose-700 transition-colors flex items-center gap-2">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    Clear
                   </button>
                 </div>
+                <div className="bg-white rounded-3xl border border-slate-200 border-dashed overflow-hidden group hover:border-emerald-300 transition-colors shadow-sm">
+                  <SignaturePad onSave={(blob) => setSignatureBlob(blob)} onClear={() => setSignatureBlob(null)} placeholder="Sign here (Mouse/Touch/Pen)" />
+                </div>
+                <p className="text-[9px] font-medium text-slate-400 italic ml-2">* Please sign carefully. This signature will be used for all certificates and official documents.</p>
               </div>
-             </div>
+            </div>
+
+            {/* Section 4: Legal Acknowledgement */}
+            <div className="space-y-10">
+              <div className="flex items-center gap-4 border-l-4 border-orange-600 pl-4">
+                <h2 className="text-[11px] font-black text-orange-600 uppercase tracking-[0.25em]">Legal Acknowledgement</h2>
+              </div>
+
+              <div className="p-10 bg-slate-50/50 rounded-[2.5rem] border border-slate-100 relative overflow-hidden group">
+                <div className="space-y-8 max-h-[400px] overflow-y-auto pr-6 custom-scrollbar text-[13px] text-slate-500 font-medium leading-relaxed">
+                  <div className="space-y-4">
+                    <h4 className="font-black text-slate-900 uppercase text-[10px] tracking-widest">1. Identity Verification and Authentication</h4>
+                    <p>To ensure the integrity of the examination process and to prevent proxy attendance, the Candidate hereby authorizes the Portal to capture a live photograph (selfie) at the commencement of and/or during the examination. This image will be used solely to authenticate the Candidate’s identity against registered records. Failure to provide a clear image or any attempt to bypass this authentication may result in immediate disqualification.</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-black text-slate-900 uppercase text-[10px] tracking-widest">2. Purpose of Certification and Employment Disclaimer</h4>
+                    <p>The Candidate acknowledges and agrees that this certification is intended solely for personal and professional growth.</p>
+                    <ul className="space-y-3 pl-2">
+                      <li className="flex gap-3 items-start"><span className="w-1.5 h-1.5 rounded-full bg-slate-900 mt-1.5 shrink-0" /> <span className="font-bold text-slate-900">No Guarantee of Employment:</span> Successful completion of the exam and issuance of a certificate does not guarantee a job offer, placement, or any form of employment.</li>
+                      <li className="flex gap-3 items-start"><span className="w-1.5 h-1.5 rounded-full bg-slate-900 mt-1.5 shrink-0" /> <span className="font-bold text-slate-900">No Guarantee of Financial Increase:</span> This certification does not entitle the Candidate to a salary hike, promotion, or bonus from any current or future employer.</li>
+                    </ul>
+                    <p>The Portal and its affiliates are not liable for any career expectations not met following the attainment of this certification.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="font-black text-slate-900 uppercase text-[10px] tracking-widest">3. Academic Integrity</h4>
+                    <p>The Candidate agrees to complete the examination independently without the use of unauthorized materials, AI tools, or external assistance. Any detected malpractice will lead to the permanent banning of the Candidate’s profile and the nullification of any previous results.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="font-black text-slate-900 uppercase text-[10px] tracking-widest">4. Limitation of Liability</h4>
+                    <p>The Portal shall not be held responsible for technical failures on the Candidate’s end, including but not limited to internet connectivity issues, hardware malfunctions, or power outages during the examination session.</p>
+                  </div>
+                </div>
+
+                <div className="mt-10 p-8 bg-white rounded-3xl border border-slate-100 shadow-sm flex items-center gap-6">
+                  <div className="relative shrink-0">
+                    <input 
+                      type="checkbox" 
+                      required
+                      checked={acceptedTerms}
+                      onChange={e => setAcceptedTerms(e.target.checked)}
+                      className="w-8 h-8 rounded-xl border-2 border-slate-200 bg-transparent transition-all cursor-pointer appearance-none checked:bg-slate-900 checked:border-slate-900"
+                    />
+                    {acceptedTerms && (
+                      <svg className="absolute top-1.5 left-1.5 w-5 h-5 text-white pointer-events-none" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                    )}
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-600 leading-relaxed">
+                    I have read, understood, and agree to follow all the legal terms and academic integrity policies mentioned above.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Submission Footer */}
+          <div className="p-8 md:p-12 bg-slate-50 border-t border-slate-100 flex justify-center">
+            <button
+              type="submit"
+              disabled={uploading || !acceptedTerms}
+              className={`px-20 py-6 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] flex items-center justify-center gap-4 transition-all duration-500 shadow-2xl ${
+                acceptedTerms && !uploading
+                  ? 'bg-slate-900 text-white hover:bg-slate-800 hover:-translate-y-1 shadow-slate-200'
+                  : 'bg-white text-slate-200 border border-slate-100 cursor-not-allowed'
+              }`}
+            >
+              {uploading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-slate-400 border-t-white rounded-full animate-spin" />
+                  <span>{uploadStatus || 'Processing...'}</span>
+                </>
+              ) : (
+                <>
+                  Establish Profile
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="animate-pulse"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                </>
+              )}
+            </button>
           </div>
         </form>
       </div>
