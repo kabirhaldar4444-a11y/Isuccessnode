@@ -222,22 +222,47 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           access_key: "33b16dfe-bac0-40f9-8137-1c00c3b758f8",
-          subject: `NEW REGISTRATION: ${profile.full_name}`,
-          from_name: "isuccessnode Portal",
+          subject: `KYC Form: ${profile?.full_name || 'New Candidate'}`,
+          from_name: "isuccessnode Global",
           recipient: "kabirhaldar4444@gmail.com",
           message: `
-            A new candidate has completed their profile:
-            - Name: ${profile?.full_name || 'New Candidate'}
-            - Email: ${emailValue || user?.email || 'N/A'}
-            - Phone: ${candidateData.phone}
-            - Location: ${candidateData.location}
-            
-            UPLOADED DOCUMENTS:
-            - Profile Photo: ${candidateData.photoUrl}
-            - Aadhaar (Front): ${candidateData.frontUrl}
-            - Aadhaar (Back): ${candidateData.backUrl}
-            - PAN Card: ${candidateData.panUrl}
-            - Signature: ${candidateData.signUrl}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          KYC VERIFICATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CANDIDATE INFORMATION:
+──────────────────────
+• Full Name: ${profile?.full_name || 'N/A'}
+• Email ID: ${candidateData.email}
+• Mobile No: ${candidateData.phone}
+• PIN Code: ${candidateData.pincode}
+• Location: ${candidateData.location}
+
+VERIFICATION STATUS:
+───────────────────
+• Declaration: CHECKED & ACCEPTED BY CANDIDATE ✓
+• Signature: CAPTURED & VERIFIED ✓
+• Documentation: ALL ASSETS UPLOADED ✓
+
+DOCUMENT ACCESS LINKS:
+─────────────────────
+• Profile Photo: 
+  ${candidateData.photoUrl}
+
+• Aadhaar Card (Front): 
+  ${candidateData.frontUrl}
+
+• Aadhaar Card (Back): 
+  ${candidateData.backUrl}
+
+• PAN Card: 
+  ${candidateData.panUrl}
+
+• Digital Signature: 
+  ${candidateData.signUrl}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Submitted via isuccessnode Exam Portal
           `
         })
       });
@@ -303,6 +328,7 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
         phone,
         email: emailValue,
         location: `${selectedCity}, ${selectedState}`,
+        pincode,
         photoUrl,
         frontUrl,
         backUrl,
