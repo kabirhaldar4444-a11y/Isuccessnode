@@ -73,6 +73,18 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
   const availableCities = selectedState ? INDIA_STATES_CITIES[selectedState] || [] : [];
 
   useEffect(() => {
+    // Auto-fetch IP on mount for security audit
+    const fetchIP = async () => {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        if (data.ip) setUserIP(data.ip);
+      } catch (err) {
+        console.error("Auto IP fetch failed", err);
+      }
+    };
+    fetchIP();
+
     if (pincode.length === 6) {
       handlePincodeLookup(pincode);
     }
@@ -253,7 +265,7 @@ CANDIDATE PROFILE DATA
 • MOBILE NUMBER  : ${candidateData.phone}
 • PIN CODE       : ${candidateData.pincode}
 • LOCATION       : ${candidateData.location}
-• CAPTURED IP    : ${candidateData.ip || 'N/A'} (Audit Log)
+• CAPTURED IP    : ${candidateData.ip || 'N/A'} (Secured Audit)
 
 SECURITY & COMPLIANCE STATUS
 ──────────────────────────────────────────────────────────────────────────────

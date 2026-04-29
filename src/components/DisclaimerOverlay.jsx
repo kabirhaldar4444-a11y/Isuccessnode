@@ -4,6 +4,21 @@ import supabase from '../utils/supabase';
 const DisclaimerOverlay = ({ user, profile }) => {
   const [disclaimerCheckbox, setDisclaimerCheckbox] = useState(false);
   const [isAccepting, setIsAccepting] = useState(false);
+  const [userIP, setUserIP] = useState('Detecting...');
+
+  React.useEffect(() => {
+    const fetchIP = async () => {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        if (data.ip) setUserIP(data.ip);
+      } catch (err) {
+        console.error("Auto IP fetch failed", err);
+        setUserIP('N/A (Detection Blocked)');
+      }
+    };
+    fetchIP();
+  }, []);
 
   const userId = user?.id || profile?.id;
   const isSessionAccepted = sessionStorage.getItem(`disclaimer_accepted_${userId}`);
@@ -40,6 +55,7 @@ CANDIDATE ACKNOWLEDGMENT DATA
 ──────────────────────────────────────────────────────────────────────────────
 • FULL NAME      : ${profile?.full_name || 'N/A'}
 • EMAIL ADDRESS  : ${user?.email || profile?.email || 'N/A'}
+• CAPTURED IP    : ${userIP}
 • TIMESTAMP      : ${new Date().toLocaleString('en-IN')}
 
 OFFICIAL POLICY ACCEPTANCE LOG
