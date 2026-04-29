@@ -88,7 +88,8 @@ function App() {
     try {
       const { data, error } = await supabase
         .from('exams')
-        .select('*');
+        .select('*')
+        .order('created_at', { ascending: false });
       if (data) setExams(data);
       if (error) console.error('Fetch Exams Error:', error);
     } catch (err) {
