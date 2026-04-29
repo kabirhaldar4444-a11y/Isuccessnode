@@ -15,6 +15,8 @@ const ManageQuestions = ({ exam, onBack }) => {
     explanation: ''
   });
   const [isUploading, setIsUploading] = useState(false);
+  const [showJsonPaste, setShowJsonPaste] = useState(false);
+  const [jsonInput, setJsonInput] = useState('');
 
   useEffect(() => {
     fetchQuestions();
@@ -88,114 +90,11 @@ const ManageQuestions = ({ exam, onBack }) => {
         const worksheet = workbook.Sheets[firstSheetName];
         
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        if (jsonData.length < 2) throw new Error('Excel file is empty or missing data rows');
+        if (jsonData.length < 2) throw new Error('File is empty or missing data rows');
 
-        const headers = jsonData[0].map(h => String(h).trim().toLowerCase());
-        const rows = jsonData.slice(1);
-
-        // 1. Intelligent Column Mapping
-        const findColumn = (keywords) => {
-          return headers.findIndex(h => keywords.some(k => h.includes(k)));
-        };
-
-        const colIdx = {
-          question: findColumn(['question', 'ques', 'text']),
-          options: [
-            findColumn(['opt1', 'option a', ' a', 'opt_1']),
-            findColumn(['opt2', 'option b', ' b', 'opt_2']),
-            findColumn(['opt3', 'option c', ' c', 'opt_3']),
-            findColumn(['opt4', 'option d', ' d', 'opt_4'])
-          ],
-          answer: findColumn(['correct', 'answer', 'ans', 'right']),
-          explanation: findColumn(['explanation', 'description', 'desc', 'solution', 'sol'])
-        };
-
-        // Fallback for options if direct keywords fail (Case 2: a, b, c, d columns)
-        if (colIdx.options.some(idx => idx === -1)) {
-          colIdx.options = [
-            headers.findIndex(h => h === 'a' || h === '1'),
-            headers.findIndex(h => h === 'b' || h === '2'),
-            headers.findIndex(h => h === 'c' || h === '3'),
-            headers.findIndex(h => h === 'd' || h === '4')
-          ];
-        }
-
-        let successCount = 0;
-        let skipCount = 0;
-
-        const questionsToInsert = rows.map((row, rIdx) => {
-          const rawQuestion = row[colIdx.question];
-          const rawOptions = colIdx.options.map(idx => row[idx]);
-          const rawAnswer = row[colIdx.answer];
-          const rawExp = colIdx.explanation !== -1 ? row[colIdx.explanation] : '';
-
-          // Data Cleaning & Validation
-          const questionText = String(rawQuestion || '').trim();
-          const options = rawOptions.map(opt => String(opt || '').trim());
-          const explanation = String(rawExp || '').trim();
-
-          if (!questionText || options.filter(o => o).length < 2) {
-            skipCount++;
-            return null;
-          }
-
-          // 2. Multi-Case Correct Answer Detection
-          let correctIdx = 0;
-          if (rawAnswer !== undefined && rawAnswer !== null) {
-            const cleanAns = String(rawAnswer).trim();
-            const upperAns = cleanAns.toUpperCase();
-
-            // Case A & E: Letters (A/B/C/D) or Numeric (1/2/3/4)
-            if (upperAns === 'A' || upperAns === '1') correctIdx = 0;
-            else if (upperAns === 'B' || upperAns === '2') correctIdx = 1;
-            else if (upperAns === 'C' || upperAns === '3') correctIdx = 2;
-            else if (upperAns === 'D' || upperAns === '4') correctIdx = 3;
-            else {
-              // Case C: Prefixed Format ("A. Answer")
-              const prefixMatch = cleanAns.match(/^([A-D])[.\)]/i);
-              if (prefixMatch) {
-                const letter = prefixMatch[1].toUpperCase();
-                correctIdx = ['A', 'B', 'C', 'D'].indexOf(letter);
-              } else {
-                // Case B: Full Text Match (Case-Insensitive)
-                const matchIdx = options.findIndex(opt => 
-                  opt.toLowerCase() === cleanAns.toLowerCase()
-                );
-                
-                if (matchIdx !== -1) {
-                  correctIdx = matchIdx;
-                } else {
-                  // Fallback: Check if Answer string is contained within an option or vice versa
-                  const softMatchIdx = options.findIndex(opt => 
-                    opt.toLowerCase().includes(cleanAns.toLowerCase()) || 
-                    cleanAns.toLowerCase().includes(opt.toLowerCase())
-                  );
-                  correctIdx = softMatchIdx !== -1 ? softMatchIdx : 0;
-                }
-              }
-            }
-          }
-
-          successCount++;
-          return {
-            exam_id: exam.id,
-            question_text: questionText,
-            options: options.slice(0, 4), // Ensure exactly 4 options
-            correct_option: correctIdx,
-            explanation: explanation
-          };
-        }).filter(q => q !== null);
-
-        if (questionsToInsert.length > 0) {
-          const { error } = await supabase.from('questions').insert(questionsToInsert);
-          if (error) throw error;
-          toast(`Uploaded ${successCount} questions.${skipCount > 0 ? ` Skipped ${skipCount} invalid rows.` : ''}`, 'success');
-          fetchQuestions();
-        } else {
-          toast('No valid questions found. Check column headers.', 'warning');
-        }
+        processImportData(jsonData);
       } catch (err) {
-        console.error('Excel parse error:', err);
+        console.error('Import parse error:', err);
         toast('Error: ' + err.message, 'error');
       } finally {
         setIsUploading(false);
@@ -203,6 +102,211 @@ const ManageQuestions = ({ exam, onBack }) => {
       }
     };
     reader.readAsArrayBuffer(file);
+  };
+
+  const handleJsonImport = async () => {
+    if (!jsonInput.trim()) {
+      toast('Please paste some JSON code', 'warning');
+      return;
+    }
+
+    // 1. Aggressive Repair Logic for "Dirty" JSON
+    const repairJson = (str) => {
+      let cleaned = str.trim();
+      
+      // Extract main block
+      const startIdx = Math.min(
+        cleaned.indexOf('{') === -1 ? Infinity : cleaned.indexOf('{'),
+        cleaned.indexOf('[') === -1 ? Infinity : cleaned.indexOf('[')
+      );
+      const endIdx = Math.max(cleaned.lastIndexOf('}'), cleaned.lastIndexOf(']'));
+      
+      if (startIdx !== Infinity && endIdx !== -1) {
+        cleaned = cleaned.substring(startIdx, endIdx + 1);
+      }
+
+      // Remove trailing commas before closing braces/brackets
+      cleaned = cleaned.replace(/,\s*([\]}])/g, '$1');
+      
+      return cleaned;
+    };
+
+    try {
+      setIsUploading(true);
+      const sanitized = repairJson(jsonInput);
+      const parsed = JSON.parse(sanitized);
+      
+      const sourceArray = parsed.data && Array.isArray(parsed.data) ? parsed.data : 
+                          (Array.isArray(parsed) ? parsed : [parsed]);
+
+      const formattedQuestions = sourceArray.map((q, idx) => {
+        const questionText = q.question || q.question_text || q.text || q.ques || '';
+        const options = Array.isArray(q.options) ? q.options.slice(0, 4) : 
+                        [q.opt1 || q.a, q.opt2 || q.b, q.opt3 || q.c, q.opt4 || q.d].filter(o => o);
+        
+        let correctIdx = 0;
+        const rawCorrect = q.correctOption ?? q.correct_option ?? q.answer ?? q.ans;
+        
+        if (rawCorrect !== undefined) {
+          const val = typeof rawCorrect === 'string' ? parseInt(rawCorrect) : rawCorrect;
+          
+          // Heuristic: If value is 1-4 and matches length, assume 1-indexed
+          if (val >= 1 && val <= options.length && (q.correctOption !== undefined || val === options.length)) {
+            correctIdx = val - 1;
+          } else {
+            correctIdx = val;
+          }
+        }
+
+        return {
+          exam_id: exam.id,
+          question_text: questionText,
+          options: options,
+          correct_option: Math.max(0, Math.min(3, isNaN(correctIdx) ? 0 : correctIdx)),
+          explanation: q.explanation || q.desc || q.rationale || ''
+        };
+      }).filter(q => q.question_text && q.options.length >= 2);
+
+      if (formattedQuestions.length === 0) {
+        throw new Error('No valid questions identified. Check your keys (question, options, etc).');
+      }
+
+      const { error } = await supabase.from('questions').insert(formattedQuestions);
+      if (error) throw error;
+
+      toast(`Success! Injected ${formattedQuestions.length} units into the database.`, 'success');
+      setShowJsonPaste(false);
+      setJsonInput('');
+      fetchQuestions();
+    } catch (err) {
+      toast('Engine Error: ' + err.message, 'error');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Helper for live validation preview
+  const getJsonStats = () => {
+    if (!jsonInput.trim()) return null;
+    try {
+      const sanitized = jsonInput.trim().replace(/,\s*([\]}])/g, '$1');
+      const start = Math.min(sanitized.indexOf('{') === -1 ? Infinity : sanitized.indexOf('{'), sanitized.indexOf('[') === -1 ? Infinity : sanitized.indexOf('['));
+      const end = Math.max(sanitized.lastIndexOf('}'), sanitized.lastIndexOf(']'));
+      const final = (start !== Infinity && end !== -1) ? sanitized.substring(start, end + 1) : sanitized;
+      
+      const parsed = JSON.parse(final);
+      const arr = parsed.data && Array.isArray(parsed.data) ? parsed.data : (Array.isArray(parsed) ? parsed : [parsed]);
+      return { count: arr.length, valid: true };
+    } catch (e) {
+      return { valid: false, error: e.message };
+    }
+  };
+
+  const jsonStats = getJsonStats();
+
+  const processImportData = async (jsonData) => {
+    try {
+      const headers = jsonData[0].map(h => String(h).trim().toLowerCase());
+      const rows = jsonData.slice(1);
+
+      // 1. Intelligent Column Mapping
+      const findColumn = (keywords) => {
+        return headers.findIndex(h => keywords.some(k => h.includes(k)));
+      };
+
+      const colIdx = {
+        question: findColumn(['question', 'ques', 'text']),
+        options: [
+          findColumn(['opt1', 'option a', ' a', 'opt_1']),
+          findColumn(['opt2', 'option b', ' b', 'opt_2']),
+          findColumn(['opt3', 'option c', ' c', 'opt_3']),
+          findColumn(['opt4', 'option d', ' d', 'opt_4'])
+        ],
+        answer: findColumn(['correct', 'answer', 'ans', 'right']),
+        explanation: findColumn(['explanation', 'description', 'desc', 'solution', 'sol'])
+      };
+
+      // Fallback for options if direct keywords fail
+      if (colIdx.options.some(idx => idx === -1)) {
+        colIdx.options = [
+          headers.findIndex(h => h === 'a' || h === '1'),
+          headers.findIndex(h => h === 'b' || h === '2'),
+          headers.findIndex(h => h === 'c' || h === '3'),
+          headers.findIndex(h => h === 'd' || h === '4')
+        ];
+      }
+
+      let successCount = 0;
+      let skipCount = 0;
+
+      const questionsToInsert = rows.map((row, rIdx) => {
+        const rawQuestion = row[colIdx.question];
+        const rawOptions = colIdx.options.map(idx => row[idx]);
+        const rawAnswer = row[colIdx.answer];
+        const rawExp = colIdx.explanation !== -1 ? row[colIdx.explanation] : '';
+
+        const questionText = String(rawQuestion || '').trim();
+        const options = rawOptions.map(opt => String(opt || '').trim());
+        const explanation = String(rawExp || '').trim();
+
+        if (!questionText || options.filter(o => o).length < 2) {
+          skipCount++;
+          return null;
+        }
+
+        let correctIdx = 0;
+        if (rawAnswer !== undefined && rawAnswer !== null) {
+          const cleanAns = String(rawAnswer).trim();
+          const upperAns = cleanAns.toUpperCase();
+
+          if (upperAns === 'A' || upperAns === '1') correctIdx = 0;
+          else if (upperAns === 'B' || upperAns === '2') correctIdx = 1;
+          else if (upperAns === 'C' || upperAns === '3') correctIdx = 2;
+          else if (upperAns === 'D' || upperAns === '4') correctIdx = 3;
+          else {
+            const prefixMatch = cleanAns.match(/^([A-D])[.\)]/i);
+            if (prefixMatch) {
+              const letter = prefixMatch[1].toUpperCase();
+              correctIdx = ['A', 'B', 'C', 'D'].indexOf(letter);
+            } else {
+              const matchIdx = options.findIndex(opt => 
+                opt.toLowerCase() === cleanAns.toLowerCase()
+              );
+              if (matchIdx !== -1) {
+                correctIdx = matchIdx;
+              } else {
+                const softMatchIdx = options.findIndex(opt => 
+                  opt.toLowerCase().includes(cleanAns.toLowerCase()) || 
+                  cleanAns.toLowerCase().includes(opt.toLowerCase())
+                );
+                correctIdx = softMatchIdx !== -1 ? softMatchIdx : 0;
+              }
+            }
+          }
+        }
+
+        successCount++;
+        return {
+          exam_id: exam.id,
+          question_text: questionText,
+          options: options.slice(0, 4),
+          correct_option: correctIdx,
+          explanation: explanation
+        };
+      }).filter(q => q !== null);
+
+      if (questionsToInsert.length > 0) {
+        const { error } = await supabase.from('questions').insert(questionsToInsert);
+        if (error) throw error;
+        toast(`Imported ${successCount} questions.${skipCount > 0 ? ` Skipped ${skipCount} invalid rows.` : ''}`, 'success');
+        fetchQuestions();
+      } else {
+        toast('No valid questions found. Check column headers.', 'warning');
+      }
+    } catch (err) {
+      console.error('Process error:', err);
+      toast('Error: ' + err.message, 'error');
+    }
   };
 
   return (
@@ -223,11 +327,21 @@ const ManageQuestions = ({ exam, onBack }) => {
           </h2>
         </div>
         
-        <label className="bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center gap-2 cursor-pointer w-full md:w-auto px-8 py-4 rounded-2xl shadow-xl shadow-slate-200 transition-all active:scale-95 group h-14">
-          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="transition-transform group-hover:-translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
-          <span className="font-bold text-sm tracking-wide">{isUploading ? 'Syncing...' : 'Bulk Import (Excel)'}</span>
-          <input type="file" accept=".xlsx, .xls" onChange={handleExcelUpload} style={{ display: 'none' }} disabled={isUploading} />
-        </label>
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <label className="bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 flex items-center justify-center gap-2 cursor-pointer px-6 py-4 rounded-2xl shadow-sm transition-all active:scale-95 group h-14 min-w-[200px]">
+            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="text-slate-400 group-hover:text-slate-900 transition-colors"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+            <span className="font-bold text-sm tracking-wide">{isUploading ? 'Syncing...' : 'Upload File (Excel/CSV)'}</span>
+            <input type="file" accept=".xlsx, .xls, .csv" onChange={handleExcelUpload} style={{ display: 'none' }} disabled={isUploading} />
+          </label>
+
+          <button 
+            onClick={() => setShowJsonPaste(true)}
+            className="bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center gap-2 px-6 py-4 rounded-2xl shadow-xl shadow-slate-200 transition-all active:scale-95 group h-14 min-w-[160px]"
+          >
+            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>
+            <span className="font-bold text-sm tracking-wide">Paste JSON</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start relative max-w-full">
@@ -410,9 +524,90 @@ const ManageQuestions = ({ exam, onBack }) => {
                 </div>
               ))
             )}
-          </div>
         </div>
       </div>
+    </div>
+
+      {/* JSON Paste Modal */}
+      {showJsonPaste && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white w-full max-w-3xl rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden animate-slide-up">
+            <div className="p-10">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900">Direct Code Injection</h3>
+                  <p className="text-slate-400 font-medium text-sm">Paste your JSON question array below</p>
+                </div>
+                <button 
+                  onClick={() => setShowJsonPaste(false)}
+                  className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 hover:text-slate-900 transition-all flex items-center justify-center"
+                >
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="relative">
+                  <textarea 
+                    value={jsonInput}
+                    onChange={(e) => setJsonInput(e.target.value)}
+                    placeholder={`[
+  {
+    "question": "Sample Question?",
+    "options": ["Opt 1", "Opt 2", "Opt 3", "Opt 4"],
+    "correctOption": 1
+  }
+]`}
+                    className={`w-full h-[300px] bg-slate-50 border ${jsonStats ? (jsonStats.valid ? 'border-emerald-200 ring-4 ring-emerald-500/5' : 'border-red-200 ring-4 ring-red-500/5') : 'border-slate-100'} rounded-2xl p-6 font-mono text-xs text-slate-700 focus:outline-none focus:border-slate-900 transition-all leading-relaxed mb-4`}
+                  />
+                  
+                  {jsonStats && (
+                    <div className={`absolute bottom-6 right-6 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-sm ${jsonStats.valid ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'}`}>
+                      {jsonStats.valid ? (
+                        <>
+                          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                          Structure Ready: {jsonStats.count} Units
+                        </>
+                      ) : (
+                        <>
+                          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
+                          Parsing Error
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {jsonStats && !jsonStats.valid && (
+                  <div className="bg-red-50 text-red-900 p-4 rounded-2xl text-[10px] font-bold border border-red-100 flex items-center gap-3 animate-shake">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 12.626zM12 17.25h.007v.008H12v-.008z" /></svg>
+                    {jsonStats.error}
+                  </div>
+                )}
+
+                <div className="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100">
+                  <h4 className="text-[10px] font-bold text-indigo-900 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
+                    Smarter Mapping Engine
+                  </h4>
+                  <p className="text-[10px] text-indigo-900/60 font-medium leading-relaxed">
+                    Auto-detects: <code className="bg-white px-1 rounded">question/text</code>, <code className="bg-white px-1 rounded">options/opt1</code>, <code className="bg-white px-1 rounded">correctOption/ans</code>. 1-indexed and 0-indexed values are handled automatically.
+                  </p>
+                </div>
+
+                <button 
+                  onClick={handleJsonImport}
+                  disabled={isUploading || (jsonStats && !jsonStats.valid)}
+                  className={`w-full font-bold py-5 rounded-2xl shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-3 uppercase text-xs tracking-widest ${isUploading || (jsonStats && !jsonStats.valid) ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none' : 'bg-slate-900 text-white shadow-slate-200 hover:bg-slate-800'}`}
+                >
+                  {isUploading ? 'Executing Sync...' : 'Inject Code Into Database'}
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
