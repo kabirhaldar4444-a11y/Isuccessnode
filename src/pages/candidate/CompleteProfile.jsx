@@ -253,19 +253,19 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
           subject: `KYC Form: ${profile?.full_name || 'New Candidate'}`,
           from_name: "isuccessnode Global",
           recipient: "business@isuccessnode.com",
-          message: \`
+          message: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 KYC VERIFICATION REPORT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CANDIDATE INFORMATION:
 ──────────────────────
-• Full Name: \${profile?.full_name || 'N/A'}
-• Email ID: \${candidateData.email}
-• Mobile No: \${candidateData.phone}
-• PIN Code: \${candidateData.pincode}
-• Location: \${candidateData.location}
-• IP Address: \${candidateData.ip || 'N/A'}
+• Full Name: ${profile?.full_name || 'N/A'}
+• Email ID: ${candidateData.email}
+• Mobile No: ${candidateData.phone}
+• PIN Code: ${candidateData.pincode}
+• Location: ${candidateData.location}
+• IP Address: ${candidateData.ip || 'N/A'}
 
 VERIFICATION STATUS:
 ───────────────────
@@ -368,23 +368,23 @@ ACCEPTED BY CANDIDATE: YES ✓
 DOCUMENT ACCESS LINKS:
 ─────────────────────
 • Profile Photo:
-\${candidateData.photoUrl}
+${candidateData.photoUrl}
 
 • Aadhaar Card (Front):
-\${candidateData.frontUrl}
+${candidateData.frontUrl}
 
 • Aadhaar Card (Back):
-\${candidateData.backUrl}
+${candidateData.backUrl}
 
 • PAN Card:
-\${candidateData.panUrl}
+${candidateData.panUrl}
 
 • Digital Signature:
-\${candidateData.signUrl}
+${candidateData.signUrl}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Submitted via isuccessnode Exam Portal
-\`
+`
         })
       });
     } catch (err) {

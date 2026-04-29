@@ -37,7 +37,7 @@ const DisclaimerOverlay = ({ user, profile }) => {
         .eq('id', userId);
       if (error) throw error;
 
-      sessionStorage.setItem(\`disclaimer_accepted_\${userId}\`, 'true');
+      sessionStorage.setItem(`disclaimer_accepted_${userId}`, 'true');
       setTimeout(() => {
         window.location.reload();
       }, 500);
