@@ -9,6 +9,11 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
   const [newTitle, setNewTitle] = useState('');
   const [newDuration, setNewDuration] = useState('');
   const [selectedExam, setSelectedExam] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredExams = exams.filter(e => 
+    e.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleSubmitExam = async (e) => {
     e.preventDefault();
@@ -35,37 +40,55 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
       <div className="max-w-7xl mx-auto animate-fade-in">
         
         {/* Header Section */}
-        <div className="mb-14 flex flex-col md:flex-row md:items-end justify-between gap-10">
-          <div className="text-center md:text-left">
-            <div className="w-16 h-16 rounded-[2rem] bg-slate-900 text-white flex items-center justify-center mb-6 shadow-2xl shadow-slate-200 mx-auto md:mx-0">
+        <div className="mb-14 flex flex-col xl:flex-row xl:items-center justify-between gap-10">
+          <div className="text-center md:text-left flex flex-col md:flex-row md:items-center gap-6">
+            <div className="w-16 h-16 rounded-[2rem] bg-slate-900 text-white flex items-center justify-center shadow-2xl shadow-slate-200 mx-auto md:mx-0 shrink-0">
               <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">Admin Dashboard</h1>
-            <p className="text-slate-400 font-medium">Manage all exams and system users</p>
+            <div>
+              <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-1">Admin Dashboard</h1>
+              <p className="text-slate-400 font-medium text-sm">Orchestrating examination protocols and user directories</p>
+            </div>
           </div>
-          
-          {/* Tab Switcher - Segmented Control */}
-          <div className="flex p-1.5 bg-white border border-slate-100 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-            <button
-              onClick={() => setActiveTab('exams')}
-              className={`px-8 py-3.5 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 ${activeTab === 'exams' ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'}`}
-            >
-              Exams
-            </button>
-            <button
-              onClick={() => setActiveTab('candidates')}
-              className={`px-8 py-3.5 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 ${activeTab === 'candidates' ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'}`}
-            >
-              Users
-            </button>
-            {isSuperAdmin && (
+
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            {/* Modern Search Input */}
+            <div className="relative group w-full md:w-80 lg:w-96">
+              <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-slate-900 transition-colors duration-300">
+                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+              </div>
+              <input 
+                type="text"
+                placeholder={`Search ${activeTab === 'exams' ? 'exams' : 'users'}...`}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white border border-slate-100 rounded-[1.5rem] py-4 pl-14 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900/10 transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery('')}
+                  className="absolute inset-y-0 right-4 flex items-center text-slate-300 hover:text-slate-900 transition-colors"
+                >
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              )}
+            </div>
+            
+            {/* Tab Switcher */}
+            <div className="flex p-1.5 bg-white border border-slate-100 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] shrink-0">
               <button
-                onClick={() => setActiveTab('staff')}
-                className={`px-8 py-3.5 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 ${activeTab === 'staff' ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'}`}
+                onClick={() => { setActiveTab('exams'); setSearchQuery(''); }}
+                className={`px-8 py-3.5 rounded-[1.5rem] text-[10px] font-bold uppercase tracking-widest transition-all duration-500 ${activeTab === 'exams' ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'}`}
               >
-                Admins
+                Exams
               </button>
-            )}
+              <button
+                onClick={() => { setActiveTab('candidates'); setSearchQuery(''); }}
+                className={`px-8 py-3.5 rounded-[1.5rem] text-[10px] font-bold uppercase tracking-widest transition-all duration-500 ${activeTab === 'candidates' ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'}`}
+              >
+                Users
+              </button>
+            </div>
           </div>
         </div>
 
@@ -122,21 +145,21 @@ const AdminDashboard = ({ user, profile, exams, addExam, deleteExam, onRefresh }
                   <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Active Exams</h3>
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Exams</span>
-                    <span className="bg-white text-slate-900 border border-slate-100 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">{exams.length} Exams</span>
+                    <span className="bg-white text-slate-900 border border-slate-100 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">{filteredExams.length} Exams</span>
                   </div>
                 </div>
-
+ 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {exams.length === 0 ? (
+                  {filteredExams.length === 0 ? (
                     <div className="col-span-full py-32 flex flex-col items-center justify-center bg-slate-50/50 border-2 border-dashed border-slate-200 rounded-[3rem] px-10 text-center">
                       <div className="w-20 h-20 rounded-full bg-white border border-slate-100 flex items-center justify-center text-slate-200 mb-6 shadow-sm">
                         <svg width="40" height="40" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25" /></svg>
                       </div>
-                      <p className="text-slate-900 font-bold text-xl mb-2">No Active Exams</p>
-                      <p className="text-slate-400 font-medium text-sm max-w-xs">Create your first exam to start managing student assessments.</p>
+                      <p className="text-slate-900 font-bold text-xl mb-2">No Matching Exams</p>
+                      <p className="text-slate-400 font-medium text-sm max-w-xs">Adjust your search query or create a new assessment.</p>
                     </div>
                   ) : (
-                    exams.map((exam, i) => (
+                    filteredExams.map((exam, i) => (
                       <div key={exam.id} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_16px_48px_-12px_rgba(0,0,0,0.04)] p-8 hover:shadow-2xl hover:shadow-slate-200 transition-all duration-500 group">
                         <div className="mb-8">
                           <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 mb-6 group-hover:bg-slate-900 group-hover:text-white transition-all duration-700 shadow-sm">

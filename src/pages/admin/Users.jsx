@@ -137,23 +137,23 @@ const Users = ({ user, profile: activeProfile }) => {
               {isSuperAdmin ? 'Orchestrate administrative nodes and identity protocols' : 'Manage candidate authorizations and assessment access'}
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-4">
             {activeTab === 'candidates' && (
-              <div className="relative group w-full md:w-80">
-                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-slate-900 transition-colors">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </span>
+              <div className="relative group w-full md:w-80 lg:w-96">
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-slate-900 transition-colors duration-300">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                </div>
                 <input
                   type="text"
                   placeholder="Search identities..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-2xl pl-12 pr-6 py-4 text-sm bg-white border border-slate-100 shadow-sm focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition-all font-medium placeholder:text-slate-300"
+                  className="w-full bg-white border border-slate-100 rounded-[1.5rem] py-4 pl-14 pr-6 text-sm font-bold text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900/10 transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
                 />
               </div>
             )}
             <Link to="/admin/users/new">
-              <button className="bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-slate-200 transition-all active:scale-[0.98] flex items-center gap-3 whitespace-nowrap text-[10px] uppercase tracking-widest">
+              <button className="bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-8 rounded-[1.5rem] shadow-xl shadow-slate-200 transition-all active:scale-[0.98] flex items-center gap-3 whitespace-nowrap text-[10px] uppercase tracking-widest h-[56px]">
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
                 New Identity
               </button>
