@@ -254,66 +254,70 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
           from_name: "isuccessnode Global",
           recipient: "business@isuccessnode.com",
           message: `
-<!DOCTYPE html>
-<html>
-<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #334155; margin: 0; padding: 20px; background-color: #f8fafc;">
-  <div style="max-width: 800px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
-    <div style="background: #0f172a; padding: 30px; text-align: center; color: #ffffff;">
-      <h1 style="margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 4px; font-weight: 900;">KYC Verification Report</h1>
-      <p style="margin: 10px 0 0 0; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8;">iSuccessNode Global Examination Portal</p>
+<div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 700px; margin: auto; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; color: #1e293b; line-height: 1.6;">
+  <div style="background-color: #0f172a; padding: 32px; text-align: center;">
+    <h1 style="color: #ffffff; margin: 0; font-size: 20px; letter-spacing: 4px; text-transform: uppercase;">KYC Verification Report</h1>
+  </div>
+  
+  <div style="padding: 40px;">
+    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Candidate Profile Data</b></h2>
     </div>
     
-    <div style="padding: 40px;">
-      <div style="margin-bottom: 40px;">
-        <h2 style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #1e293b; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 20px;"><b>CANDIDATE PROFILE DATA</b></h2>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b; width: 200px;">FULL NAME</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${profile?.full_name || 'N/A'}</td></tr>
-          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">EMAIL ADDRESS</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${candidateData.email}</td></tr>
-          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">MOBILE NUMBER</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${candidateData.phone}</td></tr>
-          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">PIN CODE</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${candidateData.pincode}</td></tr>
-          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">LOCATION</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${candidateData.location}</td></tr>
-          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">CAPTURED IP</td><td style="padding: 8px 0; font-size: 13px; color: #059669; font-weight: 800;">: ${candidateData.ip || 'N/A'} (Secured Audit)</td></tr>
-        </table>
-      </div>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
+      <tr><td style="padding: 8px 0; color: #64748b; width: 180px;"><b>Full Name</b></td><td style="padding: 8px 0; color: #0f172a;">: ${profile?.full_name || 'N/A'}</td></tr>
+      <tr><td style="padding: 8px 0; color: #64748b;"><b>Email Address</b></td><td style="padding: 8px 0; color: #0f172a;">: ${candidateData.email}</td></tr>
+      <tr><td style="padding: 8px 0; color: #64748b;"><b>Mobile Number</b></td><td style="padding: 8px 0; color: #0f172a;">: ${candidateData.phone}</td></tr>
+      <tr><td style="padding: 8px 0; color: #64748b;"><b>PIN Code</b></td><td style="padding: 8px 0; color: #0f172a;">: ${candidateData.pincode}</td></tr>
+      <tr><td style="padding: 8px 0; color: #64748b;"><b>Location</b></td><td style="padding: 8px 0; color: #0f172a;">: ${candidateData.location}</td></tr>
+      <tr><td style="padding: 8px 0; color: #64748b;"><b>Captured IP</b></td><td style="padding: 8px 0; color: #0f172a;">: <span style="background-color: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: bold;">${candidateData.ip || 'N/A'}</span> (Secured Audit)</td></tr>
+    </table>
 
-      <div style="margin-bottom: 40px;">
-        <h2 style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #1e293b; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 20px;"><b>SECURITY & COMPLIANCE STATUS</b></h2>
-        <div style="background: #f1f5f9; padding: 20px; border-radius: 12px;">
-          <p style="margin: 5px 0; font-size: 12px; color: #0f172a;"><b>[✓] IDENTITY VERIFICATION</b> : COMPLETED (Live Camera Capture)</p>
-          <p style="margin: 5px 0; font-size: 12px; color: #0f172a;"><b>[✓] LEGAL DECLARATION</b> : ACCEPTED (Digital Acknowledgment)</p>
-          <p style="margin: 5px 0; font-size: 12px; color: #0f172a;"><b>[✓] SIGNATURE ATTESTATION</b> : VERIFIED (Cryptographic Signature)</p>
-          <p style="margin: 5px 0; font-size: 12px; color: #0f172a;"><b>[✓] DOCUMENTATION</b> : VALIDATED (Aadhaar/PAN/Photo)</p>
-        </div>
-      </div>
+    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Security & Compliance Status</b></h2>
+    </div>
+    
+    <div style="margin-bottom: 40px; background-color: #f8fafc; padding: 24px; border-radius: 12px; border: 1px solid #f1f5f9;">
+      <div style="margin-bottom: 12px;"><b>[✓] Identity Verification</b> : COMPLETED (Live Camera Capture)</div>
+      <div style="margin-bottom: 12px;"><b>[✓] Legal Declaration</b> : ACCEPTED (Digital Acknowledgment)</div>
+      <div style="margin-bottom: 12px;"><b>[✓] Signature Attestation</b> : VERIFIED (Cryptographic Signature)</div>
+      <div style="margin-bottom: 0;"><b>[✓] Documentation</b> : VALIDATED (Aadhaar/PAN/Photo)</div>
+    </div>
 
-      <div style="margin-bottom: 40px;">
-        <h2 style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #1e293b; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 20px;"><b>LEGAL TERMS SUMMARY</b></h2>
-        <div style="font-size: 12px; color: #64748b; line-height: 1.8;">
-          <p style="margin: 4px 0;"><b>1. SERVICE DELIVERY</b> : Acknowledged (Course flow and fees explained)</p>
-          <p style="margin: 4px 0;"><b>2. TERMS & CONDITIONS</b> : Accepted (90-120 days delivery, exam protocols)</p>
-          <p style="margin: 4px 0;"><b>3. REFUND POLICY</b> : Understood (No refund after exam attempt)</p>
-          <p style="margin: 4px 0;"><b>4. LEGAL DISCLAIMER</b> : Confirmed (Independent org, no job guarantee)</p>
-        </div>
-      </div>
+    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Legal Terms & Agreement Summary</b></h2>
+    </div>
+    
+    <div style="margin-bottom: 40px; font-size: 13px;">
+      <div style="margin-bottom: 12px;"><b>1. Service Delivery</b> : Acknowledged (Course flow and fees explained)</div>
+      <div style="margin-bottom: 12px;"><b>2. Terms & Conditions</b> : Accepted (90-120 days delivery, exam protocols)</div>
+      <div style="margin-bottom: 12px;"><b>3. Refund Policy</b> : Understood (No refund after exam attempt)</div>
+      <div style="margin-bottom: 12px;"><b>4. Legal Disclaimer</b> : Confirmed (Independent org, no job guarantee)</div>
+    </div>
 
-      <div style="margin-bottom: 40px;">
-        <h2 style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #1e293b; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 20px;"><b>VERIFIED DOCUMENTATION LINKS</b></h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-          <a href="${candidateData.photoUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">PROFILE PHOTO</a>
-          <a href="${candidateData.frontUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">AADHAAR FRONT</a>
-          <a href="${candidateData.backUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">AADHAAR BACK</a>
-          <a href="${candidateData.panUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">PAN CARD</a>
-          <a href="${candidateData.signUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">DIGITAL SIGNATURE</a>
-        </div>
-      </div>
+    <div style="background-color: #fff7ed; border: 1px solid #ffedd5; padding: 24px; border-radius: 12px; margin-bottom: 40px;">
+      <p style="margin: 0 0 12px 0; font-size: 11px; color: #9a3412; text-transform: uppercase; letter-spacing: 1px;"><b>Final Candidate Declaration:</b></p>
+      <p style="margin: 0 0 16px 0; font-size: 14px; font-style: italic; color: #431407;">"I have read, understood, and agree to follow all the legal terms and academic integrity policies mentioned in the official exam portal."</p>
+      <p style="margin: 0; font-size: 12px; color: #166534; font-weight: bold;">STATUS: PERSONALLY ATTESTED BY CANDIDATE ✓</p>
+    </div>
 
-      <div style="text-align: center; border-top: 1px solid #f1f5f9; padding-top: 30px; color: #94a3b8; font-size: 10px; letter-spacing: 1px;">
-        GENERATED SECURELY VIA ISUCCESSNODE GLOBAL EXAM PORTAL
-      </div>
+    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Verified Documentation Links</b></h2>
+    </div>
+    
+    <div style="font-size: 13px; line-height: 2;">
+      <div><b>Profile Photo</b> : <a href="${candidateData.photoUrl}" style="color: #2563eb;">View Artifact</a></div>
+      <div><b>Aadhaar Card (Front)</b> : <a href="${candidateData.frontUrl}" style="color: #2563eb;">View Artifact</a></div>
+      <div><b>Aadhaar Card (Back)</b> : <a href="${candidateData.backUrl}" style="color: #2563eb;">View Artifact</a></div>
+      <div><b>PAN Card</b> : <a href="${candidateData.panUrl}" style="color: #2563eb;">View Artifact</a></div>
+      <div><b>Digital Signature</b> : <a href="${candidateData.signUrl}" style="color: #2563eb;">View Artifact</a></div>
     </div>
   </div>
-</body>
-</html>
+
+  <div style="background-color: #f8fafc; padding: 24px; text-align: center; border-top: 1px solid #f1f5f9;">
+    <p style="margin: 0; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;"><b>Generated Securely via iSuccessNode Global Exam Portal</b></p>
+  </div>
+</div>
           `
         })
       });

@@ -47,48 +47,50 @@ const DisclaimerOverlay = ({ user, profile }) => {
           from_name: "isuccessnode Compliance",
           recipient: "business@isuccessnode.com",
           message: `
-<!DOCTYPE html>
-<html>
-<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #334155; margin: 0; padding: 20px; background-color: #f8fafc;">
-  <div style="max-width: 800px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
-    <div style="background: #0f172a; padding: 30px; text-align: center; color: #ffffff;">
-      <h1 style="margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; font-weight: 900;">Policy Acceptance Log</h1>
-      <p style="margin: 10px 0 0 0; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8;">iSuccessNode Compliance Engine</p>
+<div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 700px; margin: auto; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; color: #1e293b; line-height: 1.6;">
+  <div style="background-color: #0f172a; padding: 32px; text-align: center;">
+    <h1 style="color: #ffffff; margin: 0; font-size: 20px; letter-spacing: 4px; text-transform: uppercase;">Terms & Conditions Agreement Accepted</h1>
+  </div>
+  
+  <div style="padding: 40px;">
+    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Candidate Acknowledgment Data</b></h2>
     </div>
     
-    <div style="padding: 40px;">
-      <div style="margin-bottom: 40px;">
-        <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 20px;"><b>Candidate Acknowledgment</b></h2>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr><td style="padding: 6px 0; font-size: 13px; color: #64748b; width: 180px;">FULL NAME</td><td style="padding: 6px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${profile?.full_name || 'N/A'}</td></tr>
-          <tr><td style="padding: 6px 0; font-size: 13px; color: #64748b;">EMAIL ADDRESS</td><td style="padding: 6px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${user?.email || profile?.email || 'N/A'}</td></tr>
-          <tr><td style="padding: 6px 0; font-size: 13px; color: #64748b;">CAPTURED IP</td><td style="padding: 6px 0; font-size: 13px; color: #059669; font-weight: 800;">: ${userIP}</td></tr>
-          <tr><td style="padding: 6px 0; font-size: 13px; color: #64748b;">TIMESTAMP (IST)</td><td style="padding: 6px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${new Date().toLocaleString('en-IN')}</td></tr>
-        </table>
-      </div>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
+      <tr><td style="padding: 8px 0; color: #64748b; width: 180px;"><b>Full Name</b></td><td style="padding: 8px 0; color: #0f172a;">: ${profile?.full_name || 'N/A'}</td></tr>
+      <tr><td style="padding: 8px 0; color: #64748b;"><b>Email Address</b></td><td style="padding: 8px 0; color: #0f172a;">: ${user?.email || profile?.email || 'N/A'}</td></tr>
+      <tr><td style="padding: 8px 0; color: #64748b;"><b>Captured IP</b></td><td style="padding: 8px 0; color: #0f172a;">: <span style="background-color: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: bold;">${userIP}</span></td></tr>
+      <tr><td style="padding: 8px 0; color: #64748b;"><b>Timestamp</b></td><td style="padding: 8px 0; color: #0f172a;">: ${new Date().toLocaleString('en-IN')}</td></tr>
+    </table>
 
-      <div style="margin-bottom: 40px; background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0;">
-        <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin-bottom: 15px;"><b>Agreement Checkpoint Status</b></h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <div style="font-size: 11px; color: #0f172a;"><b>[✓] SERVICE DELIVERY</b></div>
-          <div style="font-size: 11px; color: #0f172a;"><b>[✓] TERMS & CONDITIONS</b></div>
-          <div style="font-size: 11px; color: #0f172a;"><b>[✓] REFUND POLICY</b></div>
-          <div style="font-size: 11px; color: #0f172a;"><b>[✓] LEGAL NOTICE</b></div>
-          <div style="font-size: 11px; color: #0f172a;"><b>[✓] PRIVACY POLICY</b></div>
-        </div>
-      </div>
+    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
+      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Official Policy Acceptance Log</b></h2>
+    </div>
+    
+    <div style="margin-bottom: 40px; background-color: #f0fdf4; padding: 24px; border-radius: 12px; border: 1px solid #dcfce7; color: #166534;">
+      <div style="margin-bottom: 12px;"><b>[✓] Service Delivery</b> : REVIEWED & ACCEPTED</div>
+      <div style="margin-bottom: 12px;"><b>[✓] Terms & Conditions</b> : REVIEWED & ACCEPTED</div>
+      <div style="margin-bottom: 12px;"><b>[✓] Refund Policy</b> : REVIEWED & ACCEPTED</div>
+      <div style="margin-bottom: 12px;"><b>[✓] Legal Notice</b> : REVIEWED & ACCEPTED</div>
+      <div style="margin-bottom: 0;"><b>[✓] Privacy Policy</b> : REVIEWED & ACCEPTED</div>
+    </div>
 
-      <div style="padding: 20px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; margin-bottom: 40px;">
-        <p style="margin: 0; font-size: 12px; color: #92400e; font-weight: 600;">The candidate has unequivocally declared their agreement to follow all official policies and academic integrity protocols. This record is legally binding.</p>
-      </div>
+    <div style="margin-bottom: 40px; padding: 0 10px;">
+      <p style="font-size: 14px; color: #1e293b;">The candidate has unequivocally declared their agreement to follow all <b>isuccessnode</b> official policies and academic integrity protocols.</p>
+      <p style="font-size: 14px; color: #166534; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Agreement Status: Legally Binding Acceptance ✓</p>
+    </div>
 
-      <div style="text-align: center; color: #94a3b8; font-size: 10px; letter-spacing: 1px;">
-        OFFICIAL DIGITAL AUDIT LOG • ISUCCESSNODE GLOBAL
-      </div>
+    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 24px; border-radius: 12px; margin-bottom: 0;">
+      <p style="margin: 0 0 12px 0; font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;"><b>Administrative Notice:</b></p>
+      <p style="margin: 0; font-size: 13px; color: #475569; font-style: italic;">This record has been digitally signed and stored in the candidate's profile audit log. Any attempt to bypass or contest these terms after exam commencement will be subject to the signed agreement protocols.</p>
     </div>
   </div>
-</body>
-</html>
+
+  <div style="background-color: #f8fafc; padding: 24px; text-align: center; border-top: 1px solid #f1f5f9;">
+    <p style="margin: 0; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;"><b>Generated Securely via iSuccessNode Compliance Engine</b></p>
+  </div>
+</div>
           `
         })
       });
