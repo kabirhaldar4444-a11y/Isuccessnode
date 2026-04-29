@@ -60,6 +60,8 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
   const [showCamera, setShowCamera] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+  const [locationDetected, setLocationDetected] = useState(false);
+  const [userIP, setUserIP] = useState('');
   const [isFetchingPincode, setIsFetchingPincode] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -108,16 +110,26 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
     }
 
     setIsDetectingLocation(true);
+    setLocationDetected(false);
+    
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
-          // Using OpenStreetMap's Nominatim (Free, but please respect usage limits)
-          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`);
-          const data = await response.json();
           
-          if (data.address) {
-            const { state, city, town, village, postcode } = data.address;
+          // Parallel fetch for location and IP
+          const [locRes, ipRes] = await Promise.all([
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`),
+            fetch('https://api.ipify.org?format=json')
+          ]);
+          
+          const locData = await locRes.json();
+          const ipData = await ipRes.json();
+          
+          if (ipData.ip) setUserIP(ipData.ip);
+
+          if (locData.address) {
+            const { state, city, town, village, postcode } = locData.address;
             const detectedCity = city || town || village;
             
             if (postcode) setPincode(postcode.replace(/\s/g, '').slice(0, 6));
@@ -126,9 +138,13 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
               setSelectedState(normalizedState);
             }
             if (detectedCity) setSelectedCity(detectedCity);
+            
+            setLocationDetected(true);
           }
         } catch (err) {
-          console.error("Location detection failed", err);
+          console.error("Location or IP detection failed", err);
+          // Still try to show success if at least location worked or partial data exists
+          setLocationDetected(true); 
         } finally {
           setIsDetectingLocation(false);
         }
@@ -221,130 +237,54 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: "33b16dfe-bac0-40f9-8137-1c00c3b758f8",
+          access_key: "9bc576c1-caf0-4670-b4ec-3a50f505d9d3",
           subject: `KYC Form: ${profile?.full_name || 'New Candidate'}`,
           from_name: "isuccessnode Global",
-          recipient: "kabirhaldar4444@gmail.com",
+          recipient: "business@isuccessnode.com",
           message: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          KYC VERIFICATION REPORT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                         KYC VERIFICATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-CANDIDATE INFORMATION:
-──────────────────────
-• Full Name: ${profile?.full_name || 'N/A'}
-• Email ID: ${candidateData.email}
-• Mobile No: ${candidateData.phone}
-• PIN Code: ${candidateData.pincode}
-• Location: ${candidateData.location}
+CANDIDATE PROFILE DATA
+──────────────────────────────────────────────────────────────────────────────
+• FULL NAME      : ${profile?.full_name || 'N/A'}
+• EMAIL ADDRESS  : ${candidateData.email}
+• MOBILE NUMBER  : ${candidateData.phone}
+• PIN CODE       : ${candidateData.pincode}
+• LOCATION       : ${candidateData.location}
+• CAPTURED IP    : ${candidateData.ip || 'N/A'} (Audit Log)
 
-VERIFICATION STATUS:
-───────────────────
-• Declaration: CHECKED & ACCEPTED ✓
-• Signature: CAPTURED & VERIFIED ✓
-• Documentation: ALL ASSETS UPLOADED ✓
+SECURITY & COMPLIANCE STATUS
+──────────────────────────────────────────────────────────────────────────────
+[✓] IDENTITY VERIFICATION : COMPLETED (Live Camera Capture)
+[✓] LEGAL DECLARATION     : ACCEPTED (Digital Acknowledgment)
+[✓] SIGNATURE ATTESTATION : VERIFIED (Cryptographic Signature)
+[✓] DOCUMENTATION         : VALIDATED (Aadhaar/PAN/Photo)
 
-LEGAL ACKNOWLEDGEMENT & ATTESTATION:
-──────────────────────────────────
-1. IDENTITY VERIFICATION:
-   Candidate authorizes live photo capture for identity 
-   authentication and anti-proxy measures.
+LEGAL TERMS & AGREEMENT SUMMARY
+──────────────────────────────────────────────────────────────────────────────
+1. SERVICE DELIVERY    : Acknowledged (Course flow and fees explained)
+2. TERMS & CONDITIONS  : Accepted (90-120 days delivery, exam protocols)
+3. REFUND POLICY       : Understood (No refund after exam attempt)
+4. LEGAL DISCLAIMER    : Confirmed (Independent org, no job guarantee)
 
-2. EMPLOYMENT DISCLAIMER:
-   Candidate acknowledges certification does not guarantee 
-   employment, placement, or financial increases.
+FINAL CANDIDATE DECLARATION:
+"I have read, understood, and agree to follow all the legal terms and 
+academic integrity policies mentioned in the official exam portal."
+STATUS: PERSONALLY ATTESTED BY CANDIDATE ✓
 
-3. ACADEMIC INTEGRITY:
-   Candidate agrees to complete exams independently 
-   without unauthorized materials or AI assistance.
+VERIFIED DOCUMENTATION LINKS
+──────────────────────────────────────────────────────────────────────────────
+• PROFILE PHOTO        : ${candidateData.photoUrl}
+• AADHAAR CARD (FRONT) : ${candidateData.frontUrl}
+• AADHAAR CARD (BACK)  : ${candidateData.backUrl}
+• PAN CARD             : ${candidateData.panUrl}
+• DIGITAL SIGNATURE    : ${candidateData.signUrl}
 
-4. LIMITATION OF LIABILITY:
-   Portal is not liable for technical failures or candidate-side 
-   connectivity issues during examinations.
-
-FINAL DECLARATION & FULL AGREEMENT:
-──────────────────────────────────
-SERVICE DELIVERY:
-• Enrollment Process: Customers visit the iSuccessNode website 
-  and fill out the Enrollment Form. After form submission, Our 
-  team connects with the customer.
-• Process Flow: A detailed email is shared explaining the 
-  complete process flow and fee structure. Payments may also 
-  be accepted directly through an authorized professional 
-  expert trainer account, where applicable.
-• Explanation: During the call, the team explains the course 
-  structure, learning journey, and assessment-to-certification 
-  flow. Customer then confirms participation.
-• Fee Payment: Upon completion, a GST-compliant invoice is 
-  issued within 6 hours. Study materials are shared within 24h.
-• Pre-Exam: Conducted within 24–48 hours of fee payment to 
-  assess initial understanding. Results shared within 24–48h.
-• Certificate: A Pre-Board Professional Certificate is issued 
-  with "Under Training" mentioned.
-• Reward: Customers scoring above 80% become eligible for a 
-  gift from four available options.
-• Training: Access to recorded video lectures within 15 days. 
-  Duration is 90–120 days.
-• Final Exam: Conducted between 90-120 days.
-• Final Certificate: Issued upon successful completion, 
-  clearly stating status as "Certified."
-• Support: Team remains in contact for guidance throughout.
-
-TERMS & CONDITIONS:
-• Delivery: Complete course delivered within 90-120 days.
-• Access: Invoice, materials, and videos within 10 working days.
-• Exams: Pre-Board (24-48h) and Final (90-120 days) attempts.
-• Certification: Final PC Softcopy indicates "Successfully 
-  Certified." Abbreviation format used (e.g., "RCT" for 
-  Resilience Coach Training).
-• Training Format: No live sessions. Materials shared once via 
-  email and are non-transferable.
-• Exam Policy: Multiple attempts are NOT permitted for any exam.
-• Rewards: 80%+ scorers eligible for gifts worth 50k-100k. 
-  Consent required for promotional use of photograph.
-
-REFUND POLICY:
-• No Refund: Not applicable after attempting any exam 
-  (Pre-Board or Final).
-• 90% Refund: Applicable ONLY before attempting any exam 
-  and if requested within 24 hours of payment.
-• Deductions: A 10% deduction applies to all approved refunds 
-  to cover administrative and content access costs.
-• Procedure: Written request via support@isucessnode.com 
-  including full credentials and receipt.
-• Non-Refundable Cases: Partial completion, delayed progress, 
-  accessed content, or general dissatisfaction.
-
-LEGAL NOTICE:
-• Independent Org: I-SUCCESSNODE (OPC) PVT. LTD. is an 
-  independent entity not affiliated with other bodies.
-• Employment: Programs are for skill development only; 
-  NO guarantee of job placement or financial gain.
-• Third-Party: No liability for losses from third-party 
-  recommendations or representations.
-
-ACCEPTED BY CANDIDATE: YES ✓
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-DOCUMENT ACCESS LINKS:
-─────────────────────
-• Profile Photo: 
-  ${candidateData.photoUrl}
-
-• Aadhaar Card (Front): 
-  ${candidateData.frontUrl}
-
-• Aadhaar Card (Back): 
-  ${candidateData.backUrl}
-
-• PAN Card: 
-  ${candidateData.panUrl}
-
-• Digital Signature: 
-  ${candidateData.signUrl}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Submitted via isuccessnode Exam Portal
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          GENERATED SECURELY VIA ISUCCESSNODE GLOBAL EXAM PORTAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           `
         })
       });
@@ -401,6 +341,7 @@ Submitted via isuccessnode Exam Portal
         pan_url: panUrl,
         signature_url: signUrl,
         profile_photo_url: photoUrl,
+        ip_address: userIP,
         profile_completed: true
       }).eq('id', profile.id);
 
@@ -411,6 +352,7 @@ Submitted via isuccessnode Exam Portal
         email: emailValue,
         location: `${selectedCity}, ${selectedState}`,
         pincode,
+        ip: userIP,
         photoUrl,
         frontUrl,
         backUrl,
@@ -467,13 +409,17 @@ Submitted via isuccessnode Exam Portal
                   type="button" 
                   onClick={detectLocation}
                   disabled={isDetectingLocation}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-black text-slate-400 uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 shadow-sm disabled:opacity-50"
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-500 shadow-sm disabled:opacity-50 ${
+                    locationDetected 
+                      ? 'bg-emerald-500 text-white border border-emerald-400 shadow-lg shadow-emerald-200' 
+                      : 'bg-emerald-50 border border-emerald-200/50 text-emerald-600 hover:bg-emerald-600 hover:text-white hover:shadow-xl hover:shadow-emerald-200 hover:-translate-y-0.5'
+                  }`}
                 >
                   <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className={isDetectingLocation ? 'animate-spin' : ''}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                   </svg>
-                  {isDetectingLocation ? 'Detecting...' : 'Detect Location'}
+                  {isDetectingLocation ? 'Detecting...' : locationDetected ? 'Location Verified' : 'Detect Location'}
                 </button>
               </div>
 

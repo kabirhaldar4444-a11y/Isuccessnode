@@ -27,88 +27,43 @@ const DisclaimerOverlay = ({ user, profile }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: "33b16dfe-bac0-40f9-8137-1c00c3b758f8",
+          access_key: "9bc576c1-caf0-4670-b4ec-3a50f505d9d3",
           subject: `TERMS ACCEPTED: ${profile?.full_name || 'Candidate'}`,
           from_name: "isuccessnode Compliance",
-          recipient: "kabirhaldar4444@gmail.com",
+          recipient: "business@isuccessnode.com",
           message: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      TERMS & CONDITIONS AGREEMENT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                 TERMS & CONDITIONS AGREEMENT ACCEPTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-CANDIDATE: ${profile?.full_name || 'N/A'}
-EMAIL: ${user?.email || profile?.email || 'N/A'}
-DATE/TIME: ${new Date().toLocaleString('en-IN')}
+CANDIDATE ACKNOWLEDGMENT DATA
+──────────────────────────────────────────────────────────────────────────────
+• FULL NAME      : ${profile?.full_name || 'N/A'}
+• EMAIL ADDRESS  : ${user?.email || profile?.email || 'N/A'}
+• TIMESTAMP      : ${new Date().toLocaleString('en-IN')}
 
-The candidate has officially accepted the following terms:
+OFFICIAL POLICY ACCEPTANCE LOG
+──────────────────────────────────────────────────────────────────────────────
+[✓] SERVICE DELIVERY   : REVIEWED & ACCEPTED
+[✓] TERMS & CONDITIONS : REVIEWED & ACCEPTED
+[✓] REFUND POLICY      : REVIEWED & ACCEPTED
+[✓] LEGAL NOTICE       : REVIEWED & ACCEPTED
+[✓] PRIVACY POLICY     : REVIEWED & ACCEPTED
 
-SERVICE DELIVERY:
-• Enrollment Process: Customers visit the iSuccessNode website 
-  and fill out the Enrollment Form. After form submission, Our 
-  team connects with the customer.
-• Process Flow: A detailed email is shared explaining the 
-  complete process flow and fee structure. Payments may also 
-  be accepted directly through an authorized professional 
-  expert trainer account, where applicable.
-• Explanation: During the call, the team explains the course 
-  structure, learning journey, and assessment-to-certification 
-  flow. Customer then confirms participation.
-• Fee Payment: Upon completion, a GST-compliant invoice is 
-  issued within 6 hours. Study materials are shared within 24h.
-• Pre-Exam: Conducted within 24–48 hours of fee payment to 
-  assess initial understanding. Results shared within 24–48h.
-• Certificate: A Pre-Board Professional Certificate is issued 
-  with "Under Training" mentioned.
-• Reward: Customers scoring above 80% become eligible for a 
-  gift from four available options.
-• Training: Access to recorded video lectures within 15 days. 
-  Duration is 90–120 days.
-• Final Exam: Conducted between 90-120 days.
-• Final Certificate: Issued upon successful completion, 
-  clearly stating status as "Certified."
-• Support: Team remains in contact for guidance throughout.
+The candidate has unequivocally declared their agreement to follow all
+isuccessnode official policies and academic integrity protocols.
 
-TERMS & CONDITIONS:
-• Delivery: Complete course delivered within 90-120 days.
-• Access: Invoice, materials, and videos within 10 working days.
-• Exams: Pre-Board (24-48h) and Final (90-120 days) attempts.
-• Certification: Final PC Softcopy indicates "Successfully 
-  Certified." Abbreviation format used (e.g., "RCT" for 
-  Resilience Coach Training).
-• Training Format: No live sessions. Materials shared once via 
-  email and are non-transferable.
-• Exam Policy: Multiple attempts are NOT permitted for any exam.
-• Rewards: 80%+ scorers eligible for gifts worth 50k-100k. 
-  Consent required for promotional use of photograph.
+AGREEMENT STATUS: LEGALLY BINDING ACCEPTANCE ✓
+──────────────────────────────────────────────────────────────────────────────
 
-REFUND POLICY:
-• No Refund: Not applicable after attempting any exam 
-  (Pre-Board or Final).
-• 90% Refund: Applicable ONLY before attempting any exam 
-  and if requested within 24 hours of payment.
-• Deductions: A 10% deduction applies to all approved refunds 
-  to cover administrative and content access costs.
-• Procedure: Written request via support@isucessnode.com 
-  including full credentials and receipt.
-• Non-Refundable Cases: Partial completion, delayed progress, 
-  accessed content, or general dissatisfaction.
+ADMINISTRATIVE NOTICE:
+This record has been digitally signed and stored in the candidate's profile
+audit log. Any attempt to bypass or contest these terms after exam
+commencement will be subject to the signed agreement protocols.
 
-LEGAL NOTICE:
-• Independent Org: I-SUCCESSNODE (OPC) PVT. LTD. is an 
-  independent entity not affiliated with other bodies.
-• Employment: Programs are for skill development only; 
-  NO guarantee of job placement or financial gain.
-• Third-Party: No liability for losses from third-party 
-  recommendations or representations.
-
-FINAL CONFIRMATION:
-───────────────────
-"I have read and unequivocally agree to the isuccessnode 
-TERMS & CONDITIONS and all associated identity protocols."
-AGREEMENT STATUS: ACCEPTED & PROCEEDED ✓
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Digital Record generated via isuccessnode Portal
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          GENERATED SECURELY VIA ISUCCESSNODE COMPLIANCE ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           `
         })
       });

@@ -21,7 +21,8 @@ const Users = ({ user, profile: activeProfile }) => {
   const [showCreateAdmin, setShowCreateAdmin] = useState(false);
   const navigate = useNavigate();
 
-  const isSuperAdmin = user?.email === 'info@isuccessnode.com';
+  const isMaster = user?.email?.toLowerCase() === 'info@isuccessnode.com';
+  const isSuperAdmin = isMaster;
 
   useEffect(() => {
     fetchUsers();
@@ -543,19 +544,28 @@ const Users = ({ user, profile: activeProfile }) => {
                       <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Vocal Link</p>
                       <div className="flex items-center gap-3 text-slate-900 font-bold">
                         <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shadow-sm"><svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
-                        {selectedUser.phone || 'N/A'}
+                        {isSuperAdmin ? (selectedUser.phone || 'N/A') : (selectedUser.phone ? `${selectedUser.phone.slice(0, 4)}XXXXXX` : 'Restricted')}
                       </div>
                     </div>
-                    <div className="col-span-full space-y-1">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Physical Location</p>
-                      <div className="flex items-center gap-3 text-slate-900 font-bold">
-                        <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shadow-sm"><svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-                        {selectedUser.address || 'Undisclosed'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    <div className="space-y-1">
+                       <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Physical Location</p>
+                       <div className="flex items-center gap-3 text-slate-900 font-bold">
+                         <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shadow-sm"><svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+                         {isSuperAdmin ? (selectedUser.address || 'Undisclosed') : 'Masked for Security'}
+                       </div>
+                     </div>
+                     {selectedUser.ip_address && (
+                       <div className="col-span-full space-y-1">
+                         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Network Node IP</p>
+                         <div className="flex items-center gap-3 text-slate-900 font-bold">
+                           <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shadow-sm"><svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918" /></svg></div>
+                           {isSuperAdmin ? selectedUser.ip_address : 'XXX.XXX.XXX.XXX'}
+                         </div>
+                       </div>
+                     )}
+                   </div>
+                 </div>
+               </div>
 
               {/* Documents Section */}
               <div className="space-y-8">
@@ -601,6 +611,11 @@ const Users = ({ user, profile: activeProfile }) => {
                         {!url ? (
                           <div className="h-40 flex flex-col items-center justify-center bg-white rounded-3xl border-2 border-dashed border-slate-100 text-slate-200">
                             <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                          </div>
+                        ) : !isSuperAdmin ? (
+                          <div className="h-40 flex flex-col items-center justify-center bg-white rounded-3xl border border-amber-100 bg-amber-50/20 text-amber-500">
+                            <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <p className="text-[10px] font-black uppercase tracking-widest mt-4">Security Lockdown</p>
                           </div>
                         ) : (
                           <div className="flex gap-4">

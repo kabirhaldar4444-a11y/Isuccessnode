@@ -37,7 +37,9 @@ const DocumentPreview = ({ title, url }) => {
   );
 };
 
-const EditUser = () => {
+const EditUser = ({ user, profile: activeProfile }) => {
+  const isMaster = user?.email?.toLowerCase() === 'info@isuccessnode.com';
+  const isSuperAdmin = isMaster;
   const toast = useToast();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -52,6 +54,7 @@ const EditUser = () => {
     aadhaar_back_url: '',
     pan_url: '',
     profile_photo_url: '',
+    ip_address: '',
   });
   
   const [exams, setExams] = useState([]);
@@ -83,7 +86,8 @@ const EditUser = () => {
         aadhaar_front_url: data.aadhaar_front_url || '',
         aadhaar_back_url: data.aadhaar_back_url || '',
         pan_url: data.pan_url || '',
-        profile_photo_url: data.profile_photo_url || ''
+        profile_photo_url: data.profile_photo_url || '',
+        ip_address: data.ip_address || ''
       });
     } else if (error) {
       console.error('Error fetching user:', error);
@@ -230,10 +234,62 @@ const EditUser = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                <DocumentPreview title="Profile Photo" url={editUser.profile_photo_url} />
-               <DocumentPreview title="Aadhaar Front" url={editUser.aadhaar_front_url} />
-               <DocumentPreview title="Aadhaar Back" url={editUser.aadhaar_back_url} />
-               <DocumentPreview title="PAN Card" url={editUser.pan_url} />
+               
+               {isSuperAdmin ? (
+                 <>
+                   <DocumentPreview title="Aadhaar Front" url={editUser.aadhaar_front_url} />
+                   <DocumentPreview title="Aadhaar Back" url={editUser.aadhaar_back_url} />
+                   <DocumentPreview title="PAN Card" url={editUser.pan_url} />
+                 </>
+               ) : (
+                 <>
+                   <div className="bg-slate-50/50 p-5 rounded-3xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-center gap-3 h-full min-h-[160px]">
+                     <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
+                       <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                     </div>
+                     <div>
+                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-900">Restricted Access</p>
+                       <p className="text-[9px] font-medium text-slate-400 mt-1">Contact Super Admin to view sensitive artifacts</p>
+                     </div>
+                   </div>
+                   <div className="bg-slate-50/50 p-5 rounded-3xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-center gap-3 h-full min-h-[160px]">
+                     <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
+                       <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                     </div>
+                     <div>
+                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-900">Restricted Access</p>
+                       <p className="text-[9px] font-medium text-slate-400 mt-1">Contact Super Admin to view sensitive artifacts</p>
+                     </div>
+                   </div>
+                   <div className="bg-slate-50/50 p-5 rounded-3xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-center gap-3 h-full min-h-[160px]">
+                     <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
+                       <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                     </div>
+                     <div>
+                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-900">Restricted Access</p>
+                       <p className="text-[9px] font-medium text-slate-400 mt-1">Contact Super Admin to view sensitive artifacts</p>
+                     </div>
+                   </div>
+                 </>
+               )}
             </div>
+
+            {editUser.ip_address && (
+              <div className="mt-8 p-6 bg-emerald-50/50 border border-emerald-100 rounded-[2rem] flex items-center justify-between animate-fade-in">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-100">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918" /></svg>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-0.5">Location Tracking Node</p>
+                    <p className="text-sm font-bold text-slate-900">Captured IP: {isSuperAdmin ? editUser.ip_address : 'XXX.XXX.XXX.XXX'}</p>
+                  </div>
+                </div>
+                <div className="px-4 py-2 bg-white rounded-xl border border-emerald-100 text-[9px] font-black uppercase tracking-widest text-emerald-600 shadow-sm">
+                  Verified Identity
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Exam Allocation Grid */}

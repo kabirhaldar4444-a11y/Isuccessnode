@@ -246,7 +246,7 @@ function App() {
 
           <Route path="/admin/users/edit/:id" element={
             profile?.role === 'admin' ? (
-              <EditUser />
+              <EditUser user={user} profile={profile} />
             ) : <Navigate to="/login" />
           } />
           
