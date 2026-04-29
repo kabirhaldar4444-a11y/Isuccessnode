@@ -47,39 +47,48 @@ const DisclaimerOverlay = ({ user, profile }) => {
           from_name: "isuccessnode Compliance",
           recipient: "business@isuccessnode.com",
           message: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                 TERMS & CONDITIONS AGREEMENT ACCEPTED
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<!DOCTYPE html>
+<html>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #334155; margin: 0; padding: 20px; background-color: #f8fafc;">
+  <div style="max-width: 800px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+    <div style="background: #0f172a; padding: 30px; text-align: center; color: #ffffff;">
+      <h1 style="margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; font-weight: 900;">Policy Acceptance Log</h1>
+      <p style="margin: 10px 0 0 0; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8;">iSuccessNode Compliance Engine</p>
+    </div>
+    
+    <div style="padding: 40px;">
+      <div style="margin-bottom: 40px;">
+        <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 20px;"><b>Candidate Acknowledgment</b></h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr><td style="padding: 6px 0; font-size: 13px; color: #64748b; width: 180px;">FULL NAME</td><td style="padding: 6px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${profile?.full_name || 'N/A'}</td></tr>
+          <tr><td style="padding: 6px 0; font-size: 13px; color: #64748b;">EMAIL ADDRESS</td><td style="padding: 6px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${user?.email || profile?.email || 'N/A'}</td></tr>
+          <tr><td style="padding: 6px 0; font-size: 13px; color: #64748b;">CAPTURED IP</td><td style="padding: 6px 0; font-size: 13px; color: #059669; font-weight: 800;">: ${userIP}</td></tr>
+          <tr><td style="padding: 6px 0; font-size: 13px; color: #64748b;">TIMESTAMP (IST)</td><td style="padding: 6px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${new Date().toLocaleString('en-IN')}</td></tr>
+        </table>
+      </div>
 
-CANDIDATE ACKNOWLEDGMENT DATA
-──────────────────────────────────────────────────────────────────────────────
-• FULL NAME      : ${profile?.full_name || 'N/A'}
-• EMAIL ADDRESS  : ${user?.email || profile?.email || 'N/A'}
-• CAPTURED IP    : ${userIP}
-• TIMESTAMP      : ${new Date().toLocaleString('en-IN')}
+      <div style="margin-bottom: 40px; background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0;">
+        <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin-bottom: 15px;"><b>Agreement Checkpoint Status</b></h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="font-size: 11px; color: #0f172a;"><b>[✓] SERVICE DELIVERY</b></div>
+          <div style="font-size: 11px; color: #0f172a;"><b>[✓] TERMS & CONDITIONS</b></div>
+          <div style="font-size: 11px; color: #0f172a;"><b>[✓] REFUND POLICY</b></div>
+          <div style="font-size: 11px; color: #0f172a;"><b>[✓] LEGAL NOTICE</b></div>
+          <div style="font-size: 11px; color: #0f172a;"><b>[✓] PRIVACY POLICY</b></div>
+        </div>
+      </div>
 
-OFFICIAL POLICY ACCEPTANCE LOG
-──────────────────────────────────────────────────────────────────────────────
-[✓] SERVICE DELIVERY   : REVIEWED & ACCEPTED
-[✓] TERMS & CONDITIONS : REVIEWED & ACCEPTED
-[✓] REFUND POLICY      : REVIEWED & ACCEPTED
-[✓] LEGAL NOTICE       : REVIEWED & ACCEPTED
-[✓] PRIVACY POLICY     : REVIEWED & ACCEPTED
+      <div style="padding: 20px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; margin-bottom: 40px;">
+        <p style="margin: 0; font-size: 12px; color: #92400e; font-weight: 600;">The candidate has unequivocally declared their agreement to follow all official policies and academic integrity protocols. This record is legally binding.</p>
+      </div>
 
-The candidate has unequivocally declared their agreement to follow all
-isuccessnode official policies and academic integrity protocols.
-
-AGREEMENT STATUS: LEGALLY BINDING ACCEPTANCE ✓
-──────────────────────────────────────────────────────────────────────────────
-
-ADMINISTRATIVE NOTICE:
-This record has been digitally signed and stored in the candidate's profile
-audit log. Any attempt to bypass or contest these terms after exam
-commencement will be subject to the signed agreement protocols.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          GENERATED SECURELY VIA ISUCCESSNODE COMPLIANCE ENGINE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      <div style="text-align: center; color: #94a3b8; font-size: 10px; letter-spacing: 1px;">
+        OFFICIAL DIGITAL AUDIT LOG • ISUCCESSNODE GLOBAL
+      </div>
+    </div>
+  </div>
+</body>
+</html>
           `
         })
       });

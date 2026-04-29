@@ -254,49 +254,66 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
           from_name: "isuccessnode Global",
           recipient: "business@isuccessnode.com",
           message: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                         KYC VERIFICATION REPORT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<!DOCTYPE html>
+<html>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #334155; margin: 0; padding: 20px; background-color: #f8fafc;">
+  <div style="max-width: 800px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+    <div style="background: #0f172a; padding: 30px; text-align: center; color: #ffffff;">
+      <h1 style="margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 4px; font-weight: 900;">KYC Verification Report</h1>
+      <p style="margin: 10px 0 0 0; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8;">iSuccessNode Global Examination Portal</p>
+    </div>
+    
+    <div style="padding: 40px;">
+      <div style="margin-bottom: 40px;">
+        <h2 style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #1e293b; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 20px;"><b>CANDIDATE PROFILE DATA</b></h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b; width: 200px;">FULL NAME</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${profile?.full_name || 'N/A'}</td></tr>
+          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">EMAIL ADDRESS</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${candidateData.email}</td></tr>
+          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">MOBILE NUMBER</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${candidateData.phone}</td></tr>
+          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">PIN CODE</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${candidateData.pincode}</td></tr>
+          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">LOCATION</td><td style="padding: 8px 0; font-size: 13px; color: #0f172a; font-weight: 700;">: ${candidateData.location}</td></tr>
+          <tr><td style="padding: 8px 0; font-size: 13px; color: #64748b;">CAPTURED IP</td><td style="padding: 8px 0; font-size: 13px; color: #059669; font-weight: 800;">: ${candidateData.ip || 'N/A'} (Secured Audit)</td></tr>
+        </table>
+      </div>
 
-CANDIDATE PROFILE DATA
-──────────────────────────────────────────────────────────────────────────────
-• FULL NAME      : ${profile?.full_name || 'N/A'}
-• EMAIL ADDRESS  : ${candidateData.email}
-• MOBILE NUMBER  : ${candidateData.phone}
-• PIN CODE       : ${candidateData.pincode}
-• LOCATION       : ${candidateData.location}
-• CAPTURED IP    : ${candidateData.ip || 'N/A'} (Secured Audit)
+      <div style="margin-bottom: 40px;">
+        <h2 style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #1e293b; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 20px;"><b>SECURITY & COMPLIANCE STATUS</b></h2>
+        <div style="background: #f1f5f9; padding: 20px; border-radius: 12px;">
+          <p style="margin: 5px 0; font-size: 12px; color: #0f172a;"><b>[✓] IDENTITY VERIFICATION</b> : COMPLETED (Live Camera Capture)</p>
+          <p style="margin: 5px 0; font-size: 12px; color: #0f172a;"><b>[✓] LEGAL DECLARATION</b> : ACCEPTED (Digital Acknowledgment)</p>
+          <p style="margin: 5px 0; font-size: 12px; color: #0f172a;"><b>[✓] SIGNATURE ATTESTATION</b> : VERIFIED (Cryptographic Signature)</p>
+          <p style="margin: 5px 0; font-size: 12px; color: #0f172a;"><b>[✓] DOCUMENTATION</b> : VALIDATED (Aadhaar/PAN/Photo)</p>
+        </div>
+      </div>
 
-SECURITY & COMPLIANCE STATUS
-──────────────────────────────────────────────────────────────────────────────
-[✓] IDENTITY VERIFICATION : COMPLETED (Live Camera Capture)
-[✓] LEGAL DECLARATION     : ACCEPTED (Digital Acknowledgment)
-[✓] SIGNATURE ATTESTATION : VERIFIED (Cryptographic Signature)
-[✓] DOCUMENTATION         : VALIDATED (Aadhaar/PAN/Photo)
+      <div style="margin-bottom: 40px;">
+        <h2 style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #1e293b; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 20px;"><b>LEGAL TERMS SUMMARY</b></h2>
+        <div style="font-size: 12px; color: #64748b; line-height: 1.8;">
+          <p style="margin: 4px 0;"><b>1. SERVICE DELIVERY</b> : Acknowledged (Course flow and fees explained)</p>
+          <p style="margin: 4px 0;"><b>2. TERMS & CONDITIONS</b> : Accepted (90-120 days delivery, exam protocols)</p>
+          <p style="margin: 4px 0;"><b>3. REFUND POLICY</b> : Understood (No refund after exam attempt)</p>
+          <p style="margin: 4px 0;"><b>4. LEGAL DISCLAIMER</b> : Confirmed (Independent org, no job guarantee)</p>
+        </div>
+      </div>
 
-LEGAL TERMS & AGREEMENT SUMMARY
-──────────────────────────────────────────────────────────────────────────────
-1. SERVICE DELIVERY    : Acknowledged (Course flow and fees explained)
-2. TERMS & CONDITIONS  : Accepted (90-120 days delivery, exam protocols)
-3. REFUND POLICY       : Understood (No refund after exam attempt)
-4. LEGAL DISCLAIMER    : Confirmed (Independent org, no job guarantee)
+      <div style="margin-bottom: 40px;">
+        <h2 style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #1e293b; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 20px;"><b>VERIFIED DOCUMENTATION LINKS</b></h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <a href="${candidateData.photoUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">PROFILE PHOTO</a>
+          <a href="${candidateData.frontUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">AADHAAR FRONT</a>
+          <a href="${candidateData.backUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">AADHAAR BACK</a>
+          <a href="${candidateData.panUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">PAN CARD</a>
+          <a href="${candidateData.signUrl}" style="padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #0f172a; font-size: 11px; font-weight: 700;">DIGITAL SIGNATURE</a>
+        </div>
+      </div>
 
-FINAL CANDIDATE DECLARATION:
-"I have read, understood, and agree to follow all the legal terms and 
-academic integrity policies mentioned in the official exam portal."
-STATUS: PERSONALLY ATTESTED BY CANDIDATE ✓
-
-VERIFIED DOCUMENTATION LINKS
-──────────────────────────────────────────────────────────────────────────────
-• PROFILE PHOTO        : ${candidateData.photoUrl}
-• AADHAAR CARD (FRONT) : ${candidateData.frontUrl}
-• AADHAAR CARD (BACK)  : ${candidateData.backUrl}
-• PAN CARD             : ${candidateData.panUrl}
-• DIGITAL SIGNATURE    : ${candidateData.signUrl}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          GENERATED SECURELY VIA ISUCCESSNODE GLOBAL EXAM PORTAL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      <div style="text-align: center; border-top: 1px solid #f1f5f9; padding-top: 30px; color: #94a3b8; font-size: 10px; letter-spacing: 1px;">
+        GENERATED SECURELY VIA ISUCCESSNODE GLOBAL EXAM PORTAL
+      </div>
+    </div>
+  </div>
+</body>
+</html>
           `
         })
       });
