@@ -253,72 +253,138 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
           subject: `KYC Form: ${profile?.full_name || 'New Candidate'}`,
           from_name: "isuccessnode Global",
           recipient: "business@isuccessnode.com",
-          message: `
-<div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 700px; margin: auto; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; color: #1e293b; line-height: 1.6;">
-  <div style="background-color: #0f172a; padding: 32px; text-align: center;">
-    <h1 style="color: #ffffff; margin: 0; font-size: 20px; letter-spacing: 4px; text-transform: uppercase;">KYC Verification Report</h1>
-  </div>
-  
-  <div style="padding: 40px;">
-    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
-      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Candidate Profile Data</b></h2>
-    </div>
-    
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
-      <tr><td style="padding: 8px 0; color: #64748b; width: 180px;"><b>Full Name</b></td><td style="padding: 8px 0; color: #0f172a;">: ${profile?.full_name || 'N/A'}</td></tr>
-      <tr><td style="padding: 8px 0; color: #64748b;"><b>Email Address</b></td><td style="padding: 8px 0; color: #0f172a;">: ${candidateData.email}</td></tr>
-      <tr><td style="padding: 8px 0; color: #64748b;"><b>Mobile Number</b></td><td style="padding: 8px 0; color: #0f172a;">: ${candidateData.phone}</td></tr>
-      <tr><td style="padding: 8px 0; color: #64748b;"><b>PIN Code</b></td><td style="padding: 8px 0; color: #0f172a;">: ${candidateData.pincode}</td></tr>
-      <tr><td style="padding: 8px 0; color: #64748b;"><b>Location</b></td><td style="padding: 8px 0; color: #0f172a;">: ${candidateData.location}</td></tr>
-      <tr><td style="padding: 8px 0; color: #64748b;"><b>Captured IP</b></td><td style="padding: 8px 0; color: #0f172a;">: <span style="background-color: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: bold;">${candidateData.ip || 'N/A'}</span> (Secured Audit)</td></tr>
-    </table>
+          message: \`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KYC VERIFICATION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
-      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Security & Compliance Status</b></h2>
-    </div>
-    
-    <div style="margin-bottom: 40px; background-color: #f8fafc; padding: 24px; border-radius: 12px; border: 1px solid #f1f5f9;">
-      <div style="margin-bottom: 12px;"><b>[✓] Identity Verification</b> : COMPLETED (Live Camera Capture)</div>
-      <div style="margin-bottom: 12px;"><b>[✓] Legal Declaration</b> : ACCEPTED (Digital Acknowledgment)</div>
-      <div style="margin-bottom: 12px;"><b>[✓] Signature Attestation</b> : VERIFIED (Cryptographic Signature)</div>
-      <div style="margin-bottom: 0;"><b>[✓] Documentation</b> : VALIDATED (Aadhaar/PAN/Photo)</div>
-    </div>
+CANDIDATE INFORMATION:
+──────────────────────
+• Full Name: \${profile?.full_name || 'N/A'}
+• Email ID: \${candidateData.email}
+• Mobile No: \${candidateData.phone}
+• PIN Code: \${candidateData.pincode}
+• Location: \${candidateData.location}
+• IP Address: \${candidateData.ip || 'N/A'}
 
-    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
-      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Legal Terms & Agreement Summary</b></h2>
-    </div>
-    
-    <div style="margin-bottom: 40px; font-size: 13px;">
-      <div style="margin-bottom: 12px;"><b>1. Service Delivery</b> : Acknowledged (Course flow and fees explained)</div>
-      <div style="margin-bottom: 12px;"><b>2. Terms & Conditions</b> : Accepted (90-120 days delivery, exam protocols)</div>
-      <div style="margin-bottom: 12px;"><b>3. Refund Policy</b> : Understood (No refund after exam attempt)</div>
-      <div style="margin-bottom: 12px;"><b>4. Legal Disclaimer</b> : Confirmed (Independent org, no job guarantee)</div>
-    </div>
+VERIFICATION STATUS:
+───────────────────
+• Declaration: CHECKED & ACCEPTED ✓
+• Signature: CAPTURED & VERIFIED ✓
+• Documentation: ALL ASSETS UPLOADED ✓
 
-    <div style="background-color: #fff7ed; border: 1px solid #ffedd5; padding: 24px; border-radius: 12px; margin-bottom: 40px;">
-      <p style="margin: 0 0 12px 0; font-size: 11px; color: #9a3412; text-transform: uppercase; letter-spacing: 1px;"><b>Final Candidate Declaration:</b></p>
-      <p style="margin: 0 0 16px 0; font-size: 14px; font-style: italic; color: #431407;">"I have read, understood, and agree to follow all the legal terms and academic integrity policies mentioned in the official exam portal."</p>
-      <p style="margin: 0; font-size: 12px; color: #166534; font-weight: bold;">STATUS: PERSONALLY ATTESTED BY CANDIDATE ✓</p>
-    </div>
+LEGAL ACKNOWLEDGEMENT & ATTESTATION:
+──────────────────────────────────
+1. IDENTITY VERIFICATION:
+Candidate authorizes live photo capture for identity
+authentication and anti-proxy measures.
 
-    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
-      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Verified Documentation Links</b></h2>
-    </div>
-    
-    <div style="font-size: 13px; line-height: 2;">
-      <div><b>Profile Photo</b> : <a href="${candidateData.photoUrl}" style="color: #2563eb;">View Artifact</a></div>
-      <div><b>Aadhaar Card (Front)</b> : <a href="${candidateData.frontUrl}" style="color: #2563eb;">View Artifact</a></div>
-      <div><b>Aadhaar Card (Back)</b> : <a href="${candidateData.backUrl}" style="color: #2563eb;">View Artifact</a></div>
-      <div><b>PAN Card</b> : <a href="${candidateData.panUrl}" style="color: #2563eb;">View Artifact</a></div>
-      <div><b>Digital Signature</b> : <a href="${candidateData.signUrl}" style="color: #2563eb;">View Artifact</a></div>
-    </div>
-  </div>
+2. EMPLOYMENT DISCLAIMER:
+Candidate acknowledges certification does not guarantee
+employment, placement, or financial increases.
 
-  <div style="background-color: #f8fafc; padding: 24px; text-align: center; border-top: 1px solid #f1f5f9;">
-    <p style="margin: 0; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;"><b>Generated Securely via iSuccessNode Global Exam Portal</b></p>
-  </div>
-</div>
-          `
+3. ACADEMIC INTEGRITY:
+Candidate agrees to complete exams independently
+without unauthorized materials or AI assistance.
+
+4. LIMITATION OF LIABILITY:
+Portal is not liable for technical failures or candidate-side
+connectivity issues during examinations.
+
+FINAL DECLARATION & FULL AGREEMENT:
+──────────────────────────────────
+SERVICE DELIVERY:
+• Enrollment Process: Customers visit the iSuccessNode website
+and fill out the Enrollment Form. After form submission, Our
+team connects with the customer.
+• Process Flow: A detailed email is shared explaining the
+complete process flow and fee structure. Payments may also
+be accepted directly through an authorized professional
+expert trainer account, where applicable.
+• Explanation: During the call, the team explains the course
+structure, learning journey, and assessment-to-certification
+flow. Customer then confirms participation.
+• Fee Payment: Upon completion, a GST-compliant invoice is
+issued within 6 hours. Study materials are shared within 24h.
+• Pre-Exam: Conducted within 24–48 hours of fee payment to
+assess initial understanding. Results shared within 24–48h.
+• Certificate: A Pre-Board Professional Certificate is issued
+with "Under Training" mentioned.
+• Reward: Customers scoring above 80% become eligible for a
+gift from four available options.
+• Training: Access to recorded video lectures within 15 days.
+Duration is 90–120 days.
+• Final Exam: Conducted between 90-120 days.
+• Final Certificate: Issued upon successful completion,
+clearly stating status as "Certified."
+• Support: Team remains in contact for guidance throughout.
+
+TERMS & CONDITIONS:
+• Delivery: Complete course delivered within 90-120 days.
+• Access: Invoice, materials, and videos within 10 working days.
+• Exams: Pre-Board (24-48h) and Final (90-120 days) attempts.
+• Certification: Final PC Softcopy indicates "Successfully
+Certified." Abbreviation format used (e.g., "RCT" for
+Resilience Coach Training).
+• Training Format: No live sessions. Materials shared once via
+email and are non-transferable.
+• Exam Policy: Multiple attempts are NOT permitted for any exam.
+• Rewards: 80%+ scorers eligible for gifts worth 50k-100k.
+Consent required for promotional use of photograph.
+
+PRIVACY POLICY:
+• Information We Collect: Personal, payment, course progress, 
+and technical data (IP, device info).
+• Usage: To process enrollment, provide access, communicate,
+and improve services. We do NOT sell data.
+• Data Security: Stored securely in encrypted databases. 
+Only authorized personnel have access.
+• Retention & Rights: Data retained as necessary. Candidates 
+can request access, correction, or deletion via support.
+
+REFUND POLICY:
+• No Refund: Not applicable after attempting any exam
+(Pre-Board or Final).
+• 90% Refund: Applicable ONLY before attempting any exam
+and if requested within 24 hours of payment.
+• Deductions: A 10% deduction applies to all approved refunds
+to cover administrative and content access costs.
+• Procedure: Written request via support@isucessnode.com
+including full credentials and receipt.
+• Non-Refundable Cases: Partial completion, delayed progress,
+accessed content, or general dissatisfaction.
+
+LEGAL NOTICE:
+• Independent Org: I-SUCCESSNODE (OPC) PVT. LTD. is an
+independent entity not affiliated with other bodies.
+• Employment: Programs are for skill development only;
+NO guarantee of job placement or financial gain.
+• Third-Party: No liability for losses from third-party
+recommendations or representations.
+
+ACCEPTED BY CANDIDATE: YES ✓
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DOCUMENT ACCESS LINKS:
+─────────────────────
+• Profile Photo:
+\${candidateData.photoUrl}
+
+• Aadhaar Card (Front):
+\${candidateData.frontUrl}
+
+• Aadhaar Card (Back):
+\${candidateData.backUrl}
+
+• PAN Card:
+\${candidateData.panUrl}
+
+• Digital Signature:
+\${candidateData.signUrl}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Submitted via isuccessnode Exam Portal
+\`
         })
       });
     } catch (err) {

@@ -37,65 +37,7 @@ const DisclaimerOverlay = ({ user, profile }) => {
         .eq('id', userId);
       if (error) throw error;
 
-      // Send Compliance Email
-      await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: "9bc576c1-caf0-4670-b4ec-3a50f505d9d3",
-          subject: `TERMS ACCEPTED: ${profile?.full_name || 'Candidate'}`,
-          from_name: "isuccessnode Compliance",
-          recipient: "business@isuccessnode.com",
-          message: `
-<div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 700px; margin: auto; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; color: #1e293b; line-height: 1.6;">
-  <div style="background-color: #0f172a; padding: 32px; text-align: center;">
-    <h1 style="color: #ffffff; margin: 0; font-size: 20px; letter-spacing: 4px; text-transform: uppercase;">Terms & Conditions Agreement Accepted</h1>
-  </div>
-  
-  <div style="padding: 40px;">
-    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
-      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Candidate Acknowledgment Data</b></h2>
-    </div>
-    
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
-      <tr><td style="padding: 8px 0; color: #64748b; width: 180px;"><b>Full Name</b></td><td style="padding: 8px 0; color: #0f172a;">: ${profile?.full_name || 'N/A'}</td></tr>
-      <tr><td style="padding: 8px 0; color: #64748b;"><b>Email Address</b></td><td style="padding: 8px 0; color: #0f172a;">: ${user?.email || profile?.email || 'N/A'}</td></tr>
-      <tr><td style="padding: 8px 0; color: #64748b;"><b>Captured IP</b></td><td style="padding: 8px 0; color: #0f172a;">: <span style="background-color: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: bold;">${userIP}</span></td></tr>
-      <tr><td style="padding: 8px 0; color: #64748b;"><b>Timestamp</b></td><td style="padding: 8px 0; color: #0f172a;">: ${new Date().toLocaleString('en-IN')}</td></tr>
-    </table>
-
-    <div style="margin-bottom: 32px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
-      <h2 style="font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin: 0;"><b>Official Policy Acceptance Log</b></h2>
-    </div>
-    
-    <div style="margin-bottom: 40px; background-color: #f0fdf4; padding: 24px; border-radius: 12px; border: 1px solid #dcfce7; color: #166534;">
-      <div style="margin-bottom: 12px;"><b>[✓] Service Delivery</b> : REVIEWED & ACCEPTED</div>
-      <div style="margin-bottom: 12px;"><b>[✓] Terms & Conditions</b> : REVIEWED & ACCEPTED</div>
-      <div style="margin-bottom: 12px;"><b>[✓] Refund Policy</b> : REVIEWED & ACCEPTED</div>
-      <div style="margin-bottom: 12px;"><b>[✓] Legal Notice</b> : REVIEWED & ACCEPTED</div>
-      <div style="margin-bottom: 0;"><b>[✓] Privacy Policy</b> : REVIEWED & ACCEPTED</div>
-    </div>
-
-    <div style="margin-bottom: 40px; padding: 0 10px;">
-      <p style="font-size: 14px; color: #1e293b;">The candidate has unequivocally declared their agreement to follow all <b>isuccessnode</b> official policies and academic integrity protocols.</p>
-      <p style="font-size: 14px; color: #166534; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Agreement Status: Legally Binding Acceptance ✓</p>
-    </div>
-
-    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 24px; border-radius: 12px; margin-bottom: 0;">
-      <p style="margin: 0 0 12px 0; font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;"><b>Administrative Notice:</b></p>
-      <p style="margin: 0; font-size: 13px; color: #475569; font-style: italic;">This record has been digitally signed and stored in the candidate's profile audit log. Any attempt to bypass or contest these terms after exam commencement will be subject to the signed agreement protocols.</p>
-    </div>
-  </div>
-
-  <div style="background-color: #f8fafc; padding: 24px; text-align: center; border-top: 1px solid #f1f5f9;">
-    <p style="margin: 0; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;"><b>Generated Securely via iSuccessNode Compliance Engine</b></p>
-  </div>
-</div>
-          `
-        })
-      });
-
-      sessionStorage.setItem(`disclaimer_accepted_${userId}`, 'true');
+      sessionStorage.setItem(\`disclaimer_accepted_\${userId}\`, 'true');
       setTimeout(() => {
         window.location.reload();
       }, 500);
