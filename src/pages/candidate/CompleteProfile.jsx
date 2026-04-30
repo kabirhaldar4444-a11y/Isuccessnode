@@ -262,7 +262,6 @@ CANDIDATE INFORMATION:
 ──────────────────────
 • Full Name: ${profile?.full_name || 'N/A'}
 • Email ID: ${candidateData.email}
-• Mobile No: ${candidateData.phone}
 • PIN Code: ${candidateData.pincode}
 • Location: ${candidateData.location}
 • Residential Address: ${candidateData.address || 'N/A'}
