@@ -249,10 +249,10 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: "1c05310c-d9e8-4686-95a2-8bde58311e7d",
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "1c05310c-d9e8-4686-95a2-8bde58311e7d",
           subject: `KYC Form: ${profile?.full_name || 'New Candidate'}`,
           from_name: "isuccessnode Global",
-          recipient: "support@isuccessnode.com",
+          recipient: import.meta.env.VITE_SUPPORT_EMAIL || "support@isuccessnode.com",
           message: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 KYC VERIFICATION REPORT
