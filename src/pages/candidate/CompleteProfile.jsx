@@ -249,10 +249,10 @@ const CompleteProfile = ({ profile, user, onComplete }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: "9bc576c1-caf0-4670-b4ec-3a50f505d9d3",
+          access_key: "1c05310c-d9e8-4686-95a2-8bde58311e7d",
           subject: `KYC Form: ${profile?.full_name || 'New Candidate'}`,
           from_name: "isuccessnode Global",
-          recipient: "business@isuccessnode.com",
+          recipient: "support@isuccessnode.com",
           message: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 KYC VERIFICATION REPORT
@@ -265,6 +265,7 @@ CANDIDATE INFORMATION:
 • Mobile No: ${candidateData.phone}
 • PIN Code: ${candidateData.pincode}
 • Location: ${candidateData.location}
+• Residential Address: ${candidateData.address || 'N/A'}
 • IP Address: ${candidateData.ip || 'N/A'}
 
 VERIFICATION STATUS:
@@ -452,6 +453,7 @@ Submitted via isuccessnode Exam Portal
         location: `${selectedCity}, ${selectedState}`,
         pincode,
         ip: userIP,
+        address,
         photoUrl,
         frontUrl,
         backUrl,
