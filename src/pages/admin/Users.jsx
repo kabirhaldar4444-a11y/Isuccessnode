@@ -653,7 +653,7 @@ const Users = ({ user, profile: activeProfile }) => {
                   <h3 className="text-2xl font-bold tracking-tight text-slate-900">Analytical Metrics</h3>
                 </div>
                 <div className="bg-slate-50/50 rounded-[3rem] p-10 border border-slate-100 shadow-sm">
-                  <UserSubmissions userId={selectedUser.id} />
+                <UserSubmissions userId={selectedUser.id} allottedExamIds={selectedUser.allotted_exam_ids || []} />
                 </div>
               </div>
 

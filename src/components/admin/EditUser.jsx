@@ -37,6 +37,164 @@ const DocumentPreview = ({ title, url }) => {
   );
 };
 
+const SmartExamSelector = ({ exams, selectedIds, onToggle }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  
+  const selectedExams = exams.filter(e => selectedIds.includes(e.id));
+  const filteredExams = exams.filter(e => 
+    e.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className={`relative w-full transition-all duration-300 ${isOpen ? 'z-[1000]' : 'z-20'}`}>
+      {/* Trigger */}
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`min-h-[80px] max-h-[280px] overflow-y-auto w-full bg-white/90 backdrop-blur-xl border rounded-[2.5rem] p-5 flex flex-wrap gap-3 cursor-pointer transition-all duration-500 group custom-scrollbar ${
+          isOpen 
+            ? 'border-slate-900 ring-[12px] ring-slate-900/5 shadow-[0_30px_60px_rgba(0,0,0,0.12)] bg-white' 
+            : 'border-slate-100 hover:border-slate-300 shadow-[0_15px_35px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)]'
+        }`}
+      >
+        <div className="absolute -top-3 left-10 px-4 bg-white text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 group-hover:text-slate-900 transition-colors z-10">
+          Authorization Matrix
+        </div>
+
+        {selectedExams.length === 0 ? (
+          <div className="flex items-center px-4 text-slate-300 text-sm font-bold h-10 italic">
+            Initialize access protocols...
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-2.5 items-center w-full pr-12">
+            {selectedExams.map(exam => (
+              <div 
+                key={exam.id}
+                onClick={(e) => { e.stopPropagation(); onToggle(exam.id); }}
+                className="flex items-center gap-3 bg-slate-900 text-white pl-5 pr-3 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest group/pill hover:bg-slate-800 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-slate-200/50 animate-in zoom-in-95 duration-300"
+              >
+                {exam.title}
+                <div className="w-6 h-6 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24" className="opacity-60 group-hover/pill:opacity-100"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        <div className="absolute right-5 top-5 flex items-center">
+           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-700 ${isOpen ? 'bg-slate-900 text-white rotate-180 shadow-lg shadow-slate-300' : 'bg-slate-50 text-slate-300 group-hover:text-slate-900 group-hover:bg-white group-hover:shadow-md'}`}>
+              <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+           </div>
+        </div>
+      </div>
+
+      {/* Dropdown Panel */}
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-[100]" onClick={() => setIsOpen(false)} />
+          <div className="absolute top-[calc(100%+20px)] left-0 right-0 bg-white border border-slate-100 rounded-[3.5rem] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.25)] z-[101] overflow-hidden animate-in fade-in slide-in-from-top-6 duration-700 backdrop-blur-3xl">
+            <div className="p-10 space-y-8">
+              {/* Smart Search Box */}
+              <div className="relative group/search">
+                <div className="absolute inset-y-0 left-8 flex items-center pointer-events-none text-slate-300 group-focus-within/search:text-slate-900 transition-colors duration-500">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                </div>
+                <input 
+                  type="text"
+                  placeholder="Query authorization nodes..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full bg-slate-50/50 border border-slate-100 rounded-[2rem] py-6 pl-20 pr-10 text-base font-black uppercase tracking-[0.15em] text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-[10px] focus:ring-slate-900/5 focus:border-slate-900/10 focus:bg-white transition-all duration-500 shadow-inner"
+                  onClick={(e) => e.stopPropagation()}
+                  autoFocus
+                />
+                <div className="absolute right-10 top-1/2 -translate-y-1/2 flex items-center gap-3">
+                   <div className="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.1em] shadow-lg shadow-slate-200">Neural Search</div>
+                </div>
+              </div>
+
+              {/* Exam List */}
+              <div className="max-h-[420px] overflow-y-auto pr-4 space-y-3 custom-scrollbar">
+                {filteredExams.length === 0 ? (
+                  <div className="py-24 text-center space-y-4">
+                    <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mx-auto text-slate-200 shadow-inner">
+                       <svg width="40" height="40" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                    </div>
+                    <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Zero matches in current subspace</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-3">
+                    {filteredExams.map(exam => {
+                      const isSelected = selectedIds.includes(exam.id);
+                      return (
+                        <div 
+                          key={exam.id}
+                          onClick={() => onToggle(exam.id)}
+                          className={`flex items-center justify-between p-6 rounded-[2rem] cursor-pointer transition-all duration-500 group/item ${
+                            isSelected 
+                              ? 'bg-slate-900 text-white shadow-2xl shadow-slate-300 scale-[1.01]' 
+                              : 'bg-slate-50/50 border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          <div className="flex flex-col gap-1.5">
+                            <span className="text-base font-black uppercase tracking-widest">{exam.title}</span>
+                            <div className="flex items-center gap-2">
+                              <span className={`text-[10px] font-bold uppercase tracking-widest ${isSelected ? 'text-slate-400' : 'text-slate-300'}`}>
+                                {isSelected ? 'Protocol Active' : 'Access Restricted'}
+                              </span>
+                              {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" />}
+                            </div>
+                          </div>
+                          
+                          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border-2 transition-all duration-700 ${
+                            isSelected 
+                              ? 'bg-white border-white scale-110 shadow-[0_0_25px_rgba(255,255,255,0.5)]' 
+                              : 'bg-white border-slate-100 group-hover/item:border-slate-300 group-hover/item:scale-105 shadow-sm'
+                          }`}>
+                            {isSelected ? (
+                              <svg width="20" height="20" fill="none" stroke="#0f172a" strokeWidth="4" viewBox="0 0 24 24" className="animate-in zoom-in duration-300"><path d="M5 13l4 4L19 7"/></svg>
+                            ) : (
+                              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="opacity-0 group-hover/item:opacity-100 transition-opacity"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              
+              {/* Selection Summary */}
+              <div className="pt-8 border-t border-slate-100 flex items-center justify-between">
+                 <div className="flex items-center gap-4">
+                    <div className="flex -space-x-2">
+                       {selectedExams.slice(0, 3).map((_, i) => (
+                          <div key={i} className="w-6 h-6 rounded-full bg-slate-900 border-2 border-white" />
+                       ))}
+                       {selectedIds.length > 3 && (
+                          <div className="w-6 h-6 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[8px] font-black">+{selectedIds.length - 3}</div>
+                       )}
+                    </div>
+                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                       Active Authorization Nodes: <span className="text-slate-900 ml-1">{selectedIds.length}</span>
+                    </div>
+                 </div>
+                 <button 
+                    onClick={() => setIsOpen(false)}
+                    className="bg-slate-50 hover:bg-slate-900 hover:text-white px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 transition-all active:scale-95"
+                 >
+                    Commit Changes
+                 </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 const EditUser = ({ user, profile: activeProfile }) => {
   const isMaster = user?.email?.toLowerCase() === 'info@isuccessnode.com';
   const isSuperAdmin = isMaster;
@@ -225,7 +383,7 @@ const EditUser = ({ user, profile: activeProfile }) => {
           </div>
 
           {/* Document Verification Section */}
-          <div className="animate-slide-up">
+          <div className="animate-slide-up relative z-30">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-xl shadow-slate-200">
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.744c0 5.548 4.075 10.14 9.5 11.04a11.99 11.99 0 009.5-11.04c0-1.305-.21-2.56-.598-3.744A11.959 11.959 0 0112 2.714z"/></svg>
@@ -292,41 +450,23 @@ const EditUser = ({ user, profile: activeProfile }) => {
             )}
           </div>
 
-          {/* Exam Allocation Grid */}
-          <div className="animate-slide-up">
+          {/* Exam Allocation Matrix */}
+          <div className="animate-slide-up relative z-20">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-xl shadow-slate-200">
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M9 12h3.75M9 15h3.375m1.875-12h-9.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h9.75a2.25 2.25 0 002.25-2.25V5.25A2.25 2.25 0 0014.25 3zM12 7.036c0 .72-.405 1.35-1 1.683-.595-.333-1-.963-1-1.683 0-1.104.895-2 2-2s2 .896 2 2z"/></svg>
               </div>
               <h2 className="text-2xl font-bold tracking-tight text-slate-900">Examination Privileges</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {exams.map(exam => (
-                <label 
-                  key={exam.id} 
-                  className={`relative group cursor-pointer bg-white p-6 rounded-3xl border transition-all duration-300 ${editUser.allotted_exam_ids?.includes(exam.id) ? 'border-slate-900 shadow-xl shadow-slate-200 ring-4 ring-slate-900/5' : 'border-slate-100 hover:border-slate-300 shadow-sm'}`}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-5 h-5 rounded-lg border flex items-center justify-center transition-all ${editUser.allotted_exam_ids?.includes(exam.id) ? 'bg-slate-900 border-slate-900' : 'bg-slate-50 border-slate-200 group-hover:border-slate-400'}`}>
-                      {editUser.allotted_exam_ids?.includes(exam.id) && <svg width="12" height="12" fill="none" stroke="white" strokeWidth="4" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>}
-                    </div>
-                    <input 
-                      type="checkbox" 
-                      checked={editUser.allotted_exam_ids?.includes(exam.id)}
-                      onChange={() => toggleExamSelection(exam.id)}
-                      className="hidden"
-                    />
-                    <span className={`text-sm font-bold transition-colors ${editUser.allotted_exam_ids?.includes(exam.id) ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-600'}`}>
-                      {exam.title}
-                    </span>
-                  </div>
-                </label>
-              ))}
-            </div>
+            <SmartExamSelector 
+              exams={exams} 
+              selectedIds={editUser.allotted_exam_ids} 
+              onToggle={toggleExamSelection} 
+            />
           </div>
 
           {/* User Submissions / Marks Release */}
-          <div className="pt-16 border-t border-slate-100 animate-slide-up">
+          <div className="pt-16 border-t border-slate-100 animate-slide-up relative z-10">
             <div className="flex items-center gap-4 mb-10">
               <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-xl shadow-slate-200">
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5"/></svg>
@@ -334,7 +474,7 @@ const EditUser = ({ user, profile: activeProfile }) => {
               <h3 className="text-2xl font-bold tracking-tight text-slate-900">Analytical Performance</h3>
             </div>
             <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-100 shadow-sm">
-              <UserSubmissions userId={id} />
+              <UserSubmissions userId={id} allottedExamIds={editUser.allotted_exam_ids || []} />
             </div>
           </div>
           
@@ -362,4 +502,3 @@ const EditUser = ({ user, profile: activeProfile }) => {
 };
 
 export default EditUser;
-

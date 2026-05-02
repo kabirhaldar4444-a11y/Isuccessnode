@@ -17,6 +17,10 @@ const ExamPortal = ({ exam, onFinish, submitSignal }) => {
   const [hasAcceptedDeclaration, setHasAcceptedDeclaration] = useState(false);
   const [acceptedCheckbox, setAcceptedCheckbox] = useState(false);
 
+  // Advanced Tracking States
+  const [visitedQuestions, setVisitedQuestions] = useState(new Set([0]));
+  const [markedQuestions, setMarkedQuestions] = useState({});
+
   const answersRef = React.useRef(answers);
   useEffect(() => {
     answersRef.current = answers;
@@ -24,10 +28,12 @@ const ExamPortal = ({ exam, onFinish, submitSignal }) => {
       localStorage.setItem(`exam_progress_${exam.id}`, JSON.stringify({
         answers,
         currentQuestionIndex,
-        timeLeft
+        timeLeft,
+        visitedQuestions: Array.from(visitedQuestions),
+        markedQuestions
       }));
     }
-  }, [answers, currentQuestionIndex, timeLeft, exam.id]);
+  }, [answers, currentQuestionIndex, timeLeft, exam.id, visitedQuestions, markedQuestions]);
 
   const [confirmedSignal, setConfirmedSignal] = useState(0);
 
@@ -41,10 +47,19 @@ const ExamPortal = ({ exam, onFinish, submitSignal }) => {
   useEffect(() => {
     const savedProgress = localStorage.getItem(`exam_progress_${exam.id}`);
     if (savedProgress) {
-      const { answers: savedAnswers, currentQuestionIndex: savedIndex, timeLeft: savedTime } = JSON.parse(savedProgress);
+      const { 
+        answers: savedAnswers, 
+        currentQuestionIndex: savedIndex, 
+        timeLeft: savedTime,
+        visitedQuestions: savedVisited,
+        markedQuestions: savedMarked
+      } = JSON.parse(savedProgress);
+      
       if (savedAnswers) setAnswers(savedAnswers);
       if (savedIndex !== undefined) setCurrentQuestionIndex(savedIndex);
       if (savedTime !== undefined) setTimeLeft(savedTime);
+      if (savedVisited) setVisitedQuestions(new Set(savedVisited));
+      if (savedMarked) setMarkedQuestions(savedMarked);
     }
     fetchQuestions();
   }, [exam.id]);
@@ -108,6 +123,19 @@ const ExamPortal = ({ exam, onFinish, submitSignal }) => {
     }, 1000);
     return () => clearInterval(timer);
   }, [timeLeft, isSubmitted, hasAcceptedDeclaration]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      setVisitedQuestions(prev => new Set([...prev, currentQuestionIndex]));
+    }
+  }, [currentQuestionIndex, questions.length]);
+
+  const toggleMarkForReview = () => {
+    setMarkedQuestions(prev => ({
+      ...prev,
+      [currentQuestionIndex]: !prev[currentQuestionIndex]
+    }));
+  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -333,12 +361,59 @@ const ExamPortal = ({ exam, onFinish, submitSignal }) => {
 
   const currentQuestion = questions[currentQuestionIndex];
 
+  const QuestionNumber = ({ idx, isActive, isAnswered, isVisited, isMarked, onClick }) => {
+    let shapeClass = "rounded-lg"; // Default (Not Visited)
+    let colorClass = "bg-slate-50 text-slate-400 border-slate-200";
+    let statusIcon = null;
+
+    if (isMarked) {
+      shapeClass = "rounded-full"; // Circle for Marked
+      colorClass = isAnswered 
+        ? "bg-purple-600 text-white border-purple-600 shadow-lg shadow-purple-200" 
+        : "bg-purple-100 text-purple-700 border-purple-200";
+      
+      if (isAnswered) {
+        statusIcon = (
+          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-sm border-2 border-white flex items-center justify-center">
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4">
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        );
+      }
+    } else if (isAnswered) {
+      // Pentagon
+      shapeClass = "[clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]";
+      colorClass = "bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-200";
+    } else if (isVisited) {
+      // Hexagon
+      shapeClass = "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]";
+      colorClass = "bg-orange-500 text-white border-orange-500 shadow-lg shadow-orange-200";
+    }
+
+    if (isActive) {
+      colorClass = "bg-slate-900 text-white border-slate-900 shadow-2xl ring-4 ring-slate-100 scale-110 z-10";
+    }
+
+    return (
+      <button 
+        onClick={onClick}
+        className={`relative w-10 h-10 flex items-center justify-center font-black text-xs transition-all duration-300 border-2 ${shapeClass} ${colorClass}`}
+      >
+        {idx + 1}
+        {statusIcon}
+      </button>
+    );
+  };
+
   return (
-    <>
+    <div className="h-screen w-screen bg-[#F8FAFC] overflow-hidden font-sans selection:bg-slate-200 flex flex-col relative">
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 pointer-events-none" />
+      
       {/* Modal Overlays */}
       {showConfirm && (
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-[2.5rem] border border-slate-100 p-10 max-w-md w-full shadow-2xl text-center animate-slide-up">
+        <div className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white/90 backdrop-blur-xl rounded-[2.5rem] border border-white/20 p-10 max-w-md w-full shadow-2xl text-center animate-slide-up">
             <div className={`w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center ${timeExpired ? 'bg-amber-50 text-amber-500' : 'bg-emerald-50 text-emerald-500'}`}>
               <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /></svg>
             </div>
@@ -356,209 +431,175 @@ const ExamPortal = ({ exam, onFinish, submitSignal }) => {
         </div>
       )}
 
-      {/* Main Portal UI */}
-      <div className="min-h-screen bg-slate-50/30 p-6 md:p-10 font-sans selection:bg-slate-200 flex flex-col items-center">
-        
-        {/* HUD Header */}
-        <div className="w-full max-w-6xl flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10 p-10 bg-white border border-slate-100 rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] sticky top-6 z-50 backdrop-blur-xl bg-white/90">
-          <div className="flex items-center gap-6">
-            <div className="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-xl shadow-slate-200">
-              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-1">Active Exam</p>
-              <h2 className="text-xl font-bold text-slate-900 tracking-tight uppercase line-clamp-1">{exam.title}</h2>
-            </div>
+      {/* Floating Info & Timer Bar */}
+      <div className="w-full flex items-center justify-between px-8 pt-6 pb-2 z-[1000] shrink-0">
+        <div className="flex items-center gap-4 group">
+          <div className="w-10 h-10 rounded-xl bg-white/60 backdrop-blur-md border border-white shadow-lg shadow-slate-100 flex items-center justify-center transition-all group-hover:rotate-3">
+            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="text-slate-900"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.086c-2.358-1.2-4.857-1.75-7.5-1.75s-5.142.55-7.5 1.75v13.914c2.358-1.2 4.857-1.75 7.5-1.75s5.142.55 7.5 1.75m0-13.914c2.358-1.2 4.857-1.75 7.5-1.75s5.142.55 7.5 1.75v13.914c-2.358-1.2-4.857-1.75-7.5-1.75s-5.142.55-7.5 1.75" /></svg>
           </div>
-          
-          <div className="flex items-center gap-10 bg-slate-50 px-10 py-4 rounded-2xl border border-slate-100 shadow-inner">
-            <div className="flex flex-col items-end">
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-1">Time Left</p>
-              <div className={`text-2xl font-black flex items-center gap-3 tabular-nums ${timeLeft < 300 ? 'text-rose-500 animate-pulse' : 'text-slate-900'}`}>
-                <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                {formatTime(timeLeft)}
-              </div>
-            </div>
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-0.5">Live Assessment</p>
+            <h2 className="text-base font-black text-slate-900 tracking-tight uppercase line-clamp-1 max-w-[250px] md:max-w-md">{exam.title}</h2>
           </div>
         </div>
 
-        {/* Content Area */}
-        <div className="w-full max-w-6xl relative">
-          <div className="bg-white rounded-[3.5rem] border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.03)] p-12 md:p-20 min-h-[65vh] flex flex-col relative overflow-hidden transition-all duration-500">
-            
-            {/* Nav & Progress */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-16 pb-10 border-b border-slate-50 gap-8">
-              <div className="flex items-center gap-8">
-                <button 
-                  onClick={() => setIsSidebarOpen(true)}
-                  className="px-8 py-4 rounded-2xl bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-800 transition-all flex items-center gap-4 shadow-2xl shadow-slate-200 hover:-translate-y-1 active:scale-[0.98]"
-                >
-                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                  Question List
-                </button>
-                
-                <div className="flex items-center gap-4">
-                  <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">Question</span>
-                  <div className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-900 flex items-center justify-center font-black text-lg border border-slate-100 shadow-inner tabular-nums">
+        <div className="flex items-center gap-3 bg-white/60 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-white shadow-lg shadow-slate-100">
+          <div className="flex items-center gap-3">
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 hidden sm:block">Time Left</p>
+            <div className={`text-xl font-black flex items-center gap-2 tabular-nums ${timeLeft < 300 ? 'text-rose-500 animate-pulse' : 'text-slate-900'}`}>
+              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              {formatTime(timeLeft)}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <main className="flex-1 flex flex-row gap-6 px-8 pb-6 overflow-hidden min-h-0">
+        
+        {/* Question View */}
+        <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 bg-white/40 backdrop-blur-md rounded-[2.5rem] border border-white/50 shadow-2xl shadow-slate-200/40 p-6 md:p-10 flex flex-col relative overflow-hidden transition-all duration-500">
+            {/* Progress Header */}
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200/30 shrink-0">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:block">Question</p>
+                  <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-black shadow-lg shadow-slate-200 text-sm">
                     {currentQuestionIndex + 1}
                   </div>
-                  <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">of {questions.length}</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">/ {questions.length}</span>
                 </div>
               </div>
               
-              <div className="w-full sm:w-64 h-2.5 bg-slate-50 rounded-full overflow-hidden border border-slate-100 p-0.5 shadow-inner">
+              <div className="flex-1 max-w-[200px] h-1.5 bg-slate-200/50 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-slate-900 rounded-full transition-all duration-1000 ease-in-out shadow-[0_0_12px_rgba(15,23,42,0.4)]" 
+                  className="h-full bg-slate-900 rounded-full transition-all duration-1000 ease-in-out" 
                   style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
-                ></div>
+                />
               </div>
             </div>
-            
-            {/* Question Text */}
-            <div className="flex-1 animate-slide-up" key={currentQuestionIndex}>
-              <div className="flex items-start gap-6 mb-12">
-                <div className="w-1.5 h-10 bg-slate-900 rounded-full shadow-[0_0_12px_rgba(15,23,42,0.2)] mt-1" />
-                <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
+
+            {/* Question */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-4 animate-slide-up" key={currentQuestionIndex}>
+              <div className="flex gap-4 mb-6">
+                <div className="w-1 h-6 bg-slate-900 rounded-full shrink-0 shadow-[0_0_12px_rgba(15,23,42,0.3)] mt-1" />
+                <h3 className="text-lg md:text-xl font-bold text-slate-900 leading-snug tracking-tight">
                   {currentQuestion.question_text}
                 </h3>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
+              <div className="grid grid-cols-1 gap-2.5 max-w-4xl pb-2">
                 {currentQuestion.options.map((option, idx) => {
                   const isSelected = answers[currentQuestionIndex] === idx;
-                  const optionLabel = String.fromCharCode(65 + idx);
                   return (
                     <label 
                       key={idx} 
-                      className={`group relative p-8 rounded-[2rem] border-2 cursor-pointer transition-all duration-500 flex items-center gap-6 ${
+                      className={`group relative p-3.5 rounded-2xl border-2 cursor-pointer transition-all duration-500 flex items-center gap-4 ${
                         isSelected 
-                          ? 'border-slate-900 bg-slate-900 text-white shadow-2xl shadow-slate-200 -translate-y-1' 
-                          : 'border-slate-50 bg-slate-50 hover:border-slate-200 hover:bg-white text-slate-500'
+                          ? 'border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-200/50 scale-[1.01]' 
+                          : 'border-white bg-white/60 hover:border-slate-200 hover:bg-white text-slate-600'
                       }`}
                     >
-                      <input 
-                        type="radio" 
-                        name="option" 
-                        value={idx} 
-                        checked={isSelected}
-                        onChange={() => handleOptionSelect(idx)}
-                        className="sr-only"
-                      />
-                      <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center shrink-0 font-black text-sm transition-all duration-500 ${
+                      <input type="radio" name="option" value={idx} checked={isSelected} onChange={() => handleOptionSelect(idx)} className="sr-only" />
+                      <div className={`w-7 h-7 rounded-md border flex items-center justify-center shrink-0 font-black text-[10px] transition-all duration-500 ${
                         isSelected ? 'border-white/20 bg-white/10 text-white' : 'border-slate-200 bg-white text-slate-400 group-hover:border-slate-900 group-hover:text-slate-900'
                       }`}>
-                        {optionLabel}
+                        {String.fromCharCode(65 + idx)}
                       </div>
-                      <span className="text-lg font-bold leading-snug">{option}</span>
-                      {isSelected && (
-                        <div className="ml-auto">
-                          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24" className="text-white animate-pulse"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                        </div>
-                      )}
+                      <span className="text-[13px] sm:text-sm font-semibold leading-snug">{option}</span>
                     </label>
                   );
                 })}
               </div>
             </div>
 
-            {/* Footer Navigation */}
-            <div className="mt-20 pt-10 border-t border-slate-50 flex flex-col sm:flex-row justify-between items-center gap-6">
-              <button 
-                disabled={currentQuestionIndex === 0}
-                onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
-                className="px-10 py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all disabled:opacity-0 flex items-center gap-3 w-full sm:w-auto justify-center group"
-              >
-                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="group-hover:-translate-x-1 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                Previous
-              </button>
+            {/* Navigation */}
+            <div className="mt-6 pt-4 border-t border-slate-200/30 flex justify-between items-center gap-4 shrink-0">
+              <div className="flex gap-2">
+                <button 
+                  disabled={currentQuestionIndex === 0}
+                  onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
+                  className="px-4 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-widest text-slate-400 hover:text-slate-900 hover:bg-white transition-all disabled:opacity-0 flex items-center gap-1.5"
+                >
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
+                  Prev
+                </button>
+                <button 
+                  onClick={toggleMarkForReview}
+                  className={`px-4 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-1.5 border-2 ${
+                    markedQuestions[currentQuestionIndex] 
+                      ? 'bg-purple-600 border-purple-600 text-white shadow-md' 
+                      : 'bg-white/60 border-white text-slate-400 hover:border-purple-200 hover:text-purple-500'
+                  }`}
+                >
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+                  {markedQuestions[currentQuestionIndex] ? 'Unmark' : 'Review'}
+                </button>
+              </div>
 
               {currentQuestionIndex === questions.length - 1 ? (
-                <button 
-                  onClick={handleSubmit}
-                  className="px-14 py-5 bg-emerald-500 text-white font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-emerald-600 shadow-2xl shadow-emerald-100 transition-all flex items-center gap-4 w-full sm:w-auto justify-center hover:-translate-y-1 active:scale-[0.98]"
-                >
-                  Submit Exam
-                  <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                <button onClick={handleSubmit} className="px-8 py-2.5 bg-emerald-600 text-white font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-emerald-700 shadow-md transition-all">
+                  Finish Exam
                 </button>
               ) : (
-                <button 
-                  onClick={() => setCurrentQuestionIndex(prev => prev + 1)} 
-                  className="px-14 py-5 bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-slate-800 shadow-2xl shadow-slate-200 transition-all flex items-center gap-4 w-full sm:w-auto justify-center hover:-translate-y-1 active:scale-[0.98]"
-                >
+                <button onClick={() => setCurrentQuestionIndex(prev => prev + 1)} className="px-8 py-2.5 bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-slate-800 shadow-md transition-all flex items-center gap-1.5">
                   Next
-                  <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="animate-pulse"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
                 </button>
               )}
             </div>
           </div>
+        </div>
 
-          {/* Drawer Sidebar */}
-          <div 
-            className={`fixed inset-0 z-[1000] bg-slate-900/60 backdrop-blur-md transition-opacity duration-700 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-            onClick={() => setIsSidebarOpen(false)}
-          ></div>
-
-          <div 
-            className={`fixed top-0 right-0 h-screen w-full max-w-sm z-[1001] bg-white p-12 shadow-[0_0_128px_rgba(0,0,0,0.2)] flex flex-col transition-transform duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}
-          >
-            <div className="flex items-center justify-between mb-16 border-b border-slate-50 pb-8">
-              <h4 className="text-2xl font-black text-slate-900 flex items-center gap-5 uppercase tracking-tighter">
-                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="text-slate-300"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                Questions
+        {/* Stable Question Map Sidebar */}
+        <aside className="w-[280px] shrink-0 flex flex-col min-h-0">
+          <div className="flex-1 bg-white/40 backdrop-blur-md rounded-[2.5rem] border border-white/50 shadow-2xl shadow-slate-200/40 p-6 flex flex-col relative overflow-hidden">
+            <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-200/30">
+              <h4 className="text-base font-black text-slate-900 uppercase tracking-tighter flex items-center gap-2">
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="text-slate-300"><path d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                Map
               </h4>
-              <button onClick={() => setIsSidebarOpen(false)} className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all border border-slate-100">
-                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
             </div>
-            
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
-              <div className="grid grid-cols-4 gap-4">
-                {questions.map((_, idx) => {
-                  const isCurrent = currentQuestionIndex === idx;
-                  const isAnswered = answers[idx] !== undefined;
-                  
-                  return (
-                    <button 
-                      key={idx}
-                      onClick={() => {
-                        setCurrentQuestionIndex(idx);
-                        setIsSidebarOpen(false);
-                      }}
-                      className={`aspect-square rounded-2xl flex items-center justify-center font-black text-sm transition-all duration-500 border-2 ${
-                        isCurrent 
-                          ? 'bg-slate-900 text-white border-slate-900 shadow-2xl scale-110 z-10' 
-                          : isAnswered 
-                            ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
-                            : 'bg-slate-50 text-slate-400 border-slate-50 hover:border-slate-200'
-                      }`}
-                    >
-                      {idx + 1}
-                    </button>
-                  );
-                })}
+
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 mb-6">
+              <div className="grid grid-cols-4 gap-2">
+                {questions.map((_, idx) => (
+                  <QuestionNumber 
+                    key={idx}
+                    idx={idx}
+                    isActive={currentQuestionIndex === idx}
+                    isAnswered={answers[idx] !== undefined}
+                    isVisited={visitedQuestions.has(idx)}
+                    isMarked={markedQuestions[idx]}
+                    onClick={() => setCurrentQuestionIndex(idx)}
+                  />
+                ))}
               </div>
             </div>
 
-            <div className="mt-12 pt-10 border-t border-slate-50 space-y-5">
-              <div className="flex items-center justify-between text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">
-                <div className="flex items-center gap-4">
-                  <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                  Answered
-                </div>
-                <span className="text-slate-900 font-black text-sm">{Object.keys(answers).length}</span>
-              </div>
-              <div className="flex items-center justify-between text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">
-                <div className="flex items-center gap-4">
-                  <div className="w-3 h-3 rounded-full bg-slate-100" />
-                  Unanswered
-                </div>
-                <span className="text-slate-900 font-black text-sm">{questions.length - Object.keys(answers).length}</span>
+            {/* Legend & Stats */}
+            <div className="space-y-2 pt-6 border-t border-slate-200/30 shrink-0">
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { label: 'Not Visited', count: questions.length - visitedQuestions.size, color: 'bg-white', shape: 'rounded-md' },
+                  { label: 'Not Answered', count: visitedQuestions.size - Object.keys(answers).length, color: 'bg-orange-500', shape: '[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]' },
+                  { label: 'Answered', count: Object.keys(answers).length, color: 'bg-emerald-500', shape: '[clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]' },
+                  { label: 'Reviewed', count: Object.keys(markedQuestions).filter(k => markedQuestions[k]).length, color: 'bg-purple-600', shape: 'rounded-full' }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between p-2.5 rounded-xl bg-white/40 border border-white/50">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 ${item.shape} ${item.color} ${item.color === 'bg-white' ? 'border border-slate-200' : ''}`} />
+                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">{item.label}</span>
+                    </div>
+                    <span className="text-[10px] font-black text-slate-900">{item.count}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </>
+        </aside>
+      </main>
+    </div>
   );
 };
 
