@@ -349,7 +349,7 @@ REFUND POLICY:
 and if requested within 24 hours of payment.
 • Deductions: A 10% deduction applies to all approved refunds
 to cover administrative and content access costs.
-• Procedure: Written request via support@isucessnode.com
+• Procedure: Written request via support@isuccessnode.com
 including full credentials and receipt.
 • Non-Refundable Cases: Partial completion, delayed progress,
 accessed content, or general dissatisfaction.

@@ -219,7 +219,7 @@ const DisclaimerOverlay = ({ user, profile }) => {
 
                 <div className="space-y-3">
                   <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Refund Request Procedure</h4>
-                  <p className="text-slate-500 text-[13px] leading-relaxed font-medium">To request a refund, the candidate must email <span className="text-slate-900 font-bold">support@isucessnode.com</span> with their full name, registered email ID, course name, payment receipt, and reason for cancellation. Requests without complete details may face delays in processing.</p>
+                  <p className="text-slate-500 text-[13px] leading-relaxed font-medium">To request a refund, the candidate must email <span className="text-slate-900 font-bold">support@isuccessnode.com</span> with their full name, registered email ID, course name, payment receipt, and reason for cancellation. Requests without complete details may face delays in processing.</p>
                 </div>
 
                 <div className="space-y-3">
@@ -339,7 +339,7 @@ const DisclaimerOverlay = ({ user, profile }) => {
 
                 <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 space-y-4">
                    <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.3em]">Your Rights</h4>
-                   <p className="text-[13px] text-slate-500 font-medium leading-relaxed">You have the right to access the information we hold about you, request correction or deletion of inaccurate data, and withdraw consent for marketing communications at any time. To exercise these rights, please contact our support team at support@isucessnode.com.</p>
+                   <p className="text-[13px] text-slate-500 font-medium leading-relaxed">You have the right to access the information we hold about you, request correction or deletion of inaccurate data, and withdraw consent for marketing communications at any time. To exercise these rights, please contact our support team at support@isuccessnode.com.</p>
                 </div>
 
                 <div className="p-6 bg-slate-100/50 rounded-3xl border border-slate-200/50">
